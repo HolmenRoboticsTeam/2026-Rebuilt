@@ -124,6 +124,12 @@ public class RobotContainer {
             () -> -controller.getLeftX(),
             () -> -controller.getRightX()));
 
+    intake.setDefaultCommand(
+        Commands.run(
+            () -> intake.setVoltage(12.0 * controller.getLeftTriggerAxis()),
+            intake
+    ));
+
     // Lock to 0° when A button is held
     controller
         .a()
