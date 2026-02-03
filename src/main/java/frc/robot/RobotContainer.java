@@ -125,12 +125,9 @@ public class RobotContainer {
             () -> -controller.getRightX()));
 
     intake.setDefaultCommand(
-        Commands.run(
-            () -> intake.setVoltage(12.0 * controller.getLeftTriggerAxis()),
-            intake
-    ));
+        Commands.run(() -> intake.setVoltage(12.0 * controller.getLeftTriggerAxis()), intake));
 
-    // Lock to 0° when A button is held
+    // Lock to 0° when "A" button is held
     controller
         .a()
         .whileTrue(
@@ -145,7 +142,7 @@ public class RobotContainer {
 
     // Reset gyro to 0° when B button is pressed
     controller
-        .b()
+        .start()
         .onTrue(
             Commands.runOnce(
                     () ->

@@ -5,9 +5,9 @@
 package frc.robot.subsystems.Intake;
 
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.SparkMax;
 
 /** Add your docs here. */
 public class IntakeIOReal implements IntakeIO {

@@ -6,6 +6,7 @@ package frc.robot.subsystems.Intake;
 
 /** Add your docs here. */
 public interface IntakeIO {
-  public default void setVoltage(double volts){};
 
+  public default void setVoltage(double volts) {}
+  ;
 }

@@ -8,16 +8,15 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 
-
 /** Add your docs here. */
-public class IntakeIOSim implements IntakeIO{
+public class IntakeIOSim implements IntakeIO {
 
   private DCMotorSim intakeMotor;
 
   public IntakeIOSim() {
-    intakeMotor = new DCMotorSim(
-      LinearSystemId.createDCMotorSystem(DCMotor.getCIM(1), 0.025, 1.0),
-      DCMotor.getCIM(1));
+    intakeMotor =
+        new DCMotorSim(
+            LinearSystemId.createDCMotorSystem(DCMotor.getCIM(1), 0.025, 1.0), DCMotor.getCIM(1));
   }
 
   @Override
