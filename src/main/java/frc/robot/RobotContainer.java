@@ -27,6 +27,10 @@ import frc.robot.subsystems.drive.GyroIONavX;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOSpark;
+import frc.robot.subsystems.hopper.Hopper;
+import frc.robot.subsystems.hopper.HopperIO;
+import frc.robot.subsystems.hopper.HopperIOReal;
+import frc.robot.subsystems.hopper.HopperIOSim;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
@@ -39,7 +43,7 @@ public class RobotContainer {
   // Subsystems
   private final Drive drive;
   private final Intake intake;
-
+  private final Hopper hopper;
   // Controller
   private final CommandXboxController controller = new CommandXboxController(0);
 
@@ -59,6 +63,8 @@ public class RobotContainer {
                 new ModuleIOSpark(2),
                 new ModuleIOSpark(3));
         intake = new Intake(new IntakeIOReal());
+        hopper = new Hopper(new HopperIOReal());
+
         break;
 
       case SIM:
@@ -71,6 +77,7 @@ public class RobotContainer {
                 new ModuleIOSim(),
                 new ModuleIOSim());
         intake = new Intake(new IntakeIOSim());
+        hopper = new Hopper(new HopperIOSim());
         break;
 
       default:
@@ -83,6 +90,8 @@ public class RobotContainer {
                 new ModuleIO() {},
                 new ModuleIO() {});
         intake = new Intake(new IntakeIO() {});
+        hopper = new Hopper(new HopperIO() {});
+
         break;
     }
 
