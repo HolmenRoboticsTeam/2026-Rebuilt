@@ -5,10 +5,12 @@
 package frc.robot.subsystems.hopper;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import org.littletonrobotics.junction.Logger;
 
 public class Hopper extends SubsystemBase {
 
   private HopperIO io;
+  private HopperIOInputsAutoLogged inputs;
 
   public Hopper(HopperIO io) {
     this.io = io;
@@ -16,10 +18,11 @@ public class Hopper extends SubsystemBase {
 
   @Override
   public void periodic() {
-    io.updateInputs();
+    io.updateInputs(inputs);
+    Logger.processInputs("Hopper", inputs);
   }
 
   public void setVoltage(double volts) {
-    io.setVolts(0);
+    io.setVolts(volts);
   }
 }

@@ -17,8 +17,10 @@ public class HopperIOReal implements HopperIO {
     hopperMotor = new SparkMax(0, MotorType.kBrushless);
   }
 
-  public void updateInputs() {}
+  @Override
+  public void updateInputs(HopperIOInputsAutoLogged inputs) {}
 
+  @Override
   public void setVolts(double volts) {
     hopperMotor.getClosedLoopController().setSetpoint(volts, ControlType.kVoltage);
   }
