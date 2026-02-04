@@ -20,9 +20,7 @@ public class IntakeIOSim implements IntakeIO {
   }
 
   @Override
-  public void updateInputs(IntakeIOInputsAutoLogged inputs) {
-
-  }
+  public void updateInputs(IntakeIOInputsAutoLogged inputs) {}
 
   @Override
   public void setVoltage(double volts) {
