@@ -31,6 +31,12 @@ import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeIO;
 import frc.robot.subsystems.intake.IntakeIOReal;
 import frc.robot.subsystems.intake.IntakeIOSim;
+import frc.robot.subsystems.shooter.Shooter;
+import frc.robot.subsystems.shooter.ShooterIO;
+import frc.robot.subsystems.shooter.ShooterIOReal;
+import frc.robot.subsystems.shooter.ShooterIOSim;
+
+
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
@@ -44,6 +50,7 @@ public class RobotContainer {
   private final Drive drive;
   private final Intake intake;
   private final Hopper hopper;
+  private final Shooter shooter;
   // Controller
   private final CommandXboxController controller = new CommandXboxController(0);
 
@@ -64,7 +71,7 @@ public class RobotContainer {
                 new ModuleIOSpark(3));
         intake = new Intake(new IntakeIOReal());
         hopper = new Hopper(new HopperIOReal());
-
+        shooter = new Shooter(new ShooterIOReal();)
         break;
 
       case SIM:
@@ -91,7 +98,7 @@ public class RobotContainer {
                 new ModuleIO() {});
         intake = new Intake(new IntakeIO() {});
         hopper = new Hopper(new HopperIO() {});
-
+        shooter = new Shooter(new ShooterIO() {});
         break;
     }
 
