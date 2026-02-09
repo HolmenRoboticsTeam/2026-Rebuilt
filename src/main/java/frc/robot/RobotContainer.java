@@ -35,8 +35,6 @@ import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.ShooterIO;
 import frc.robot.subsystems.shooter.ShooterIOReal;
 import frc.robot.subsystems.shooter.ShooterIOSim;
-
-
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
@@ -71,7 +69,7 @@ public class RobotContainer {
                 new ModuleIOSpark(3));
         intake = new Intake(new IntakeIOReal());
         hopper = new Hopper(new HopperIOReal());
-        shooter = new Shooter(new ShooterIOReal();)
+        shooter = new Shooter(new ShooterIOReal());
         break;
 
       case SIM:
@@ -85,6 +83,7 @@ public class RobotContainer {
                 new ModuleIOSim());
         intake = new Intake(new IntakeIOSim());
         hopper = new Hopper(new HopperIOSim());
+        shooter = new Shooter(new ShooterIOSim());
         break;
 
       default:
