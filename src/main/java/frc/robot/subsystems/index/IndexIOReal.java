@@ -9,11 +9,11 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 
 /** Add your docs here. */
-public class indexIOReal implements IndexIO {
+public class IndexIOReal implements IndexIO {
 
   private SparkMax indexMotor;
 
-  public indexIOReal() {
+  public IndexIOReal() {
     indexMotor = new SparkMax(0, MotorType.kBrushless);
   }
 

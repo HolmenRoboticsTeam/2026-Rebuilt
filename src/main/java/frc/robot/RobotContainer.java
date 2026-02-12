@@ -35,6 +35,14 @@ import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.ShooterIO;
 import frc.robot.subsystems.shooter.ShooterIOReal;
 import frc.robot.subsystems.shooter.ShooterIOSim;
+import frc.robot.subsystems.index.Index;
+import frc.robot.subsystems.index.IndexIO;
+import frc.robot.subsystems.index.IndexIOReal;
+import frc.robot.subsystems.index.IndexIOSim;
+import frc.robot.subsystems.feeder.Feeder;
+import frc.robot.subsystems.feeder.FeederIO;
+import frc.robot.subsystems.feeder.FeederIOReal;
+import frc.robot.subsystems.feeder.FeederIOSim;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
@@ -49,6 +57,8 @@ public class RobotContainer {
   private final Intake intake;
   private final Hopper hopper;
   private final Shooter shooter;
+  private final Index index;
+  private final Feeder feeder;
   // Controller
   private final CommandXboxController controller = new CommandXboxController(0);
 
@@ -70,7 +80,10 @@ public class RobotContainer {
         intake = new Intake(new IntakeIOReal());
         hopper = new Hopper(new HopperIOReal());
         shooter = new Shooter(new ShooterIOReal());
+        index = new Index(new IndexIOReal());
+        feeder  =  new Feeder(new FeederIOReal());
         break;
+        
 
       case SIM:
         // Sim robot, instantiate physics sim IO implementations
@@ -84,7 +97,10 @@ public class RobotContainer {
         intake = new Intake(new IntakeIOSim());
         hopper = new Hopper(new HopperIOSim());
         shooter = new Shooter(new ShooterIOSim());
+        index = new Index(new IndexIOSim());
+        feeder  =  new Feeder(new FeederIOSim());
         break;
+      
 
       default:
         // Replayed robot, disable IO implementations
@@ -99,6 +115,8 @@ public class RobotContainer {
         hopper = new Hopper(new HopperIO() {});
         shooter = new Shooter(new ShooterIO() {});
         break;
+        index = new Index(new IndexIO() {});
+        feeder = new Feeder(new FeederIO() {});
     }
 
     // Set up auto routines
