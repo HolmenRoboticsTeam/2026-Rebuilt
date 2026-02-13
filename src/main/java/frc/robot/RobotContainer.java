@@ -114,9 +114,10 @@ public class RobotContainer {
         intake = new Intake(new IntakeIO() {});
         hopper = new Hopper(new HopperIO() {});
         shooter = new Shooter(new ShooterIO() {});
-        break;
         index = new Index(new IndexIO() {});
         feeder = new Feeder(new FeederIO() {});
+        break;
+  
     }
 
     // Set up auto routines
