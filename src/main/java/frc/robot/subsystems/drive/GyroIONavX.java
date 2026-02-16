@@ -17,7 +17,8 @@ import java.util.Queue;
 
 /** IO implementation for NavX. */
 public class GyroIONavX implements GyroIO {
-  private final Navx navX = new Navx(0);
+  private final Navx navX =
+      new Navx(DriveConstants.navXCanId, (int) DriveConstants.odometryFrequency);
   private final Queue<Double> yawPositionQueue;
   private final Queue<Double> yawTimestampQueue;
 
@@ -29,10 +30,11 @@ public class GyroIONavX implements GyroIO {
 
   @Override
   public void updateInputs(GyroIOInputs inputs) {
-    // inputs.connected = navX.isConnected();
+    inputs.connected =
+        navX.getTemperature().magnitude() == 0.0; // TODO: find a check to replace this
     inputs.yawPosition = Rotation2d.fromDegrees(-navX.getYaw().in(Degree));
     inputs.yawVelocityRadPerSec =
-        Units.degreesToRadians(-navX.getAngularVel()[2].in(DegreesPerSecond));
+        Units.degreesToRadians(-navX.getAngularVel()[3].in(DegreesPerSecond));
 
     inputs.odometryYawTimestamps =
         yawTimestampQueue.stream().mapToDouble((Double value) -> value).toArray();
