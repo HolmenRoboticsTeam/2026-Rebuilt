@@ -17,6 +17,10 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
+import frc.robot.subsystems.climber.Climber;
+import frc.robot.subsystems.climber.ClimberIO;
+import frc.robot.subsystems.climber.ClimberIOReal;
+import frc.robot.subsystems.climber.ClimberIOSim;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIONavX;
@@ -50,10 +54,14 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 public class RobotContainer {
   // Subsystems
   private final Drive drive;
+
   private final Intake intake;
   private final Hopper hopper;
   private final Indexer indexer;
   private final Feeder feeder;
+
+  private final Climber climber;
+
   // Controller
   private final CommandXboxController controller = new CommandXboxController(0);
 
@@ -76,6 +84,7 @@ public class RobotContainer {
         hopper = new Hopper(new HopperIOReal());
         indexer = new Indexer(new IndexerIOReal());
         feeder = new Feeder(new FeederIOReal());
+        climber = new Climber(new ClimberIOReal());
         break;
 
       case SIM:
@@ -91,6 +100,7 @@ public class RobotContainer {
         hopper = new Hopper(new HopperIOSim());
         indexer = new Indexer(new IndexerIOSim());
         feeder = new Feeder(new FeederIOSim());
+        climber = new Climber(new ClimberIOSim());
         break;
 
       default:
@@ -106,6 +116,7 @@ public class RobotContainer {
         hopper = new Hopper(new HopperIO() {});
         indexer = new Indexer(new IndexerIO() {});
         feeder = new Feeder(new FeederIO() {});
+        climber = new Climber(new ClimberIO() {});
         break;
     }
 
