@@ -6,18 +6,29 @@ package frc.robot.subsystems.hopper;
 
 import org.littletonrobotics.junction.AutoLog;
 
-/** Add your docs here. */
+/** The hopper interface for its inputs and outputs. */
 public interface HopperIO {
 
   @AutoLog
   public static class HopperIOInputs {
-    public double positionRad = 0.0;
-    public double velocityRadPerSec = 0.0;
+    public double positionRotations = 0.0;
+    public double velocityRPM = 0.0;
     public double appliedVolts = 0.0;
     public double currentAmps = 0.0;
   }
 
-  public default void updateInputs(HopperIOInputsAutoLogged inputs) {}
+  /**
+   * Updates the inputs for the implementation of the hopper.
+   *
+   * @param inputs The class of inputs to update.
+   */
+  public default void updateInputs(HopperIOInputs inputs) {}
 
-  public default void setVoltage(double volts) {}
+  /**
+   * Sets the voltage of the hopper motor. This does not need to be called every cycle, as it runs
+   * on the controller.
+   *
+   * @param volts The target voltage.
+   */
+  public default void setVolts(double volts) {}
 }

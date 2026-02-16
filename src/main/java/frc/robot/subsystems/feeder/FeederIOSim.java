@@ -4,31 +4,44 @@
 
 package frc.robot.subsystems.feeder;
 
-import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 
-/** Add your docs here. */
+/** The sim implementation of the feeder. */
 public class FeederIOSim implements FeederIO {
 
   private DCMotorSim feederMotor;
 
   private double appliedVolts;
 
+  /** Creates a new sim feeder. */
   public FeederIOSim() {
+
     feederMotor =
         new DCMotorSim(
-            LinearSystemId.createDCMotorSystem(DCMotor.getNEO(1), 0.025, 1.0), DCMotor.getNEO(1));
+            LinearSystemId.createDCMotorSystem(
+                FeederConstants.Sim.motorGearBox,
+                FeederConstants.Sim.JKgMetersSquared,
+                FeederConstants.gearRatio),
+            FeederConstants.Sim.motorGearBox);
+
+    appliedVolts = 0.0;
   }
 
-  @Override
-  public void updateInputs(FeederIOInputsAutoLogged inputs) {
+  public void updateInputs(FeederIOInputs inputs) {
     feederMotor.setInputVoltage(appliedVolts);
     feederMotor.update(0.02);
+
+    inputs.positionRotations = feederMotor.getAngularPositionRotations();
+    inputs.velocityRPM = feederMotor.getAngularVelocityRPM();
+    inputs.appliedVolts = appliedVolts;
+    inputs.currentAmps = feederMotor.getCurrentDrawAmps();
+    inputs.hasFuel = true; // Always has fuel
+    inputs.releasingFuel = appliedVolts > 0.0;
   }
 
   @Override
-  public void setVoltage(double volts) {
+  public void setVolts(double volts) {
     appliedVolts = volts;
   }
 }

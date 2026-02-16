@@ -4,30 +4,40 @@
 
 package frc.robot.subsystems.hopper;
 
-import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 
-/** Add your docs here. */
+/** The sim implementations of the hopper. */
 public class HopperIOSim implements HopperIO {
 
   private DCMotorSim hopperMotor;
 
   private double appliedVolts;
 
+  /** Creates a new sim hopper. */
   public HopperIOSim() {
+
     hopperMotor =
         new DCMotorSim(
-            LinearSystemId.createDCMotorSystem(DCMotor.getNEO(1), 0.025, 1.0), DCMotor.getNEO(1));
+            LinearSystemId.createDCMotorSystem(
+                HopperConstants.Sim.motorGearBox,
+                HopperConstants.Sim.JKgMetersSquared,
+                HopperConstants.gearRatio),
+            HopperConstants.Sim.motorGearBox);
+
+    appliedVolts = 0.0;
   }
 
-  @Override
-  public void updateInputs(HopperIOInputsAutoLogged inputs) {
+  public void updateInputs(HopperIOInputs inputs) {
     hopperMotor.setInputVoltage(appliedVolts);
     hopperMotor.update(0.02);
+
+    inputs.positionRotations = hopperMotor.getAngularPositionRotations();
+    inputs.velocityRPM = hopperMotor.getAngularVelocityRPM();
+    inputs.appliedVolts = appliedVolts;
+    inputs.currentAmps = hopperMotor.getCurrentDrawAmps();
   }
 
-  @Override
   public void setVoltage(double volts) {
     appliedVolts = volts;
   }

@@ -4,26 +4,41 @@
 
 package frc.robot.subsystems.intake;
 
-import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 
-/** Add your docs here. */
+/** The sim implementation of the intake */
 public class IntakeIOSim implements IntakeIO {
 
   private DCMotorSim intakeMotor;
 
+  private double appliedVolts;
+
+  /** Creates a new sim intake. */
   public IntakeIOSim() {
+
     intakeMotor =
         new DCMotorSim(
-            LinearSystemId.createDCMotorSystem(DCMotor.getCIM(1), 0.025, 1.0), DCMotor.getCIM(1));
+            LinearSystemId.createDCMotorSystem(
+                IntakeConstants.Sim.motorGearBox,
+                IntakeConstants.Sim.JKgMetersSquared,
+                IntakeConstants.gearRatio),
+            IntakeConstants.Sim.motorGearBox);
+
+    appliedVolts = 0.0;
   }
 
-  @Override
-  public void updateInputs(IntakeIOInputsAutoLogged inputs) {}
+  public void updateInputs(IntakeIOInputs inputs) {
+    intakeMotor.setInputVoltage(appliedVolts);
+    intakeMotor.update(0.02);
 
-  @Override
+    inputs.positionRad = intakeMotor.getAngularPositionRotations();
+    inputs.velocityRadPerSec = intakeMotor.getAngularVelocityRPM();
+    inputs.appliedVolts = appliedVolts;
+    inputs.currentAmps = intakeMotor.getCurrentDrawAmps();
+  }
+
   public void setVoltage(double volts) {
-    intakeMotor.setInputVoltage(volts);
+    appliedVolts = volts;
   }
 }

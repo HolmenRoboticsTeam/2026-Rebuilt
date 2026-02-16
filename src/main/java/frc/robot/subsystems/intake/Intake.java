@@ -1,18 +1,21 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.subsystems.intake;
 
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
 
+/** A subsystem for controlling the intake. */
 public class Intake extends SubsystemBase {
 
-  private IntakeIO io;
-  private IntakeIOInputsAutoLogged inputs;
+  private final IntakeIO io;
+  private final IntakeIOInputsAutoLogged inputs = new IntakeIOInputsAutoLogged();
 
-  /** Creates a new Intake. */
+  /**
+   * Creates a new intake.
+   *
+   * @param io the implementation of the intake.
+   */
   public Intake(IntakeIO io) {
     this.io = io;
   }
@@ -23,7 +26,40 @@ public class Intake extends SubsystemBase {
     Logger.processInputs("Intake", inputs);
   }
 
-  public void setVoltage(double volts) {
-    io.setVoltage(volts);
+  /**
+   * Creates and returns a command that runs the intake.
+   *
+   * @return A command with the given logic.
+   */
+  public Command start() {
+    return Commands.runOnce(
+            () -> {
+              io.setVolts(IntakeConstants.maxVolts);
+            },
+            this)
+        .withName("Intake_Start");
+  }
+
+  /**
+   * Creates and returns a command that stops the intake.
+   *
+   * @return A command with the given logic.
+   */
+  public Command stop() {
+    return Commands.runOnce(
+            () -> {
+              io.setVolts(0.0);
+            },
+            this)
+        .withName("Intake_Stop");
+  }
+
+  /**
+   * Checks the motor to see if the intake is running.
+   *
+   * @return Whether the intake is running.
+   */
+  public boolean isRunning() {
+    return inputs.isRunning;
   }
 }

@@ -1,17 +1,21 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.subsystems.hopper;
 
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
 
+/** A subsystem for controlling the hopper. */
 public class Hopper extends SubsystemBase {
 
-  private HopperIO io;
-  private HopperIOInputsAutoLogged inputs;
+  private final HopperIO io;
+  private final HopperIOInputsAutoLogged inputs = new HopperIOInputsAutoLogged();
 
+  /**
+   * Creates a new hopper.
+   *
+   * @param io the implementation of the hopper.
+   */
   public Hopper(HopperIO io) {
     this.io = io;
   }
@@ -22,7 +26,27 @@ public class Hopper extends SubsystemBase {
     Logger.processInputs("Hopper", inputs);
   }
 
-  public void setVoltage(double volts) {
-    io.setVoltage(volts);
+  /**
+   * Creates and returns a command that runs the hopper.
+   *
+   * @return A command with the given logic.
+   */
+  public Command start() {
+    return Commands.runOnce(
+            () -> {
+              io.setVolts(HopperConstants.maxVolts);
+            },
+            this)
+        .withName("Hopper_Start");
+  }
+
+  /** Creates and returns a command that stops the hopper. */
+  public Command stop() {
+    return Commands.runOnce(
+            () -> {
+              io.setVolts(0.0);
+            },
+            this)
+        .withName("Hopper_Stop");
   }
 }
