@@ -213,9 +213,7 @@ public class Drive extends SubsystemBase {
     }
 
     poseEstimator.update(
-        gyroInputs.odometryYawPositions.length == 0.0
-            ? getRotation()
-            : gyroInputs.odometryYawPositions[0],
+        gyroInputs.yawPosition,
         new SwerveModulePosition[] {
           new SwerveModulePosition(),
           new SwerveModulePosition(),

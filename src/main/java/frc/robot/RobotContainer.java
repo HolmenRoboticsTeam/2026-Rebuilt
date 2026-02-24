@@ -128,7 +128,7 @@ public class RobotContainer {
             new Vision(
                 drive::addVisionMeasurement,
                 new VisionIOLimelight("limelight-three", drive::getRotation),
-                new VisionIOLimelight("Camera1", drive::getRotation));
+                new VisionIOLimelight("limelight-two", drive::getRotation));
         // intake = new Intake(new IntakeIOReal());
         // hopper = new Hopper(new HopperIOReal());
         // indexer = new Indexer(new IndexerIOReal());
