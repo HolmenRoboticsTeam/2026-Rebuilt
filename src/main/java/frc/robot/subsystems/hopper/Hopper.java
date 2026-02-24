@@ -11,6 +11,9 @@ public class Hopper extends SubsystemBase {
   private final HopperIO io;
   private final HopperIOInputsAutoLogged inputs = new HopperIOInputsAutoLogged();
 
+  // This should include fuel held in the intake, hopper, indexer, and feeder.
+  private int fuelHeld = 8;
+
   /**
    * Creates a new hopper.
    *
@@ -48,5 +51,23 @@ public class Hopper extends SubsystemBase {
             },
             this)
         .withName("Hopper_Stop");
+  }
+
+  /**
+   * Get the current position of the hopper
+   *
+   * @return the position in rotations
+   */
+  public double getPosition() {
+    return inputs.positionRotations;
+  }
+
+  public void changeFuelCountBy(int delta) {
+    fuelHeld += delta;
+    Logger.recordOutput("Hopper/FuelHeld", fuelHeld);
+  }
+
+  public int getHeldFuel() {
+    return fuelHeld;
   }
 }

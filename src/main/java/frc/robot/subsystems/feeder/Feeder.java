@@ -44,6 +44,13 @@ public class Feeder extends SubsystemBase {
         .withName("Feeder_Start");
   }
 
+  public Command reverse() {
+    return Commands.runOnce(
+        () -> {
+          io.setVolts(-FeederConstants.maxVolts);
+        });
+  }
+
   /**
    * Creates and returns a command that stops the feeder.
    *
@@ -59,20 +66,21 @@ public class Feeder extends SubsystemBase {
   }
 
   /**
-   * Check whether the line-break is broken to see if there is fuel inside the feeder.
+   * Get the current position of the feeder
    *
-   * @return Whether there is fuel inside the feeder.
+   * @return the position in rotations
    */
-  public boolean hasFuel() {
-    return inputs.hasFuel;
+  public double getPosition() {
+    return inputs.positionRotations;
   }
 
   /**
-   * Checks the motor to see if the feeder to releasing fuel to the turret.
+   * Checks the motor to see if the feeder to releasing fuel to the turret and if the feeder has
+   * fuel.
    *
-   * @return Whether the feeder is releasing fuel.
+   * @return Whether the feeder has and is releasing fuel.
    */
-  public boolean releasingFuel() {
-    return inputs.releasingFuel;
+  public boolean feedingFuel() {
+    return inputs.releasingFuel && inputs.hasFuel;
   }
 }

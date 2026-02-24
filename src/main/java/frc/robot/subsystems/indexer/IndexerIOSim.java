@@ -38,7 +38,8 @@ public class IndexerIOSim implements IndexerIO {
     inputs.currentAmps = indexerMotor.getCurrentDrawAmps();
   }
 
-  public void setVoltage(double volts) {
+  @Override
+  public void setVolts(double volts) {
     appliedVolts = volts;
   }
 }

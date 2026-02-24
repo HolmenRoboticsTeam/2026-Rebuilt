@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems.feeder;
 
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.system.plant.DCMotor;
 
@@ -24,6 +25,8 @@ public class FeederConstants {
 
     static {
       motorConfig = new SparkMaxConfig();
+
+      motorConfig.idleMode(IdleMode.kBrake);
 
       motorConfig
           .encoder

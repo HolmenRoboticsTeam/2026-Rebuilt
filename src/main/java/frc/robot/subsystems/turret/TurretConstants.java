@@ -6,6 +6,7 @@ package frc.robot.subsystems.turret;
 
 import static edu.wpi.first.units.Units.Inch;
 
+import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.config.SparkFlexConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.system.plant.DCMotor;
@@ -15,16 +16,16 @@ import edu.wpi.first.units.measure.Distance;
 public class TurretConstants {
 
   public static final Distance turretXOffset = Distance.ofRelativeUnits(0.0, Inch);
-  public static final Distance turretYOffset = Distance.ofRelativeUnits(6.0, Inch);
+  public static final Distance turretYOffset = Distance.ofRelativeUnits(0.0, Inch);
 
   public static final double currentControlDebounce = 0.025;
 
-  public static final double rotationTolerance = Math.toRadians(1.0);
-  public static final double angleTolerance = Math.toRadians(1.0);
-  public static final double flyWheelTolerance = 10.0; // RPM
+  public static final double rotationTolerance = Math.toRadians(3.0);
+  public static final double angleTolerance = Math.toRadians(5.0);
+  public static final double flyWheelTolerance = 25.0; // RPM
 
-  public static final double rotationGearing = 1.0 * (2.0 * Math.PI);
-  public static final double angleGearing = 1.0 * (2.0 * Math.PI);
+  public static final double rotationGearing = (2.0 * Math.PI) * (1.0 / 3.0) * (10.0 / 88.0);
+  public static final double angleGearing = (2.0 * Math.PI) * (15.0 / 36.0) * (10.0 / 192.0);
   public static final double flyWheelGearing = 1.0;
 
   /** The constants only for the real version of the turret. */
@@ -35,7 +36,7 @@ public class TurretConstants {
     public static final int leftFlyWheelMotorID = 24;
     public static final int rightFlyWheelMotorID = 25;
 
-    public static final double holdAmps = 20.0;
+    public static final double holdAmps = 30.0;
 
     public static final SparkFlexConfig rotationMotorConfig;
     public static final SparkMaxConfig angleMotorConfig;
@@ -53,7 +54,15 @@ public class TurretConstants {
           .positionConversionFactor(rotationGearing)
           .velocityConversionFactor(rotationGearing / 60.0);
 
-      rotationMotorConfig.closedLoop.pid(0.01, 0.0, 0.0);
+      rotationMotorConfig.inverted(true);
+
+      rotationMotorConfig
+          .closedLoop
+          .pid(0.5, 0.0, 0.0)
+          .outputRange(-0.2, 0.2)
+          .allowedClosedLoopError(0.004, ClosedLoopSlot.kSlot0)
+          .feedForward
+          .kS(0.4);
 
       // Angle Motor Config
 
@@ -64,7 +73,12 @@ public class TurretConstants {
           .positionConversionFactor(angleGearing)
           .velocityConversionFactor(angleGearing / 60.0);
 
-      angleMotorConfig.closedLoop.pid(0.01, 0.0, 0.0);
+      angleMotorConfig
+          .closedLoop
+          .pid(0.6, 0.0, 0.0)
+          .allowedClosedLoopError(0.04, ClosedLoopSlot.kSlot0)
+          .feedForward
+          .kS(0.3);
 
       // Left FlyWheel Motor Config
 
@@ -77,7 +91,7 @@ public class TurretConstants {
           .positionConversionFactor(flyWheelGearing)
           .velocityConversionFactor(flyWheelGearing);
 
-      leftFlyWheelMotorConfig.closedLoop.pid(1.0, 0, 0);
+      leftFlyWheelMotorConfig.closedLoop.pid(0.0001, 0.0, 0.0).feedForward.kV(0.00192).kS(0.4);
 
       // Right FlyWheel Motor Config
 
@@ -90,7 +104,7 @@ public class TurretConstants {
           .positionConversionFactor(flyWheelGearing)
           .velocityConversionFactor(flyWheelGearing);
 
-      rightFlyWheelMotorConfig.closedLoop.pid(1.0, 0, 0);
+      rightFlyWheelMotorConfig.closedLoop.pid(0.0001, 0.0, 0.0).feedForward.kV(0.00192).kS(0.4);
     }
   }
 
@@ -98,25 +112,25 @@ public class TurretConstants {
   public static class Sim {
 
     public static final DCMotor rotationMotorGearBox = DCMotor.getNeoVortex(1);
-    public static final double rotationJKgMetersSquared = 0.004;
-    public static final double rotationP = 0.01;
+    public static final double rotationJKgMetersSquared = 0.04;
+    public static final double rotationP = 5.0;
     public static final double rotationI = 0.0;
-    public static final double rotationD = 0.0;
+    public static final double rotationD = 3.0;
 
     public static final DCMotor angleMotorGearBox = DCMotor.getNEO(1);
     public static final double angleJKgMetersSquared = 0.004;
-    public static final double angleP = 0.01;
+    public static final double angleP = 15.0;
     public static final double angleI = 0.0;
-    public static final double angleD = 0.0;
+    public static final double angleD = 4.5;
 
     public static final DCMotor flyWheelMotorGearBox = DCMotor.getNEO(2);
     public static final double flyWheelJKgMetersSquared = 0.004;
-    public static final double flyWheelP = 1.0;
+    public static final double flyWheelP = 1.2;
     public static final double flyWheelI = 0.0;
     public static final double flyWheelD = 0.0;
 
-    public static final double percentSpeedKept = 0.9;
-    public static final double RPMToVelocityFactor = 0.02;
+    public static final double percentSpeedKept = 0.8;
+    public static final double RPMToVelocityFactor = 0.0025;
     public static final Distance turretHeight = Distance.ofRelativeUnits(20.0, Inch);
   }
 }

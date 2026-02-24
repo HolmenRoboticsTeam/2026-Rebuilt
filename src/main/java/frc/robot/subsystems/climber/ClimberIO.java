@@ -26,12 +26,12 @@ public interface ClimberIO {
   public default void updateInputs(ClimberIOInputs inputs) {}
 
   /**
-   * Sets the voltage of the climber motor. This does not need to be called every cycle, as it runs
-   * on the controller.
+   * Sets the target height of the climber motor. This does not need to be called every cycle, as it
+   * runs on the controller.
    *
-   * @param volts The target voltage.
+   * @param height The target height.
    */
-  public default void setVolts(double volts) {}
+  public default void setTargetHeight(double height) {}
 
   /** Resets the position of the climber motor to the min value. */
   public default void resetPosition() {}

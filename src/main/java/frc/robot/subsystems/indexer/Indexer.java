@@ -53,4 +53,13 @@ public class Indexer extends SubsystemBase {
             this)
         .withName("Indexer_Stop");
   }
+
+  /**
+   * Get the current position of the indexer
+   *
+   * @return the position in rotations
+   */
+  public double getPosition() {
+    return inputs.positionRotation;
+  }
 }

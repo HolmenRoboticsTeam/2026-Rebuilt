@@ -44,8 +44,8 @@ public class ClimberIOReal implements ClimberIO {
   }
 
   @Override
-  public void setVolts(double volts) {
-    climberMotor.getClosedLoopController().setSetpoint(volts, ControlType.kVoltage);
+  public void setTargetHeight(double height) {
+    climberMotor.getClosedLoopController().setSetpoint(height, ControlType.kPosition);
   }
 
   @Override

@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems.indexer;
 
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.system.plant.DCMotor;
 
@@ -23,6 +24,8 @@ public class IndexerConstants {
 
     static {
       motorConfig = new SparkMaxConfig();
+
+      motorConfig.idleMode(IdleMode.kCoast);
 
       motorConfig
           .encoder

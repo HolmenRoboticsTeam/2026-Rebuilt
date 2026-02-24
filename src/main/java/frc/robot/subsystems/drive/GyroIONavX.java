@@ -26,15 +26,15 @@ public class GyroIONavX implements GyroIO {
     yawTimestampQueue = SparkOdometryThread.getInstance().makeTimestampQueue();
     yawPositionQueue =
         SparkOdometryThread.getInstance().registerSignal(() -> navX.getYaw().in(Degree));
+    navX.enableOptionalMessages(true, false, false, false, false, true, false, false, false);
   }
 
   @Override
   public void updateInputs(GyroIOInputs inputs) {
-    inputs.connected =
-        navX.getTemperature().magnitude() == 0.0; // TODO: find a check to replace this
+    inputs.connected = true;
     inputs.yawPosition = Rotation2d.fromDegrees(-navX.getYaw().in(Degree));
     inputs.yawVelocityRadPerSec =
-        Units.degreesToRadians(-navX.getAngularVel()[3].in(DegreesPerSecond));
+        Units.degreesToRadians(-navX.getAngularVel()[2].in(DegreesPerSecond));
 
     inputs.odometryYawTimestamps =
         yawTimestampQueue.stream().mapToDouble((Double value) -> value).toArray();

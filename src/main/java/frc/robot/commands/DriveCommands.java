@@ -59,45 +59,6 @@ public class DriveCommands {
   }
 
   /**
-   * Field relative drive command using two joysticks (controlling linear and angular velocities).
-   */
-  public static Command joystickDrive(
-      Drive drive,
-      DoubleSupplier xSupplier,
-      DoubleSupplier ySupplier,
-      DoubleSupplier omegaSupplier) {
-    return Commands.run(
-        () -> {
-          // Get linear velocity
-          Translation2d linearVelocity =
-              getLinearVelocityFromJoysticks(xSupplier.getAsDouble(), ySupplier.getAsDouble());
-
-          // Apply rotation deadband
-          double omega = MathUtil.applyDeadband(omegaSupplier.getAsDouble(), DEADBAND);
-
-          // Square rotation value for more precise control
-          omega = Math.copySign(omega * omega, omega);
-
-          // Convert to field relative speeds & send command
-          ChassisSpeeds speeds =
-              new ChassisSpeeds(
-                  linearVelocity.getX() * drive.getMaxLinearSpeedMetersPerSec(),
-                  linearVelocity.getY() * drive.getMaxLinearSpeedMetersPerSec(),
-                  omega * drive.getMaxAngularSpeedRadPerSec());
-          boolean isFlipped =
-              DriverStation.getAlliance().isPresent()
-                  && DriverStation.getAlliance().get() == Alliance.Red;
-          drive.runVelocity(
-              ChassisSpeeds.fromFieldRelativeSpeeds(
-                  speeds,
-                  isFlipped
-                      ? drive.getRotation().plus(new Rotation2d(Math.PI))
-                      : drive.getRotation()));
-        },
-        drive);
-  }
-
-  /**
    * Field relative drive command using joystick for linear control and PID for angular control.
    * Possible use cases include snapping to an angle, aiming at a vision target, or controlling
    * absolute rotation with a joystick.
@@ -106,7 +67,8 @@ public class DriveCommands {
       Drive drive,
       DoubleSupplier xSupplier,
       DoubleSupplier ySupplier,
-      Supplier<Rotation2d> rotationSupplier) {
+      DoubleSupplier xAngleSupplier,
+      DoubleSupplier yAngleSupplier) {
 
     // Create PID controller
     ProfiledPIDController angleController =
@@ -124,10 +86,23 @@ public class DriveCommands {
               Translation2d linearVelocity =
                   getLinearVelocityFromJoysticks(xSupplier.getAsDouble(), ySupplier.getAsDouble());
 
+              double xAngle = xAngleSupplier.getAsDouble();
+              double yAngle = yAngleSupplier.getAsDouble();
+
+              if (MathUtil.isNear(0.0, xAngle, 0.1) // Stick is a neural, so snake drive
+                  && MathUtil.isNear(0.0, yAngle, 0.1)) {
+                xAngle = ySupplier.getAsDouble();
+                yAngle = xSupplier.getAsDouble();
+              }
+
               // Calculate angular speed
               double omega =
                   angleController.calculate(
-                      drive.getRotation().getRadians(), rotationSupplier.get().getRadians());
+                      drive.getRotation().getRadians(), Math.atan2(xAngle, yAngle));
+
+              if (MathUtil.isNear(0.0, xAngle, 0.1) && MathUtil.isNear(0.0, yAngle, 0.1)) {
+                omega = 0.0;
+              }
 
               // Convert to field relative speeds & send command
               ChassisSpeeds speeds =
@@ -149,6 +124,27 @@ public class DriveCommands {
 
         // Reset PID controller when command starts
         .beforeStarting(() -> angleController.reset(drive.getRotation().getRadians()));
+  }
+
+  /**
+   * Creates and returns a command that point the drive towards and move at the given transform.
+   *
+   * @param drive the drive subsystem
+   * @param transform the target pose
+   * @return A command with the given logic
+   */
+  public static Command driveTowardsTransform(Drive drive, Supplier<Transform2d> transform) {
+
+    // Move towards pose
+    DoubleSupplier xSupplier = () -> drive.getPose().getX() - transform.get().getX();
+    DoubleSupplier ySupplier = () -> drive.getPose().getY() - transform.get().getY();
+
+    // Look at pose
+    DoubleSupplier xAngleSupplier = () -> drive.getPose().getX() - transform.get().getX();
+    DoubleSupplier yAngleSupplier = () -> drive.getPose().getY() - transform.get().getY();
+
+    return DriveCommands.joystickDriveAtAngle(
+        drive, xSupplier, ySupplier, xAngleSupplier, yAngleSupplier);
   }
 
   /**

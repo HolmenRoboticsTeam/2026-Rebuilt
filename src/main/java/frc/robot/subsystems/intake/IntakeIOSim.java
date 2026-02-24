@@ -32,13 +32,16 @@ public class IntakeIOSim implements IntakeIO {
     intakeMotor.setInputVoltage(appliedVolts);
     intakeMotor.update(0.02);
 
-    inputs.positionRad = intakeMotor.getAngularPositionRotations();
+    inputs.positionRotations = intakeMotor.getAngularPositionRotations();
     inputs.velocityRadPerSec = intakeMotor.getAngularVelocityRPM();
     inputs.appliedVolts = appliedVolts;
     inputs.currentAmps = intakeMotor.getCurrentDrawAmps();
+
+    inputs.isRunning = appliedVolts != 0.0;
   }
 
-  public void setVoltage(double volts) {
+  @Override
+  public void setVolts(double volts) {
     appliedVolts = volts;
   }
 }

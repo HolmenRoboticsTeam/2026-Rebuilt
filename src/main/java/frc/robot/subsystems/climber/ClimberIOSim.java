@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems.climber;
 
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 
@@ -12,6 +14,8 @@ public class ClimberIOSim implements ClimberIO {
 
   private DCMotorSim climberMotor;
 
+  private PIDController pidController;
+  private double targetHeight;
   private double appliedVolts;
 
   /** Creates a new sim climber. */
@@ -25,12 +29,34 @@ public class ClimberIOSim implements ClimberIO {
                 ClimberConstants.motorToLengthRatio),
             ClimberConstants.Sim.motorGearBox);
 
+    pidController =
+        new PIDController(
+            ClimberConstants.Sim.climberP,
+            ClimberConstants.Sim.climberI,
+            ClimberConstants.Sim.climberD);
+
+    resetPosition();
+    targetHeight = climberMotor.getAngularPositionRotations() * ClimberConstants.motorToLengthRatio;
     appliedVolts = 0.0;
   }
 
   public void updateInputs(ClimberIOInputs inputs) {
+
+    appliedVolts =
+        pidController.calculate(
+            climberMotor.getAngularPositionRotations() * ClimberConstants.motorToLengthRatio,
+            targetHeight);
+
     climberMotor.setInputVoltage(appliedVolts);
     climberMotor.update(0.02);
+
+    climberMotor.setAngle(
+        MathUtil.clamp(
+            climberMotor.getAngularPositionRad(),
+            2.0 * Math.PI * ClimberConstants.retractedHeight / ClimberConstants.motorToLengthRatio
+                - 1.0,
+            2.0 * Math.PI * ClimberConstants.extendHeight / ClimberConstants.motorToLengthRatio
+                + 1.0));
 
     inputs.positionMeters =
         climberMotor.getAngularPositionRotations() * ClimberConstants.motorToLengthRatio;
@@ -39,10 +65,19 @@ public class ClimberIOSim implements ClimberIO {
     inputs.appliedVolts = appliedVolts;
     inputs.currentAmps = climberMotor.getCurrentDrawAmps();
     inputs.hardStop =
-        climberMotor.getAngularPositionRotations() <= ClimberConstants.retractedHeight;
+        climberMotor.getAngularPositionRotations() * ClimberConstants.motorToLengthRatio
+            <= ClimberConstants.retractedHeight;
   }
 
-  public void setVoltage(double volts) {
-    appliedVolts = volts;
+  @Override
+  public void setTargetHeight(double height) {
+    targetHeight = height;
+  }
+
+  @Override
+  public void resetPosition() {
+    climberMotor.setAngle(
+        2.0 * Math.PI * ClimberConstants.retractedHeight / ClimberConstants.motorToLengthRatio);
+    climberMotor.setAngularVelocity(0.0);
   }
 }

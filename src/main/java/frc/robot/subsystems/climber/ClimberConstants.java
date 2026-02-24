@@ -10,13 +10,10 @@ import edu.wpi.first.math.system.plant.DCMotor;
 /** Constants for the climber subsystem. */
 public class ClimberConstants {
 
-  public static final double extendVolts = 12.0;
-  public static final double retractVolts = -12.0;
+  public static final double retractedHeight = 0.5;
+  public static final double extendHeight = 0.76;
 
-  public static final double retractedHeight = 0.0;
-  public static final double extendHeight = 30.0;
-
-  public static final double gearRatio = 27.0;
+  public static final double gearRatio = 1.0 / 27.0;
   public static final double drumCircumference = 0.03 * Math.PI; // Meters
   public static final double motorToLengthRatio = gearRatio * drumCircumference;
 
@@ -44,6 +41,10 @@ public class ClimberConstants {
   public static class Sim {
 
     public static final DCMotor motorGearBox = DCMotor.getNEO(1);
-    public static final double JKgMetersSquared = 0.004;
+    public static final double JKgMetersSquared = 0.00001;
+
+    public static final double climberP = 20.0;
+    public static final double climberI = 0.0;
+    public static final double climberD = 0.0;
   }
 }

@@ -36,18 +36,11 @@ public class Climber extends SubsystemBase {
    * @return A command with the given logic.
    */
   public Command extend() {
-    return Commands.sequence(
-        Commands.runOnce(
-            () -> {
-              io.setVolts(ClimberConstants.extendVolts);
-            },
-            this),
-        Commands.waitUntil(() -> inputs.positionMeters >= ClimberConstants.extendHeight),
-        Commands.runOnce(
-            () -> {
-              io.setVolts(0.0);
-            },
-            this));
+    return Commands.runOnce(
+        () -> {
+          io.setTargetHeight(ClimberConstants.extendHeight);
+        },
+        this);
   }
 
   /**
@@ -56,18 +49,12 @@ public class Climber extends SubsystemBase {
    * @return A command with the given logic.
    */
   public Command retract() {
-    return Commands.sequence(
-        Commands.runOnce(
-            () -> {
-              io.setVolts(ClimberConstants.retractVolts);
-            },
-            this),
-        Commands.waitUntil(() -> inputs.hardStop),
-        Commands.runOnce(
-            () -> {
-              io.setVolts(0.0);
-            },
-            this));
+    return Commands.runOnce(
+        () -> {
+          System.out.println("RETRACTING");
+          io.setTargetHeight(ClimberConstants.retractedHeight);
+        },
+        this);
   }
 
   /**
@@ -80,15 +67,19 @@ public class Climber extends SubsystemBase {
     return Commands.sequence(
         Commands.runOnce(
             () -> {
-              io.setVolts(ClimberConstants.retractVolts);
+              io.setTargetHeight(0.0);
             },
             this),
         Commands.waitUntil(() -> inputs.hardStop),
         Commands.runOnce(
             () -> {
-              io.setVolts(0.0);
               io.resetPosition();
+              io.setTargetHeight(ClimberConstants.retractedHeight);
             },
             this));
+  }
+
+  public double getHeight() {
+    return inputs.positionMeters;
   }
 }

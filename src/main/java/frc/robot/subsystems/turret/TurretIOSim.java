@@ -130,7 +130,7 @@ public class TurretIOSim implements TurretIO {
 
     inputs.flyWheelPositionRotations =
         inputs.flyWheelPositionRotations + (flyWheelSim.getAngularVelocityRadPerSec() * 0.02);
-    inputs.flyWheelVelocityRPM = flyWheelSim.getAngularVelocityRadPerSec();
+    inputs.flyWheelVelocityRPM = flyWheelSim.getAngularVelocityRPM();
     inputs.flyWheelAppliedVolts = flyWheelAppliedVolts;
     inputs.flyWheelCurrentAmps = flyWheelSim.getCurrentDrawAmps();
     inputs.flyWheelIsTarget =
@@ -161,7 +161,7 @@ public class TurretIOSim implements TurretIO {
     double angle = angleMotorSim.getAngularPositionRad();
     double rpm = flyWheelSim.getAngularVelocityRPM();
 
-    // Eat 10% off speed
+    // Eat some speed
     flyWheelSim.setAngularVelocity(
         flyWheelSim.getAngularVelocityRadPerSec() * TurretConstants.Sim.percentSpeedKept);
 

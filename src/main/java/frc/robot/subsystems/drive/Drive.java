@@ -212,8 +212,21 @@ public class Drive extends SubsystemBase {
       poseEstimator.updateWithTime(sampleTimestamps[i], rawGyroRotation, modulePositions);
     }
 
+    poseEstimator.update(
+        gyroInputs.odometryYawPositions.length == 0.0
+            ? getRotation()
+            : gyroInputs.odometryYawPositions[0],
+        new SwerveModulePosition[] {
+          new SwerveModulePosition(),
+          new SwerveModulePosition(),
+          new SwerveModulePosition(),
+          new SwerveModulePosition()
+        });
+
     // Update gyro alert
     gyroDisconnectedAlert.set(!gyroInputs.connected && Constants.currentMode != Mode.SIM);
+
+    field.setRobotPose(getPose());
   }
 
   /**

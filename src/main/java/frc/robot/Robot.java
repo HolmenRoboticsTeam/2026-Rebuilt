@@ -115,7 +115,10 @@ public class Robot extends LoggedRobot {
 
   /** This function is called once when the robot is disabled. */
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    System.out.println("RAN DISABLEDINIT!!!!");
+    robotContainer.disabledInit();
+  }
 
   /** This function is called periodically when disabled. */
   @Override
@@ -125,6 +128,7 @@ public class Robot extends LoggedRobot {
   @Override
   public void autonomousInit() {
     Elastic.selectTab("Autonomous");
+    robotContainer.enabledInit();
     autonomousCommand = robotContainer.getAutonomousCommand();
 
     // schedule the autonomous command (example)
@@ -147,6 +151,8 @@ public class Robot extends LoggedRobot {
     if (autonomousCommand != null) {
       autonomousCommand.cancel();
     }
+
+    robotContainer.enabledInit();
   }
 
   /** This function is called periodically during operator control. */
@@ -168,7 +174,7 @@ public class Robot extends LoggedRobot {
   /** This function is called once when the robot is first started up. */
   @Override
   public void simulationInit() {
-    // FuelSim.getInstance().spawnStartingFuel();
+    FuelSim.getInstance().spawnStartingFuel();
     FuelSim.getInstance().setSubticks(5);
     FuelSim.getInstance().start();
   }

@@ -38,7 +38,8 @@ public class HopperIOSim implements HopperIO {
     inputs.currentAmps = hopperMotor.getCurrentDrawAmps();
   }
 
-  public void setVoltage(double volts) {
+  @Override
+  public void setVolts(double volts) {
     appliedVolts = volts;
   }
 }

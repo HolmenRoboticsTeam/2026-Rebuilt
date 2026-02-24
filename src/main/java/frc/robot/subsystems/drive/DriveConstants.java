@@ -16,7 +16,7 @@ import edu.wpi.first.math.util.Units;
 
 public class DriveConstants {
   public static final double maxSpeedMetersPerSec = 4.0;
-  public static final double odometryFrequency = 200.0; // Hz TODO: tune this (400Hz?)
+  public static final double odometryFrequency = 100.0; // Hz TODO: tune this (400Hz?)
   public static final double trackWidth = Units.inchesToMeters(25.6692913); // TODO: update this
   public static final double wheelBase = Units.inchesToMeters(22.677165);
   public static final double driveBaseRadius = Math.hypot(trackWidth / 2.0, wheelBase / 2.0);

@@ -55,6 +55,15 @@ public class Intake extends SubsystemBase {
   }
 
   /**
+   * Get the current position of the intake
+   *
+   * @return the position in radians
+   */
+  public double getPosition() {
+    return inputs.positionRotations;
+  }
+
+  /**
    * Checks the motor to see if the intake is running.
    *
    * @return Whether the intake is running.
