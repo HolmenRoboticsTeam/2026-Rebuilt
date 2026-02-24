@@ -41,9 +41,6 @@ import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.feeder.Feeder;
 import frc.robot.subsystems.feeder.FeederIO;
 import frc.robot.subsystems.feeder.FeederIOSim;
-import frc.robot.subsystems.hopper.Hopper;
-import frc.robot.subsystems.hopper.HopperIO;
-import frc.robot.subsystems.hopper.HopperIOSim;
 import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.indexer.IndexerIO;
 import frc.robot.subsystems.indexer.IndexerIOSim;
@@ -76,7 +73,6 @@ public class RobotContainer {
   private final Vision vision;
 
   private final Intake intake;
-  private final Hopper hopper;
   private final Indexer indexer;
   private final Feeder feeder;
   private final Turret turret;
@@ -130,20 +126,14 @@ public class RobotContainer {
                 new VisionIOLimelight("limelight-three", drive::getRotation),
                 new VisionIOLimelight("limelight-two", drive::getRotation));
         // intake = new Intake(new IntakeIOReal());
-        // hopper = new Hopper(new HopperIOReal());
         // indexer = new Indexer(new IndexerIOReal());
         // feeder = new Feeder(new FeederIOReal());
         intake = new Intake(new IntakeIO() {});
-        hopper = new Hopper(new HopperIO() {});
         indexer = new Indexer(new IndexerIO() {});
         feeder = new Feeder(new FeederIO() {});
         turret =
             new Turret(
-                new TurretIOReal(),
-                drive::getPose,
-                drive::getChassisSpeeds,
-                feeder::feedingFuel,
-                (delta) -> hopper.changeFuelCountBy(delta));
+                new TurretIOReal(), drive::getPose, drive::getChassisSpeeds, feeder::feedingFuel);
         // climber = new Climber(new ClimberIOReal());
         climber = new Climber(new ClimberIO() {});
 
@@ -170,16 +160,11 @@ public class RobotContainer {
                 new VisionIO() {},
                 new VisionIO() {});
         intake = new Intake(new IntakeIOSim());
-        hopper = new Hopper(new HopperIOSim());
         indexer = new Indexer(new IndexerIOSim());
         feeder = new Feeder(new FeederIOSim());
         turret =
             new Turret(
-                new TurretIOSim(),
-                drive::getPose,
-                drive::getChassisSpeeds,
-                feeder::feedingFuel,
-                (delta) -> hopper.changeFuelCountBy(delta));
+                new TurretIOSim(), drive::getPose, drive::getChassisSpeeds, feeder::feedingFuel);
         climber = new Climber(new ClimberIOSim());
 
         // Register a robot for collision with fuel
@@ -202,9 +187,7 @@ public class RobotContainer {
                     intake
                         .isRunning(), // (optional) BooleanSupplier for whether the intake should be
                 // active at a given moment
-                () ->
-                    hopper.changeFuelCountBy(
-                        1)); // (optional) Runnable called whenever a fuel is in-took
+                () -> {}); // (optional) Runnable called whenever a fuel is in-took
         break;
 
       default:
@@ -218,23 +201,18 @@ public class RobotContainer {
                 new ModuleIO() {});
         vision = new Vision(drive::addVisionMeasurement, new VisionIO() {}, new VisionIO() {});
         intake = new Intake(new IntakeIO() {});
-        hopper = new Hopper(new HopperIO() {});
         indexer = new Indexer(new IndexerIO() {});
         feeder = new Feeder(new FeederIO() {});
         turret =
             new Turret(
-                new TurretIO() {},
-                drive::getPose,
-                drive::getChassisSpeeds,
-                feeder::feedingFuel,
-                (delta) -> hopper.changeFuelCountBy(delta));
+                new TurretIO() {}, drive::getPose, drive::getChassisSpeeds, feeder::feedingFuel);
         climber = new Climber(new ClimberIO() {});
         break;
     }
 
     // Set up auto routines
     autoCommandBuilder =
-        new AutoCommandBuilder(drive, vision, intake, hopper, indexer, feeder, turret, climber);
+        new AutoCommandBuilder(drive, vision, intake, indexer, feeder, turret, climber);
     useDynamicAuto = new LoggedDashboardChooser<>("Use DynamicAuto");
     useDynamicAuto.addDefaultOption("Yes, use DynamicAuto", true);
     useDynamicAuto.addOption("No, use Hard Autos", false);
@@ -274,8 +252,7 @@ public class RobotContainer {
     CommandScheduler.getInstance().schedule(PathfindingCommand.warmupCommand());
 
     CommandScheduler.getInstance()
-        .schedule(
-            StateLoggingCommands.logMechanisms(intake, hopper, indexer, feeder, turret, climber));
+        .schedule(StateLoggingCommands.logMechanisms(intake, indexer, feeder, turret, climber));
   }
 
   /**
@@ -383,7 +360,6 @@ public class RobotContainer {
                 "Couldn't find the file for one of paths!"));
         return Commands.parallel(
             intake.start(),
-            hopper.start(),
             indexer.start(),
             feeder.start(),
             turret.fullFieldAim(),

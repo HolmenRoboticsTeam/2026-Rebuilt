@@ -17,7 +17,6 @@ import frc.robot.Constants.FieldConstants;
 import frc.robot.subsystems.climber.Climber;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.feeder.Feeder;
-import frc.robot.subsystems.hopper.Hopper;
 import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.turret.Turret;
@@ -45,7 +44,6 @@ public class AutoCommandBuilder {
   private Drive drive;
   private Vision vision;
   private Intake intake;
-  private Hopper hopper;
   private Indexer indexer;
   private Feeder feeder;
   private Turret turret;
@@ -55,7 +53,6 @@ public class AutoCommandBuilder {
       Drive drive,
       Vision vision,
       Intake intake,
-      Hopper hopper,
       Indexer indexer,
       Feeder feeder,
       Turret turret,
@@ -63,7 +60,6 @@ public class AutoCommandBuilder {
     this.drive = drive;
     this.vision = vision;
     this.intake = intake;
-    this.hopper = hopper;
     this.indexer = indexer;
     this.feeder = feeder;
     this.turret = turret;
@@ -170,7 +166,6 @@ public class AutoCommandBuilder {
 
             // Set the subsystems
             intake.start(),
-            hopper.start(),
             indexer.start(),
             feeder.stop(),
             // Turret is running RPM and pointing at hub, but 0 angle (see deadline).
@@ -197,7 +192,6 @@ public class AutoCommandBuilder {
 
             // Set the subsystems
             intake.start(),
-            hopper.start(),
             indexer.start(),
             feeder.stop(),
             // Turret is running fullFieldAim (see deadline).
@@ -235,7 +229,6 @@ public class AutoCommandBuilder {
     return Commands.sequence(
             // Set the subsystems
             intake.start(),
-            hopper.start(),
             indexer.start(),
             // Feeder and Turret are shooting still (see deadline).
 

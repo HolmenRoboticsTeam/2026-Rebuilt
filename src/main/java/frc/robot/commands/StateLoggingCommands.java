@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.climber.Climber;
 import frc.robot.subsystems.feeder.Feeder;
-import frc.robot.subsystems.hopper.Hopper;
 import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.turret.Turret;
@@ -28,11 +27,6 @@ public class StateLoggingCommands {
       new LoggedMechanism2d(canvasWidth, canvasHeight);
   private static LoggedMechanismLigament2d intakeLigament =
       new LoggedMechanismLigament2d("Intake", 0.1, 0.0);
-
-  private static LoggedMechanism2d hopperMechanism =
-      new LoggedMechanism2d(canvasWidth, canvasHeight);
-  private static LoggedMechanismLigament2d hopperLigament =
-      new LoggedMechanismLigament2d("hopper", 0.1, 0.0);
 
   private static LoggedMechanism2d indexerMechanism =
       new LoggedMechanism2d(canvasWidth, canvasHeight);
@@ -61,10 +55,6 @@ public class StateLoggingCommands {
     intakeLigament.setColor(new Color8Bit(0, 0, 255));
     intakeLigament.setLineWeight(1.0);
 
-    hopperMechanism.getRoot("root", 0.4, 0.3).append(hopperLigament);
-    hopperLigament.setColor(new Color8Bit(255, 255, 0));
-    hopperLigament.setLineWeight(1.0);
-
     indexerMechanism.getRoot("root", 0.4, 0.4).append(indexerLigament);
     indexerLigament.setColor(new Color8Bit(255, 0, 0));
     indexerLigament.setLineWeight(1.0);
@@ -84,16 +74,10 @@ public class StateLoggingCommands {
   }
 
   public static Command logMechanisms(
-      Intake intake,
-      Hopper hopper,
-      Indexer indexer,
-      Feeder feeder,
-      Turret turret,
-      Climber climber) {
+      Intake intake, Indexer indexer, Feeder feeder, Turret turret, Climber climber) {
     return Commands.run(
             () -> {
               intakeLigament.setAngle(Rotation2d.fromRotations(intake.getPosition()));
-              hopperLigament.setAngle(Rotation2d.fromRotations(-hopper.getPosition()));
               indexerLigament.setAngle(Rotation2d.fromRotations(indexer.getPosition()));
               feederLigament.setAngle(Rotation2d.fromRotations(feeder.getPosition()));
 
@@ -103,7 +87,6 @@ public class StateLoggingCommands {
               climberLigament.setLength(climber.getHeight() - 0.1);
 
               Logger.recordOutput("Mechanism/Intake", intakeMechanism);
-              Logger.recordOutput("Mechanism/Hopper", hopperMechanism);
               Logger.recordOutput("Mechanism/Indexer", indexerMechanism);
               Logger.recordOutput("Mechanism/Feeder", feederMechanism);
 

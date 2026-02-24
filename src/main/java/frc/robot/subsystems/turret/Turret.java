@@ -23,7 +23,6 @@ import frc.robot.Constants.Mode;
 import frc.robot.subsystems.turret.TurretDistanceCalc.TargetType;
 import frc.robot.subsystems.turret.TurretDistanceCalc.TurretShotData;
 import frc.robot.subsystems.turret.TurretIO.FlyWheelMode;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.LoggedNetworkNumber;
@@ -42,7 +41,6 @@ public class Turret extends SubsystemBase {
   private Supplier<ChassisSpeeds> robotVelocity;
 
   private Supplier<Boolean> fedFuel;
-  private Consumer<Integer> changeFuelHeld;
 
   private Debouncer currentControlDebouncer =
       new Debouncer(TurretConstants.currentControlDebounce, DebounceType.kFalling);
@@ -59,8 +57,7 @@ public class Turret extends SubsystemBase {
       TurretIO io,
       Supplier<Pose2d> robotPose,
       Supplier<ChassisSpeeds> robotVelocity,
-      Supplier<Boolean> fedFuel,
-      Consumer<Integer> changeFuelHeld) {
+      Supplier<Boolean> fedFuel) {
     this.io = io;
     this.robotPose = robotPose;
     turretPose =
@@ -81,7 +78,6 @@ public class Turret extends SubsystemBase {
         };
     this.robotVelocity = robotVelocity;
     this.fedFuel = fedFuel;
-    this.changeFuelHeld = changeFuelHeld;
   }
 
   private double fuelHz = 0.3;
@@ -96,7 +92,6 @@ public class Turret extends SubsystemBase {
         && fedFuel.get()
         && lastFuel + fuelHz < Timer.getFPGATimestamp()) {
       io.shootFuel(robotPose.get().getRotation());
-      changeFuelHeld.accept(-1);
       lastFuel = Timer.getFPGATimestamp();
     }
   }
