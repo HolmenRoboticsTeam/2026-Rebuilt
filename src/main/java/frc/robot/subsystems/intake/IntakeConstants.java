@@ -33,6 +33,8 @@ public class IntakeConstants {
           .velocityConversionFactor(gearRatio / 60.0);
 
       motorConfig.closedLoop.pid(1.0, 0.0, 0.0);
+
+      motorConfig.smartCurrentLimit(40);
     }
   }
 

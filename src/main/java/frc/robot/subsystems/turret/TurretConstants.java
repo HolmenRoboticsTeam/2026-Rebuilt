@@ -15,8 +15,8 @@ import edu.wpi.first.units.measure.Distance;
 /** Constants for the turret subsystem. */
 public class TurretConstants {
 
-  public static final Distance turretXOffset = Distance.ofRelativeUnits(-25.0, Inch);
-  public static final Distance turretYOffset = Distance.ofRelativeUnits(0.0, Inch);
+  public static final Distance turretXOffset = Distance.ofRelativeUnits(0.0, Inch);
+  public static final Distance turretYOffset = Distance.ofRelativeUnits(-25.0, Inch);
 
   public static final double currentControlDebounce = 0.025;
 
@@ -60,9 +60,24 @@ public class TurretConstants {
           .closedLoop
           .pid(0.5, 0.0, 0.0)
           .outputRange(-0.2, 0.2)
-          .allowedClosedLoopError(0.004, ClosedLoopSlot.kSlot0)
+          .allowedClosedLoopError(0.006, ClosedLoopSlot.kSlot0)
           .feedForward
           .kS(0.4);
+
+      rotationMotorConfig
+          .absoluteEncoder
+          .zeroCentered(true)
+          .zeroOffset(0.12281514)
+          .positionConversionFactor(rotationGearing * 3.0);
+
+      rotationMotorConfig
+          .softLimit
+          .forwardSoftLimit(Math.PI / 6)
+          .reverseSoftLimit(-Math.PI / 6)
+          .forwardSoftLimitEnabled(true)
+          .reverseSoftLimitEnabled(true);
+
+      rotationMotorConfig.smartCurrentLimit(40);
 
       // Angle Motor Config
 
@@ -76,9 +91,13 @@ public class TurretConstants {
       angleMotorConfig
           .closedLoop
           .pid(0.6, 0.0, 0.0)
-          .allowedClosedLoopError(0.04, ClosedLoopSlot.kSlot0)
+          .allowedClosedLoopError(0.01, ClosedLoopSlot.kSlot0)
           .feedForward
-          .kS(0.3);
+          .kS(0.25);
+      angleMotorConfig.inverted(true);
+      angleMotorConfig.softLimit.forwardSoftLimit(0.0).reverseSoftLimit(0.45);
+
+      angleMotorConfig.smartCurrentLimit(40);
 
       // Left FlyWheel Motor Config
 
@@ -91,20 +110,23 @@ public class TurretConstants {
           .positionConversionFactor(flyWheelGearing)
           .velocityConversionFactor(flyWheelGearing);
 
-      leftFlyWheelMotorConfig.closedLoop.pid(0.0001, 0.0, 0.0).feedForward.kV(0.00192).kS(0.4);
+      leftFlyWheelMotorConfig
+          .closedLoop
+          .pid(0.0001, 0.0, 0.0)
+          .allowedClosedLoopError(0.0, ClosedLoopSlot.kSlot0)
+          .feedForward
+          .kV(0.00192)
+          .kS(0.4);
+
+      leftFlyWheelMotorConfig.smartCurrentLimit(40);
 
       // Right FlyWheel Motor Config
 
       rightFlyWheelMotorConfig = new SparkMaxConfig();
 
-      rightFlyWheelMotorConfig.inverted(true);
+      rightFlyWheelMotorConfig.smartCurrentLimit(40);
 
-      rightFlyWheelMotorConfig
-          .encoder
-          .positionConversionFactor(flyWheelGearing)
-          .velocityConversionFactor(flyWheelGearing);
-
-      rightFlyWheelMotorConfig.closedLoop.pid(0.0001, 0.0, 0.0).feedForward.kV(0.00192).kS(0.4);
+      rightFlyWheelMotorConfig.follow(leftFlyWheelMotorID, true);
     }
   }
 

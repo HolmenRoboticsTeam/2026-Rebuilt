@@ -149,7 +149,7 @@ public class Turret extends SubsystemBase {
               Logger.recordOutput("Turret/Type", targetType);
               Logger.recordOutput("Turret/FlyWheelMode", flyWheelMode);
               Logger.recordOutput("Turret/RPM", RPM);
-              Logger.recordOutput("Turret/Angle", Rotation2d.fromDegrees(angle));
+              Logger.recordOutput("Turret/Angle", Rotation2d.fromRadians(angle));
               Logger.recordOutput(
                   "Turret/Rotation",
                   deltaTranslation.getAngle().minus(robotPose.get().getRotation()));
@@ -160,7 +160,7 @@ public class Turret extends SubsystemBase {
               // Set the outputs
               io.setFlyWheelMode(flyWheelMode);
               io.setFlyWheelRPM(RPM);
-              io.setTargetAngle(Rotation2d.fromDegrees(angle));
+              io.setTargetAngle(Rotation2d.fromRadians(angle));
             },
             this)
         .repeatedly()
