@@ -4,7 +4,8 @@
 
 package frc.robot.subsystems.turret;
 
-import static edu.wpi.first.units.Units.Meter;
+import static edu.wpi.first.units.Units.Meters;
+import static edu.wpi.first.units.Units.RPM;
 
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.filter.Debouncer.DebounceType;
@@ -12,6 +13,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -109,66 +111,68 @@ public class Turret extends SubsystemBase {
    */
   public Command fullFieldAim() {
 
-    return Commands.runOnce(
+    return Commands.run(
             () -> {
 
               // Get target translation and type based on turret position
-
               Translation2d turretTarget = getTargetTranslation();
               TargetType targetType = getTargetType();
 
-              // ADJUST THE TARGET BASE ON ROBOT VELOCITY TODO: Mult by time-of-flight
-              // turretTarget =
-              //     turretTarget.minus(
-              //         new Translation2d(
-              //             robotVelocity.get().vxMetersPerSecond,
-              //             robotVelocity.get().vyMetersPerSecond));
-
-              // AIM THE TURRET AT THE TARGET
-              Translation2d deltaTranslation =
-                  turretTarget.minus(turretPose.get().getTranslation());
-              io.setTargetRotation(
-                  deltaTranslation.getAngle().minus(robotPose.get().getRotation()));
-
-              // SPIN AND ANGLE THE FLYWHEEL BASED OFF TURRET DISTANCE FROM TARGET
-
+              // Get the shot data
               Distance distance =
-                  Distance.ofRelativeUnits(
-                      turretPose.get().getTranslation().getDistance(turretTarget), Meter);
-
+                  Meters.of(turretPose.get().getTranslation().getDistance(turretTarget));
               TurretShotData shotData = TurretDistanceCalc.getShotData(targetType, distance);
-              double RPM = shotData.RPM();
-              double angle = shotData.angleRad();
+
+              // Adjust target based on robot movement times time of flight.
+              turretTarget =
+                  turretTarget.minus(
+                      new Translation2d(
+                              robotVelocity.get().vxMetersPerSecond,
+                              robotVelocity.get().vyMetersPerSecond)
+                          .times(shotData.timeOfFlightSec()));
+
+              // Update shot data
+              shotData = TurretDistanceCalc.getShotData(targetType, distance);
+              /**
+               * TLDR: The time of flight data should not be updated.
+               *
+               * <p>The shot data needs to be update because me moved the target based on the
+               * velocity of the robot. The time of flight does not need to be updated because it is
+               * not affect by the robot's velocity. Why? The robot's velocity is only horizontal
+               * AND the time of flight to only based on when the fuel hit the target from above,
+               * its vertical position. So regardless of the velocity of the robot, the fuel's
+               * vertical velocity will not be affected. Therefore, the time of flight will remain
+               * unchanged.
+               */
+
+              // Get the target values
+              Rotation2d rotation =
+                  turretTarget.minus(turretPose.get().getTranslation()).getAngle();
+              Rotation2d angle = Rotation2d.fromRadians(shotData.angleRad());
+              AngularVelocity rpm = RPM.of(shotData.RPM());
 
               // Set the Flywheel mode
-
               boolean torqueCurrentControl =
                   currentControlDebouncer.calculate(inputs.flyWheelIsTarget);
               FlyWheelMode flyWheelMode =
                   torqueCurrentControl ? FlyWheelMode.CURRENT : FlyWheelMode.VOLTAGE;
 
               // Log the outputs
-
               Logger.recordOutput("Turret/Distance", distance);
               Logger.recordOutput("Turret/Target", turretTarget);
               Logger.recordOutput("Turret/Type", targetType);
               Logger.recordOutput("Turret/FlyWheelMode", flyWheelMode);
-              Logger.recordOutput("Turret/RPM", RPM);
-              Logger.recordOutput("Turret/Angle", Rotation2d.fromRadians(angle));
-              Logger.recordOutput(
-                  "Turret/Rotation",
-                  deltaTranslation.getAngle().minus(robotPose.get().getRotation()));
-              Logger.recordOutput(
-                  "Turret/TrueRotation",
-                  deltaTranslation.getAngle().minus(robotPose.get().getRotation()));
+              Logger.recordOutput("Turret/RPM", rpm);
+              Logger.recordOutput("Turret/Angle", angle);
+              Logger.recordOutput("Turret/Rotation", rotation);
 
               // Set the outputs
+              io.setTargetRotation(rotation);
+              io.setTargetAngle(angle);
               io.setFlyWheelMode(flyWheelMode);
-              io.setFlyWheelRPM(RPM);
-              io.setTargetAngle(Rotation2d.fromRadians(angle));
+              io.setFlyWheelRPM(rpm.in(RPM));
             },
             this)
-        .repeatedly()
         .withName("Turret_FullFieldAim");
   }
 
@@ -179,62 +183,73 @@ public class Turret extends SubsystemBase {
    * @param targetType the target type
    * @return A command with the given logic
    */
-  public Command forceAim(Translation2d turretTarget, TargetType type) {
+  public Command forceAim(Translation2d target, TargetType type) {
 
-    return Commands.runOnce(
+    return Commands.run(
             () -> {
+
+              // Checks for the trench
               final TargetType targetType;
-              if (getTargetType() == TargetType.INVALID) targetType = TargetType.INVALID;
-              else targetType = type;
+              if (getTargetType() == TargetType.IN_TRENCH) {
+                targetType = TargetType.IN_TRENCH;
+              } else {
+                targetType = type;
+              }
 
-              // ADJUST THE TARGET BASE ON ROBOT VELOCITY TODO: Mult by time-of-flight
-              // turretTarget =
-              //     turretTarget.minus(
-              //         new Translation2d(
-              //             robotVelocity.get().vxMetersPerSecond,
-              //             robotVelocity.get().vyMetersPerSecond));
-
-              // AIM THE TURRET AT THE TARGET
-              Translation2d deltaTranslation =
-                  turretTarget.minus(turretPose.get().getTranslation());
-              io.setTargetRotation(
-                  deltaTranslation.getAngle().minus(robotPose.get().getRotation()));
-
-              // SPIN AND ANGLE THE FLYWHEEL BASED OFF TURRET DISTANCE FROM TARGET
-
-              Distance distance =
-                  Distance.ofRelativeUnits(
-                      turretPose.get().getTranslation().getDistance(turretTarget), Meter);
-
+              // Get the shot data
+              Distance distance = Meters.of(turretPose.get().getTranslation().getDistance(target));
               TurretShotData shotData = TurretDistanceCalc.getShotData(targetType, distance);
-              double RPM = shotData.RPM();
-              double angle = shotData.angleRad();
+
+              // Adjust target based on robot movement times time of flight.
+              final Translation2d turretTarget =
+                  target.minus(
+                      new Translation2d(
+                              robotVelocity.get().vxMetersPerSecond,
+                              robotVelocity.get().vyMetersPerSecond)
+                          .times(shotData.timeOfFlightSec()));
+
+              // Update shot data
+              shotData = TurretDistanceCalc.getShotData(targetType, distance);
+              /**
+               * TLDR: The time of flight data should not be updated.
+               *
+               * <p>The shot data needs to be update because me moved the target based on the
+               * velocity of the robot. The time of flight does not need to be updated because it is
+               * not affect by the robot's velocity. Why? The robot's velocity is only horizontal
+               * AND the time of flight to only based on when the fuel hit the target from above,
+               * its vertical position. So regardless of the velocity of the robot, the fuel's
+               * vertical velocity will not be affected. Therefore, the time of flight will remain
+               * unchanged.
+               */
+
+              // Get the target values
+              Rotation2d rotation =
+                  turretTarget.minus(turretPose.get().getTranslation()).getAngle();
+              Rotation2d angle = Rotation2d.fromRadians(shotData.angleRad());
+              AngularVelocity rpm = RPM.of(shotData.RPM());
 
               // Set the Flywheel mode
-
               boolean torqueCurrentControl =
                   currentControlDebouncer.calculate(inputs.flyWheelIsTarget);
               FlyWheelMode flyWheelMode =
                   torqueCurrentControl ? FlyWheelMode.CURRENT : FlyWheelMode.VOLTAGE;
 
               // Log the outputs
-
+              Logger.recordOutput("Turret/Distance", distance);
               Logger.recordOutput("Turret/Target", turretTarget);
               Logger.recordOutput("Turret/Type", targetType);
               Logger.recordOutput("Turret/FlyWheelMode", flyWheelMode);
-              Logger.recordOutput("Turret/RPM", RPM);
-              Logger.recordOutput("Turret/Angle", Rotation2d.fromDegrees(angle));
-              Logger.recordOutput(
-                  "Turret/Rotation",
-                  deltaTranslation.getAngle().minus(robotPose.get().getRotation()));
+              Logger.recordOutput("Turret/RPM", rpm);
+              Logger.recordOutput("Turret/Angle", angle);
+              Logger.recordOutput("Turret/Rotation", rotation);
 
               // Set the outputs
+              io.setTargetRotation(rotation);
+              io.setTargetAngle(angle);
               io.setFlyWheelMode(flyWheelMode);
-              io.setFlyWheelRPM(RPM);
-              io.setTargetAngle(Rotation2d.fromDegrees(angle));
+              io.setFlyWheelRPM(rpm.in(RPM));
             },
             this)
-        .repeatedly()
         .withName("Turret_FullFieldAim");
   }
 
@@ -249,30 +264,43 @@ public class Turret extends SubsystemBase {
     LoggedNetworkNumber tunableRPM = new LoggedNetworkNumber("/Tuning/RPM", 0.0);
     LoggedNetworkNumber tunableAngle = new LoggedNetworkNumber("/Tuning/Angle", 0.0);
 
-    return Commands.runOnce(
+    return Commands.run(
             () -> {
-              io.setTargetRotation(Rotation2d.kZero);
 
-              double RPM = tunableRPM.get();
-              double angle = tunableAngle.get();
+              // Get target translation and type based on turret position
+              Translation2d turretTarget = getTargetTranslation();
+              TargetType targetType = getTargetType();
+
+              // Get distance and rotation for logging
+              Distance distance =
+                  Meters.of(turretPose.get().getTranslation().getDistance(turretTarget));
+              Rotation2d rotation =
+                  turretTarget.minus(turretPose.get().getTranslation()).getAngle();
+
+              // Pull Tunable values
+              double rpm = tunableRPM.get();
+              Rotation2d angle = Rotation2d.fromRadians(tunableAngle.get());
 
               // Set the Flywheel mode
-
               boolean torqueCurrentControl =
                   currentControlDebouncer.calculate(inputs.flyWheelIsTarget);
               FlyWheelMode flyWheelMode =
                   torqueCurrentControl ? FlyWheelMode.CURRENT : FlyWheelMode.VOLTAGE;
 
               // Log the outputs
-
+              Logger.recordOutput("Turret/Distance", distance);
+              Logger.recordOutput("Turret/Target", turretTarget);
+              Logger.recordOutput("Turret/Type", targetType);
               Logger.recordOutput("Turret/FlyWheelMode", flyWheelMode);
-              Logger.recordOutput("Turret/RPM", RPM);
-              Logger.recordOutput("Turret/Angle", Rotation2d.fromDegrees(angle));
+              Logger.recordOutput("Turret/RPM", rpm);
+              Logger.recordOutput("Turret/Angle", angle);
+              Logger.recordOutput("Turret/Rotation", rotation);
 
               // Set the outputs
+              io.setTargetRotation(rotation);
+              io.setTargetAngle(angle);
               io.setFlyWheelMode(flyWheelMode);
-              io.setFlyWheelRPM(RPM);
-              io.setTargetAngle(Rotation2d.fromDegrees(angle));
+              io.setFlyWheelRPM(rpm);
             },
             this)
         .withName("Turret_Calibrate");
@@ -339,24 +367,55 @@ public class Turret extends SubsystemBase {
   }
 
   /**
-   * Find and returns which target type is correct based on the position of th e robot.
+   * Find and returns which target type is correct based on the position and speed of the robot.
    *
    * @return The type of the target.
    */
   private TargetType getTargetType() {
-    if (FieldConstants.kHomeAllianceZone.contains(
-        turretPose.get().getTranslation())) { // In Alliance Zone
+
+    ChassisSpeeds speeds = robotVelocity.get();
+    Translation2d turretTrans = turretPose.get().getTranslation();
+
+    /**
+     * The Trench zone is 1.2446 meter (49 inches). So, if the robot is going more than 4.9784 m/s
+     * perfectly at the trench it will miss the check. However, it will only be for one cycle, then
+     * the current turret position will be in the trench zone.
+     */
+    Translation2d forwardTrans =
+        turretTrans.plus(
+            new Translation2d(speeds.vxMetersPerSecond * 0.25, speeds.vyMetersPerSecond * 0.25)
+                .rotateBy(robotPose.get().getRotation()));
+    TargetType type = checkTrans(forwardTrans);
+    Logger.recordOutput("Turret/Step Check", new Translation2d[] {turretTrans, forwardTrans});
+    if (type == TargetType.IN_TRENCH) {
+      return type;
+    }
+    return checkTrans(turretTrans);
+  }
+
+  /**
+   * Return which targetType the given translation should target.
+   *
+   * @param trans the given translation
+   * @return Which targetType
+   */
+  private TargetType checkTrans(Translation2d trans) {
+    if (FieldConstants.kHomeAllianceZone.contains(trans)) { // In Alliance Zone
       return TargetType.HUB;
 
-    } else if (FieldConstants.kLeftNeutralSide.contains(
-        turretPose.get().getTranslation())) { // On Left Side
+    } else if (FieldConstants.kLeftNeutralSide.contains(trans)
+        || FieldConstants.kLeftOpposingSide.contains(trans)) { // On Left Side
       return TargetType.GROUND;
 
-    } else if (FieldConstants.kRightNeutralSide.contains(
-        turretPose.get().getTranslation())) { // On Right Side
+    } else if (FieldConstants.kRightNeutralSide.contains(trans)
+        || FieldConstants.kRightOpposingSide.contains(trans)) { // On Right Side
       return TargetType.GROUND;
 
-    } else {
+    } else if (FieldConstants.kAllianceTrenchBumpZone.contains(trans)
+        || FieldConstants.kOpposingTrenchBumpZone.contains(trans)) { // In the trench/On the bump
+      return TargetType.IN_TRENCH;
+
+    } else { // Out of the field
       return TargetType.INVALID;
     }
   }

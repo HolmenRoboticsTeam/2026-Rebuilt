@@ -57,85 +57,62 @@ public final class Constants {
 
   public static class FieldConstants {
 
-    public static final Distance fieldLength = Distance.ofRelativeUnits(651.22, Inches);
-    public static final Distance fieldWidth = Distance.ofRelativeUnits(317.69, Inches);
+    public static final Distance fieldLength = Inches.of(651.22);
+    public static final Distance fieldWidth = Inches.of(317.69);
 
     // #################### RECTANGLE ZONES ####################
 
     public static final Rectangle2d kHomeAllianceZone =
         new Rectangle2d( // Blue Alliance Zone
-            correctSide(
-                new Translation2d(
-                    Distance.ofRelativeUnits(0.0, Inches), Distance.ofRelativeUnits(0.0, Inches))),
-            correctSide(
-                new Translation2d(
-                    Distance.ofRelativeUnits(
-                        181.56 - (47.0 / 2.0)
-                        /** Minus one half hub behind the trench */
-                        ,
-                        Inches),
-                    Distance.ofRelativeUnits(316.64, Inches))));
+            correctSide(new Translation2d(Inches.of(0.0), Inches.of(0.0))),
+            correctSide(new Translation2d(Inches.of(157.06), Inches.of(316.64))));
+
+    public static final Rectangle2d kAllianceTrenchBumpZone =
+        new Rectangle2d(
+            correctSide(new Translation2d(Inches.of(157.06), Inches.of(0.0))),
+            correctSide(new Translation2d(Inches.of(206.06), Inches.of(316.64))));
 
     public static final Rectangle2d kLeftNeutralSide =
         new Rectangle2d(
-            correctSide(
-                new Translation2d(
-                    Distance.ofRelativeUnits(
-                        181.56 + (47.0 / 2.0)
-                        /** Plus one half hub in front of the trench */
-                        ,
-                        Inches),
-                    Distance.ofRelativeUnits(158.32, Inches))),
-            correctSide(
-                new Translation2d(
-                    Distance.ofRelativeUnits(
-                        468.56 - (47.0 / 2.0)
-                        /** Minus one half hub behind the opposing trench */
-                        ,
-                        Inches),
-                    Distance.ofRelativeUnits(316.64, Inches))));
+            correctSide(new Translation2d(Inches.of(206.06), Inches.of(158.32))),
+            correctSide(new Translation2d(Inches.of(464.06), Inches.of(316.64))));
 
     public static final Rectangle2d kRightNeutralSide =
         new Rectangle2d(
-            correctSide(
-                new Translation2d(
-                    Distance.ofRelativeUnits(
-                        181.56 + (47.0 / 2.0)
-                        /** Plus one half hub in front of the trench */
-                        ,
-                        Inches),
-                    Distance.ofRelativeUnits(0.0, Inches))),
-            correctSide(
-                new Translation2d(
-                    Distance.ofRelativeUnits(
-                        468.56 - 47.0
-                        /** Minus one full hub behind the opposing trench */
-                        ,
-                        Inches),
-                    Distance.ofRelativeUnits(158.8, Inches))));
+            correctSide(new Translation2d(Inches.of(206.06), Inches.of(0.0))),
+            correctSide(new Translation2d(Inches.of(464.06), Inches.of(158.8))));
+
+    public static final Rectangle2d kOpposingTrenchBumpZone =
+        new Rectangle2d(
+            correctSide(new Translation2d(Inches.of(464.06), Inches.of(0.0))),
+            correctSide(new Translation2d(Inches.of(513.06), Inches.of(316.64))));
+
+    public static final Rectangle2d kLeftOpposingSide =
+        new Rectangle2d(
+            correctSide(new Translation2d(Inches.of(513.06), Inches.of(158.32))),
+            correctSide(new Translation2d(Inches.of(651.22), Inches.of(316.64))));
+
+    public static final Rectangle2d kRightOpposingSide =
+        new Rectangle2d(
+            correctSide(new Translation2d(Inches.of(513.06), Inches.of(0.0))),
+            correctSide(new Translation2d(Inches.of(651.22), Inches.of(158.8))));
 
     // #################### TRANSLATIONS POINTS ####################
 
     public static final Translation2d kHubPosition =
-        correctSide(
-            new Translation2d(
-                Distance.ofRelativeUnits(181.56, Inches),
-                Distance.ofRelativeUnits(158.32, Inches)));
+        correctSide(new Translation2d(Inches.of(181.56), Inches.of(158.32)));
 
     public static final Translation2d kLeftCorner =
         correctSide(
             new Translation2d(
-                Distance.ofRelativeUnits(15.50, Inches),
-                Distance.ofRelativeUnits(
+                Inches.of(15.50),
+                Inches.of(
                     316.64 - 75.0
                     /** Left Wall Minus Inches */
-                    ,
-                    Inches)));
+                    )));
 
     public static final Translation2d kRightCorner =
-        correctSide(
-            new Translation2d(
-                Distance.ofRelativeUnits(15.50, Inches), Distance.ofRelativeUnits(75.0, Inches)));
+        correctSide(new Translation2d(Inches.of(15.50), Inches.of(75.0)));
 
     // #################### POSE POSITIONS ####################
 

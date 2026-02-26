@@ -38,10 +38,13 @@ public class TurretDistanceCalc {
         return hubMap.get(distance.in(Inches));
       case GROUND:
         return groundMap.get(distance.in(Inches));
-      case INVALID:
+      case IN_TRENCH:
         // So that when the robot is under the trench the flywheel stays up to speed.
         TurretShotData unchangedValue = hubMap.get(distance.in(Inches));
         return new TurretShotData(unchangedValue.RPM, 0.0, unchangedValue.timeOfFlightSec);
+      case INVALID:
+        // Look at the hub to try to fix pose estimation
+        return hubMap.get(distance.in(Inches));
     }
 
     return new TurretShotData(0, 0, 0); // How?
@@ -49,24 +52,24 @@ public class TurretDistanceCalc {
 
   private static void loadRealValues() {
     // TODO: Add real values
-    hubMap.put(25.0, new TurretShotData(0, 0, 0));
-    hubMap.put(50.0, new TurretShotData(0, 0.1, 0));
-    hubMap.put(75.0, new TurretShotData(0, 0.2, 0));
-    hubMap.put(100.0, new TurretShotData(0, 0.3, 0));
-    hubMap.put(125.0, new TurretShotData(0, 0.4, 0));
-    hubMap.put(150.0, new TurretShotData(0, 0.5, 0));
+    hubMap.put(25.0, new TurretShotData(0, 0, 0.0));
+    hubMap.put(50.0, new TurretShotData(0, 0.1, 0.0));
+    hubMap.put(75.0, new TurretShotData(0, 0.2, 0.0));
+    hubMap.put(100.0, new TurretShotData(0, 0.3, 0.0));
+    hubMap.put(125.0, new TurretShotData(0, 0.4, 0.0));
+    hubMap.put(150.0, new TurretShotData(0, 0.5, 0.0));
   }
 
   private static void loadSimValues() {
-    hubMap.put(100.0, new TurretShotData(3050.0, 1.309, 0));
-    hubMap.put(200.0, new TurretShotData(3100.0, 0.698, 0));
-    hubMap.put(225.0, new TurretShotData(4100.0, 0.785, 0));
+    hubMap.put(100.0, new TurretShotData(3050.0, 1.309, 0.0));
+    hubMap.put(200.0, new TurretShotData(3100.0, 0.698, 0.0));
+    hubMap.put(225.0, new TurretShotData(4100.0, 0.785, 0.0));
   }
 
   static {
 
     // Load some defaults
-    groundMap.put(0.0, new TurretShotData(0, 0, 0));
+    groundMap.put(0.0, new TurretShotData(0, 0, 0.0));
 
     // set the real or sim data
     if (Constants.currentMode == Mode.REAL) {
@@ -94,6 +97,9 @@ public class TurretDistanceCalc {
     GROUND,
 
     /** Used for dropping the turret flat */
+    IN_TRENCH,
+
+    /** Outside of the field */
     INVALID
   }
 }
