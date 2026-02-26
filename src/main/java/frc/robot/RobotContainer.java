@@ -281,7 +281,7 @@ public class RobotContainer {
     // Switch to X pattern when X button is pressed
     controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
 
-    // Reset gyro to 0° when Start button is pressed
+    // Reset gyro to ZERO when Start button is pressed
     controller
         .start()
         .onTrue(
