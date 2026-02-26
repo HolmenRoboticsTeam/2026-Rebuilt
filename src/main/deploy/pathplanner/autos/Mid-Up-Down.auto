@@ -21,19 +21,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "(A) Left Trench Start To Pre Depot Collect"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "Intake Start"
-                      }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "(B) Pre Depot Collect To Post Depot Collect & Launch"
+                        "pathName": "(A) Hub Start to Outpost Collect & Launch"
                       }
                     },
                     {
@@ -64,13 +52,13 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "(D) Post Depot Collect & Launch To Pre Left Climb"
+                        "pathName": "(D) Outpost Collect & Launch To Pre Right Climb"
                       }
                     },
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "(E) Pre Left Climb To Post Left Climb"
+                        "pathName": "(E) Pre Right Climb To Post Right Climb"
                       }
                     },
                     {
@@ -101,6 +89,6 @@
     }
   },
   "resetOdom": true,
-  "folder": "Left Trench Starts (U)",
+  "folder": "Hub Starts (M)",
   "choreoAuto": false
 }

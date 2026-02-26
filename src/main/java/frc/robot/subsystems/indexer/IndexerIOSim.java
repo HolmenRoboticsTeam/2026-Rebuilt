@@ -36,6 +36,7 @@ public class IndexerIOSim implements IndexerIO {
     inputs.velocityRPM = indexerMotor.getAngularVelocityRPM();
     inputs.appliedVolts = appliedVolts;
     inputs.currentAmps = indexerMotor.getCurrentDrawAmps();
+    inputs.hasFuel = true;
   }
 
   @Override

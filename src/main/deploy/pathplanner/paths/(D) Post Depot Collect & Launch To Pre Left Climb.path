@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.6,
-        "y": 4.0
+        "x": 0.6,
+        "y": 4.8
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.057447971191168,
-        "y": 3.424543191679761
+        "x": 0.8094361161478328,
+        "y": 5.206619356846716
       },
       "isLocked": false,
-      "linkedName": "Hub Start"
+      "linkedName": "Post Depot Collect & Launch"
     },
     {
       "anchor": {
-        "x": 0.4,
-        "y": 0.6
+        "x": 1.2,
+        "y": 5.5
       },
       "prevControl": {
-        "x": 0.7968943364223514,
-        "y": 1.0431783021204863
+        "x": 0.7504139424199927,
+        "y": 4.7994854674736205
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Outpost Collect & Launch"
+      "linkedName": "Pre Left Climb"
     }
   ],
   "rotationTargets": [],
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 90.0
   },
   "reversed": false,
-  "folder": "A 3 Starts -TO- 4 pre-collects, 2 pre-climb  (Has branches)",
+  "folder": "D 4 launchs -TO- 2 pre-collect, 2 starts, 2 pre-climb (Has Branches)",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": -160.0
   },
   "useDefaultConstraints": true
 }

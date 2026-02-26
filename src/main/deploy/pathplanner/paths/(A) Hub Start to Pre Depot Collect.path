@@ -36,7 +36,7 @@
         "y": 7.2
       },
       "prevControl": {
-        "x": 0.8918261191312218,
+        "x": 0.8918261191312217,
         "y": 7.008248872369518
       },
       "nextControl": null,
@@ -61,7 +61,7 @@
     "rotation": -119.99999999999999
   },
   "reversed": false,
-  "folder": "A 3 Starts -TO- 4 pre-collects, 2 pre-climb  (Has branches)",
+  "folder": "A 3 Starts -TO- 4 pre-collects, 2 launchs, 2 pre-climb (Has branches)",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 0.0

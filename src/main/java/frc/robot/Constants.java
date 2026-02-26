@@ -70,8 +70,8 @@ public final class Constants {
             correctSide(
                 new Translation2d(
                     Distance.ofRelativeUnits(
-                        181.56 - 47.0
-                        /** Minus one full hub behind the trench */
+                        181.56 - (47.0 / 2.0)
+                        /** Minus one half hub behind the trench */
                         ,
                         Inches),
                     Distance.ofRelativeUnits(316.64, Inches))));
@@ -81,16 +81,16 @@ public final class Constants {
             correctSide(
                 new Translation2d(
                     Distance.ofRelativeUnits(
-                        181.56 + 47.0
-                        /** Plus one full hub in front of the trench */
+                        181.56 + (47.0 / 2.0)
+                        /** Plus one half hub in front of the trench */
                         ,
                         Inches),
                     Distance.ofRelativeUnits(158.32, Inches))),
             correctSide(
                 new Translation2d(
                     Distance.ofRelativeUnits(
-                        468.56 - 47.0
-                        /** Minus one full hub behind the opposing trench */
+                        468.56 - (47.0 / 2.0)
+                        /** Minus one half hub behind the opposing trench */
                         ,
                         Inches),
                     Distance.ofRelativeUnits(316.64, Inches))));
@@ -100,8 +100,8 @@ public final class Constants {
             correctSide(
                 new Translation2d(
                     Distance.ofRelativeUnits(
-                        181.56 + 47.0
-                        /** Plus one full hub in front of the trench */
+                        181.56 + (47.0 / 2.0)
+                        /** Plus one half hub in front of the trench */
                         ,
                         Inches),
                     Distance.ofRelativeUnits(0.0, Inches))),
@@ -244,8 +244,24 @@ public final class Constants {
       Climber climber) {
     return new ArrayList<Pair<String, Command>>(
         Arrays.asList(
-            new Pair<String, Command>("Start Intake", intake.start()),
-            new Pair<String, Command>("Test1", Commands.none()),
-            new Pair<String, Command>("Test2", Commands.none())));
+            // Intake Commands
+            new Pair<String, Command>("Intake Start", intake.start()),
+            new Pair<String, Command>("Intake Stop", intake.stop()),
+
+            // Indexer Commands
+            new Pair<String, Command>("Indexer Auto", indexer.autoIndex()),
+            new Pair<String, Command>(
+                "Indexer Wait Until Out Of Fuel", Commands.waitUntil(() -> !indexer.hasFuel())),
+
+            // Feeder Commands
+            new Pair<String, Command>("Feeder Auto", feeder.autoFeed()),
+
+            // Turret Commands
+            new Pair<String, Command>("Turret Full Field Aim", turret.fullFieldAim()),
+
+            // Climber Commands
+            new Pair<String, Command>("Climber Calibrate", climber.calibrate()),
+            new Pair<String, Command>("Climber Extend", climber.extend()),
+            new Pair<String, Command>("Climber Retract", climber.retract())));
   }
 }

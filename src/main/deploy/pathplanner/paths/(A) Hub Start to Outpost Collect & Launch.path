@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.4,
-        "y": 0.6
+        "x": 3.6,
+        "y": 4.0
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.8076983639870985,
-        "y": 0.6974952897074259
+        "x": 3.057447971191168,
+        "y": 3.424543191679761
       },
       "isLocked": false,
-      "linkedName": "Right Trench Start"
+      "linkedName": "Hub Start"
     },
     {
       "anchor": {
@@ -20,20 +20,15 @@
         "y": 0.6
       },
       "prevControl": {
-        "x": 0.649077048107332,
-        "y": 0.6214621552071972
+        "x": 0.7968943364223514,
+        "y": 1.0431783021204863
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": "Outpost Collect & Launch"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.3,
-      "rotationDegrees": 90.0
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -50,10 +45,10 @@
     "rotation": 0.0
   },
   "reversed": false,
-  "folder": "A 3 Starts -TO- 4 pre-collects, 2 pre-climb  (Has branches)",
+  "folder": "A 3 Starts -TO- 4 pre-collects, 2 launchs, 2 pre-climb (Has branches)",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 90.0
+    "rotation": 0.0
   },
   "useDefaultConstraints": true
 }

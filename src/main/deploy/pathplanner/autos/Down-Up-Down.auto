@@ -21,19 +21,13 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "(A) Left Trench Start To Pre Depot Collect"
+                        "pathName": "(A) Right Trench Start To Outpost Collect & Launch"
                       }
                     },
                     {
-                      "type": "named",
+                      "type": "wait",
                       "data": {
-                        "name": "Intake Start"
-                      }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "(B) Pre Depot Collect To Post Depot Collect & Launch"
+                        "waitTime": 3.0
                       }
                     },
                     {
@@ -64,13 +58,13 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "(D) Post Depot Collect & Launch To Pre Left Climb"
+                        "pathName": "(D) Outpost Collect & Launch To Pre Right Climb"
                       }
                     },
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "(E) Pre Left Climb To Post Left Climb"
+                        "pathName": "(E) Pre Right Climb To Post Right Climb"
                       }
                     },
                     {
@@ -101,6 +95,6 @@
     }
   },
   "resetOdom": true,
-  "folder": "Left Trench Starts (U)",
+  "folder": "Right Trench Starts (D)",
   "choreoAuto": false
 }

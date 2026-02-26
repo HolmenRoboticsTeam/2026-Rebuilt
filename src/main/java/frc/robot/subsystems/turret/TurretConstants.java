@@ -16,7 +16,7 @@ import edu.wpi.first.units.measure.Distance;
 public class TurretConstants {
 
   public static final Distance turretXOffset = Distance.ofRelativeUnits(0.0, Inch);
-  public static final Distance turretYOffset = Distance.ofRelativeUnits(-25.0, Inch);
+  public static final Distance turretYOffset = Distance.ofRelativeUnits(-6.0, Inch);
 
   public static final double currentControlDebounce = 0.025;
 

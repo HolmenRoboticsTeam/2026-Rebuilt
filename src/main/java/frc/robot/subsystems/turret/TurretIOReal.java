@@ -126,14 +126,8 @@ public class TurretIOReal implements TurretIO {
       flyWheelMotorLeft
           .getClosedLoopController()
           .setSetpoint(TurretConstants.Real.holdAmps, ControlType.kCurrent);
-      flyWheelMotorRight
-          .getClosedLoopController()
-          .setSetpoint(TurretConstants.Real.holdAmps, ControlType.kCurrent);
-
     } else {
-
       flyWheelMotorLeft.getClosedLoopController().setSetpoint(RPM, ControlType.kVelocity);
-      flyWheelMotorRight.getClosedLoopController().setSetpoint(RPM, ControlType.kVelocity);
     }
   }
 

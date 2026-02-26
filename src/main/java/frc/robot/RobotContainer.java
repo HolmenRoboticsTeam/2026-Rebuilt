@@ -70,15 +70,15 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
  */
 public class RobotContainer {
   // Subsystems
-  private final Drive drive;
-  private final Vision vision;
+  private Drive drive;
+  private Vision vision;
 
-  private final Intake intake;
-  private final Indexer indexer;
-  private final Feeder feeder;
-  private final Turret turret;
+  private Intake intake;
+  private Indexer indexer;
+  private Feeder feeder;
+  private Turret turret;
 
-  private final Climber climber;
+  private Climber climber;
 
   // Auto
   private final LoggedDashboardChooser<Boolean> autoSelectorType;
@@ -90,29 +90,31 @@ public class RobotContainer {
   private final XboxController buttonBox = new XboxController(1);
 
   // Switch 1
-  private final JoystickButton firstAutoToggleUp = new JoystickButton(buttonBox, 10);
-  private final JoystickButton firstAutoToggleDown = new JoystickButton(buttonBox, 11);
+  private final JoystickButton firstAutoToggleUp = new JoystickButton(buttonBox, 1);
+  private final JoystickButton firstAutoToggleDown = new JoystickButton(buttonBox, 2);
 
   // Switch 2
-  private final JoystickButton secondAutoToggleUp = new JoystickButton(buttonBox, 12);
-  private final JoystickButton secondAutoToggleDown = new JoystickButton(buttonBox, 13);
+  private final JoystickButton secondAutoToggleUp = new JoystickButton(buttonBox, 3);
+  private final JoystickButton secondAutoToggleDown = new JoystickButton(buttonBox, 4);
 
   // Switch 3
-  private final JoystickButton thirdAutoToggleUp = new JoystickButton(buttonBox, 14);
-  private final JoystickButton thirdAutoToggleDown = new JoystickButton(buttonBox, 15);
+  private final JoystickButton thirdAutoToggleUp = new JoystickButton(buttonBox, 5);
+  private final JoystickButton thirdAutoToggleDown = new JoystickButton(buttonBox, 6);
 
-  // Left side
-  private final JoystickButton reverseFeeder = new JoystickButton(buttonBox, 6);
-  private final JoystickButton climbLeftSide = new JoystickButton(buttonBox, 5);
-  private final JoystickButton moveToLeftTrench = new JoystickButton(buttonBox, 4);
+  // Top Row
+  private final JoystickButton reverseFeeder = new JoystickButton(buttonBox, 10);
+  private final JoystickButton climbLeftSide = new JoystickButton(buttonBox, 11);
+  private final JoystickButton moveToLeftTrench = new JoystickButton(buttonBox, 12);
 
-  // Center
-  private final JoystickButton feedOutpost = new JoystickButton(buttonBox, 7);
+  // Mid Row
+  private final JoystickButton feedOutpost = new JoystickButton(buttonBox, 13);
+  private final JoystickButton unused0 = new JoystickButton(buttonBox, 14);
+  private final JoystickButton unused1 = new JoystickButton(buttonBox, 15);
 
-  // Right Side
-  private final JoystickButton unused = new JoystickButton(buttonBox, 3);
-  private final JoystickButton climbRightSide = new JoystickButton(buttonBox, 2);
-  private final JoystickButton moveToRightTrench = new JoystickButton(buttonBox, 1);
+  // Bottom Row
+  private final JoystickButton unused2 = new JoystickButton(buttonBox, 16);
+  private final JoystickButton climbRightSide = new JoystickButton(buttonBox, 17);
+  private final JoystickButton moveToRightTrench = new JoystickButton(buttonBox, 18);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -135,21 +137,24 @@ public class RobotContainer {
                 new ModuleIO() {});
         vision =
             new Vision(
-                drive::addVisionMeasurement,
-                new VisionIOLimelight("limelight-three", drive::getRotation),
-                new VisionIOLimelight("limelight-two", drive::getRotation));
+                (p, t, sd) -> drive.addVisionMeasurement(p, t, sd),
+                new VisionIOLimelight("limelight-three", () -> drive.getRotation()),
+                new VisionIOLimelight("limelight-two", () -> drive.getRotation()));
         // intake = new Intake(new IntakeIOReal());
-        // indexer = new Indexer(new IndexerIOReal());
-        // feeder = new Feeder(new FeederIOReal());
+        // indexer = new Indexer(new IndexerIOReal(), () -> feeder.hasFuel());
+        // feeder = new Feeder(new FeederIOReal(), () -> turret.isReadyForFuel());
         intake = new Intake(new IntakeIO() {});
-        indexer = new Indexer(new IndexerIO() {});
-        feeder = new Feeder(new FeederIO() {});
+        indexer = new Indexer(new IndexerIO() {}, () -> feeder.hasFuel());
+        feeder = new Feeder(new FeederIO() {}, () -> turret.isReadyForFuel());
         turret =
             new Turret(
-                new TurretIOReal(), drive::getPose, drive::getChassisSpeeds, feeder::feedingFuel);
+                new TurretIOReal(),
+                () -> drive.getPose(),
+                () -> drive.getChassisSpeeds(),
+                () -> feeder.feedingFuel(),
+                (d) -> indexer.changeHeldFuelBy(d));
         // climber = new Climber(new ClimberIOReal());
         climber = new Climber(new ClimberIO() {});
-
         break;
 
       case SIM:
@@ -163,21 +168,25 @@ public class RobotContainer {
                 new ModuleIOSim());
         vision =
             new Vision(
-                drive::addVisionMeasurement,
+                (p, t, sd) -> drive.addVisionMeasurement(p, t, sd),
                 // new VisionIOPhotonVisionSim(
                 //     "Camera0",
                 //     VisionConstants.robotToCamera0,
-                //     drive::getPose), // TODO: set these Transforms
+                //     drive.getPose), // TODO: set these Transforms
                 // new VisionIOPhotonVisionSim(
-                //     "Camera1", VisionConstants.robotToCamera1, drive::getPose));
+                //     "Camera1", VisionConstants.robotToCamera1, drive.getPose));
                 new VisionIO() {},
                 new VisionIO() {});
         intake = new Intake(new IntakeIOSim());
-        indexer = new Indexer(new IndexerIOSim());
-        feeder = new Feeder(new FeederIOSim());
+        indexer = new Indexer(new IndexerIOSim(), () -> feeder.hasFuel());
+        feeder = new Feeder(new FeederIOSim(), () -> turret.isReadyForFuel());
         turret =
             new Turret(
-                new TurretIOSim(), drive::getPose, drive::getChassisSpeeds, feeder::feedingFuel);
+                new TurretIOSim(),
+                () -> drive.getPose(),
+                () -> drive.getChassisSpeeds(),
+                () -> feeder.feedingFuel(),
+                (d) -> indexer.changeHeldFuelBy(d));
         climber = new Climber(new ClimberIOSim());
 
         // Register a robot for collision with fuel
@@ -186,8 +195,9 @@ public class RobotContainer {
                 Distance.ofRelativeUnits(29.0, Inches).in(Meters), // from left to right
                 Distance.ofRelativeUnits(26.0, Inches).in(Meters), // from front to back
                 Distance.ofRelativeUnits(6.0, Inches).in(Meters), // from floor to top of bumpers
-                drive::getPose, // Supplier<Pose2d> of robot pose
-                drive::getChassisSpeeds); // Supplier<ChassisSpeeds> of field-centric chassis speeds
+                () -> drive.getPose(), // Supplier<Pose2d> of robot pose
+                () -> drive.getChassisSpeeds()); // Supplier<ChassisSpeeds> of field-centric chassis
+        // speeds
 
         FuelSim.getInstance()
             .registerIntake(
@@ -200,7 +210,9 @@ public class RobotContainer {
                     intake
                         .isRunning(), // (optional) BooleanSupplier for whether the intake should be
                 // active at a given moment
-                () -> {}); // (optional) Runnable called whenever a fuel is in-took
+                () ->
+                    indexer.changeHeldFuelBy(
+                        1)); // (optional) Runnable called whenever a fuel is in-took
         break;
 
       default:
@@ -212,13 +224,21 @@ public class RobotContainer {
                 new ModuleIO() {},
                 new ModuleIO() {},
                 new ModuleIO() {});
-        vision = new Vision(drive::addVisionMeasurement, new VisionIO() {}, new VisionIO() {});
+        vision =
+            new Vision(
+                (p, t, sd) -> drive.addVisionMeasurement(p, t, sd),
+                new VisionIO() {},
+                new VisionIO() {});
         intake = new Intake(new IntakeIO() {});
-        indexer = new Indexer(new IndexerIO() {});
-        feeder = new Feeder(new FeederIO() {});
+        indexer = new Indexer(new IndexerIO() {}, () -> feeder.hasFuel());
+        feeder = new Feeder(new FeederIO() {}, () -> turret.isReadyForFuel());
         turret =
             new Turret(
-                new TurretIO() {}, drive::getPose, drive::getChassisSpeeds, feeder::feedingFuel);
+                new TurretIO() {},
+                () -> drive.getPose(),
+                () -> drive.getChassisSpeeds(),
+                () -> feeder.feedingFuel(),
+                (d) -> indexer.changeHeldFuelBy(d));
         climber = new Climber(new ClimberIO() {});
         break;
     }
@@ -227,7 +247,7 @@ public class RobotContainer {
     NamedCommands.registerCommands(
         Constants.getNamedCommand(drive, vision, intake, indexer, feeder, turret, climber));
     autoSelectorType = new LoggedDashboardChooser<>("Auto Selector Type");
-    autoSelectorType.addDefaultOption("Button Box", true);
+    autoSelectorType.addDefaultOption("Use Button Box", true);
     autoSelectorType.addOption("Use Dashboard Chooser", false);
     hardAutoChooser = new LoggedDashboardChooser<>("Choose Auto", AutoBuilder.buildAutoChooser());
 

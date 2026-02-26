@@ -21,19 +21,13 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "(A) Left Trench Start To Pre Depot Collect"
+                        "pathName": "(A) Right Trench Start To Outpost Collect & Launch"
                       }
                     },
                     {
-                      "type": "named",
+                      "type": "wait",
                       "data": {
-                        "name": "Intake Start"
-                      }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "(B) Pre Depot Collect To Post Depot Collect & Launch"
+                        "waitTime": 3.0
                       }
                     },
                     {
@@ -56,27 +50,52 @@
                       }
                     },
                     {
-                      "type": "named",
+                      "type": "path",
                       "data": {
-                        "name": "Climber Extend"
+                        "pathName": "(D) Outpost Collect & Launch To Right Trench Start"
                       }
                     },
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "(D) Post Depot Collect & Launch To Pre Left Climb"
-                      }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "(E) Pre Left Climb To Post Left Climb"
+                        "pathName": "(A) Right Trench Start To Pre Right Neutral Collect"
                       }
                     },
                     {
                       "type": "named",
                       "data": {
-                        "name": "Climber Retract"
+                        "name": "Intake Start"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "(B) Pre Right Neutral Collect To Post Right Neutral Collect"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "(C) Post Right Neutral Collect To Right Bump Launch"
+                      }
+                    },
+                    {
+                      "type": "deadline",
+                      "data": {
+                        "commands": [
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "Indexer Wait Until Out Of Fuel"
+                            }
+                          },
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "Feeder Auto"
+                            }
+                          }
+                        ]
                       }
                     }
                   ]
@@ -101,6 +120,6 @@
     }
   },
   "resetOdom": true,
-  "folder": "Left Trench Starts (U)",
+  "folder": "Right Trench Starts (D)",
   "choreoAuto": false
 }

@@ -19,6 +19,7 @@ public class IndexerConstants {
   public static class Real {
 
     public static final int motorID = 20;
+    public static final int lineBreakID = 2;
 
     public static final SparkMaxConfig motorConfig;
 

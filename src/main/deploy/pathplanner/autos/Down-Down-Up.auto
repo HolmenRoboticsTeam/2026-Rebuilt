@@ -21,7 +21,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "(A) Left Trench Start To Pre Depot Collect"
+                        "pathName": "(A) Right Trench Start To Pre Right Neutral Collect"
                       }
                     },
                     {
@@ -33,7 +33,13 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "(B) Pre Depot Collect To Post Depot Collect & Launch"
+                        "pathName": "(B) Pre Right Neutral Collect To Post Right Neutral Collect"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "(C) Post Right Neutral Collect To Right Bump Launch"
                       }
                     },
                     {
@@ -56,27 +62,28 @@
                       }
                     },
                     {
-                      "type": "named",
-                      "data": {
-                        "name": "Climber Extend"
-                      }
-                    },
-                    {
                       "type": "path",
                       "data": {
-                        "pathName": "(D) Post Depot Collect & Launch To Pre Left Climb"
+                        "pathName": "(D) Right Bump Launch To Outpost Collect & Launch"
                       }
                     },
                     {
-                      "type": "path",
+                      "type": "deadline",
                       "data": {
-                        "pathName": "(E) Pre Left Climb To Post Left Climb"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "Climber Retract"
+                        "commands": [
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "Indexer Wait Until Out Of Fuel"
+                            }
+                          },
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "Feeder Auto"
+                            }
+                          }
+                        ]
                       }
                     }
                   ]
@@ -101,6 +108,6 @@
     }
   },
   "resetOdom": true,
-  "folder": "Left Trench Starts (U)",
+  "folder": "Right Trench Starts (D)",
   "choreoAuto": false
 }

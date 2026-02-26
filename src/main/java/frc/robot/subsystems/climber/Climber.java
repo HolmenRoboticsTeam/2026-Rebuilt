@@ -64,19 +64,16 @@ public class Climber extends SubsystemBase {
    * @return
    */
   public Command calibrate() {
-    return Commands.sequence(
-        Commands.runOnce(
+    return Commands.startEnd(
             () -> {
               io.setTargetHeight(0.0);
             },
-            this),
-        Commands.waitUntil(() -> inputs.hardStop),
-        Commands.runOnce(
             () -> {
               io.resetPosition();
               io.setTargetHeight(ClimberConstants.retractedHeight);
             },
-            this));
+            this)
+        .until(() -> inputs.hardStop);
   }
 
   public double getHeight() {

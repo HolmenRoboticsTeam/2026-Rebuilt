@@ -8,24 +8,40 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.649999133475332,
-        "y": 7.399341773911705
+        "x": 3.6836049751845876,
+        "y": 7.391109482907757
       },
       "isLocked": false,
       "linkedName": "Left Trench Start"
     },
     {
       "anchor": {
-        "x": 6.0,
+        "x": 3.4,
         "y": 7.4
       },
       "prevControl": {
-        "x": 5.7196483916084215,
-        "y": 7.40091230163065
+        "x": 3.64576947013721,
+        "y": 7.445797025541786
+      },
+      "nextControl": {
+        "x": 3.03202569541776,
+        "y": 7.3314311553169516
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 3.0,
+        "y": 5.6
+      },
+      "prevControl": {
+        "x": 2.75931946844572,
+        "y": 6.1549412401379655
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Pre Left Neutral Collect"
+      "linkedName": "Left Bump Launch"
     }
   ],
   "rotationTargets": [],
@@ -41,8 +57,8 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 4.0,
-    "rotation": -100.0
+    "velocity": 0,
+    "rotation": 119.99999999999999
   },
   "reversed": false,
   "folder": "A 3 Starts -TO- 4 pre-collects, 2 launchs, 2 pre-climb (Has branches)",

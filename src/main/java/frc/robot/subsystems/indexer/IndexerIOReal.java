@@ -10,12 +10,15 @@ import com.revrobotics.ResetMode;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
+import edu.wpi.first.wpilibj.DigitalInput;
 
 /** The real implementation of the indexer. */
 public class IndexerIOReal implements IndexerIO {
 
   private SparkMax indexerMotor;
   private RelativeEncoder encoder;
+
+  private DigitalInput lineBreak;
 
   /** Creates a new real indexer. */
   public IndexerIOReal() {
@@ -27,6 +30,8 @@ public class IndexerIOReal implements IndexerIO {
         IndexerConstants.Real.motorConfig,
         ResetMode.kResetSafeParameters,
         PersistMode.kPersistParameters);
+
+    lineBreak = new DigitalInput(IndexerConstants.Real.lineBreakID);
   }
 
   public void updateInputs(IndexerIOInputs inputs) {
@@ -35,6 +40,7 @@ public class IndexerIOReal implements IndexerIO {
     inputs.velocityRPM = encoder.getVelocity();
     inputs.appliedVolts = indexerMotor.getBusVoltage() * indexerMotor.getAppliedOutput();
     inputs.currentAmps = indexerMotor.getOutputCurrent();
+    inputs.hasFuel = lineBreak.get();
   }
 
   public void setVoltage(double volts) {

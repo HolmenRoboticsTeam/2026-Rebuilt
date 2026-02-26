@@ -7,6 +7,7 @@ package frc.robot.subsystems.feeder;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 
 /** A subsystem for controlling the feeder with a line-break to detect fuel inside. */
@@ -15,19 +16,30 @@ public class Feeder extends SubsystemBase {
   private FeederIO io;
   private FeederIOInputsAutoLogged inputs = new FeederIOInputsAutoLogged();
 
+  private Supplier<Boolean> turretIsReady;
+
   /**
    * Creates a new feeder.
    *
    * @param io the implementation of the feeder.
    */
-  public Feeder(FeederIO io) {
+  public Feeder(FeederIO io, Supplier<Boolean> turretIsReady) {
     this.io = io;
+    this.turretIsReady = turretIsReady;
   }
 
   @Override
   public void periodic() {
     io.updateInputs(inputs);
     Logger.processInputs("Feeder", inputs);
+  }
+
+  public Command autoFeed() {
+    return Commands.repeatingSequence(
+        stop(),
+        Commands.waitUntil(() -> turretIsReady.get()),
+        start(),
+        Commands.waitUntil(() -> !turretIsReady.get()).finallyDo(() -> io.setVolts(0.0)));
   }
 
   /**
@@ -72,6 +84,10 @@ public class Feeder extends SubsystemBase {
    */
   public double getPosition() {
     return inputs.positionRotations;
+  }
+
+  public boolean hasFuel() {
+    return inputs.hasFuel;
   }
 
   /**

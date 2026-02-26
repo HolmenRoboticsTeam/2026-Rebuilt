@@ -4,31 +4,36 @@
     {
       "anchor": {
         "x": 4.4,
-        "y": 7.4
+        "y": 0.6
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.1188920794586314,
-        "y": 7.6201813597666455
+        "x": 2.8076983639870985,
+        "y": 0.6974952897074259
       },
       "isLocked": false,
-      "linkedName": "Left Trench Start"
+      "linkedName": "Right Trench Start"
     },
     {
       "anchor": {
-        "x": 1.2,
-        "y": 5.5
+        "x": 0.4,
+        "y": 0.6
       },
       "prevControl": {
-        "x": 1.5033377092319333,
-        "y": 6.115100041529175
+        "x": 0.649077048107332,
+        "y": 0.6214621552071972
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Pre Left Climb"
+      "linkedName": "Outpost Collect & Launch"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.3,
+      "rotationDegrees": 90.0
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -42,13 +47,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 90.0
+    "rotation": 0.0
   },
   "reversed": false,
-  "folder": "A 3 Starts -TO- 4 pre-collects, 2 pre-climb  (Has branches)",
+  "folder": "A 3 Starts -TO- 4 pre-collects, 2 launchs, 2 pre-climb (Has branches)",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -90.0
+    "rotation": 90.0
   },
   "useDefaultConstraints": true
 }

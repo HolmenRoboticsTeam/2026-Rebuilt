@@ -9,6 +9,7 @@ package frc.robot.subsystems.drive;
 
 import static edu.wpi.first.units.Units.Degree;
 import static edu.wpi.first.units.Units.DegreesPerSecond;
+import static edu.wpi.first.units.Units.Kelvin;
 
 import com.studica.frc.Navx;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -27,12 +28,13 @@ public class GyroIONavX implements GyroIO {
     yawTimestampQueue = SparkOdometryThread.getInstance().makeTimestampQueue();
     yawPositionQueue =
         SparkOdometryThread.getInstance().registerSignal(() -> navX.getYaw().in(Degree));
-    navX.enableOptionalMessages(true, false, false, false, false, true, false, false, false);
+    navX.enableOptionalMessages(true, false, false, false, false, false, true, false, false, true);
   }
 
   @Override
   public void updateInputs(GyroIOInputs inputs) {
-    inputs.connected = true;
+    System.out.println(navX.getTemperature().in(Kelvin));
+    inputs.connected = navX.getTemperature().in(Kelvin) != 0.0;
     inputs.yawPosition = Rotation2d.fromDegrees(navX.getYaw().in(Degree));
     inputs.yawVelocityRadPerSec =
         Units.degreesToRadians(-navX.getAngularVel()[2].in(DegreesPerSecond));
