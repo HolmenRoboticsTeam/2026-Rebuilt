@@ -10,6 +10,7 @@ package frc.robot;
 import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.Meter;
 
+import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rectangle2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -18,6 +19,18 @@ import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.subsystems.climber.Climber;
+import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.feeder.Feeder;
+import frc.robot.subsystems.indexer.Indexer;
+import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.turret.Turret;
+import frc.robot.subsystems.vision.Vision;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.function.Supplier;
 
 /**
@@ -135,25 +148,11 @@ public final class Constants {
                 Distance.ofRelativeUnits(7.400, Meter),
                 Rotation2d.fromDegrees(0.0)));
 
-    public static final Pose2d kLeftBumpStart =
-        correctSide(
-            new Pose2d(
-                Distance.ofRelativeUnits(3.600, Meter),
-                Distance.ofRelativeUnits(5.600, Meter),
-                Rotation2d.fromDegrees(0.0)));
-
     public static final Pose2d kHubStart =
         correctSide(
             new Pose2d(
                 Distance.ofRelativeUnits(3.600, Meter),
                 Distance.ofRelativeUnits(4.000, Meter),
-                Rotation2d.fromDegrees(0.0)));
-
-    public static final Pose2d kRightBumpStart =
-        correctSide(
-            new Pose2d(
-                Distance.ofRelativeUnits(3.600, Meter),
-                Distance.ofRelativeUnits(2.400, Meter),
                 Rotation2d.fromDegrees(0.0)));
 
     public static final Pose2d kRightTrenchStart =
@@ -233,5 +232,20 @@ public final class Constants {
       return new Pose2d(
           correctSide(pose.getTranslation()), pose.getRotation().minus(Rotation2d.k180deg));
     }
+  }
+
+  public static List<Pair<String, Command>> getNamedCommand(
+      Drive drive,
+      Vision vision,
+      Intake intake,
+      Indexer indexer,
+      Feeder feeder,
+      Turret turret,
+      Climber climber) {
+    return new ArrayList<Pair<String, Command>>(
+        Arrays.asList(
+            new Pair<String, Command>("Start Intake", intake.start()),
+            new Pair<String, Command>("Test1", Commands.none()),
+            new Pair<String, Command>("Test2", Commands.none())));
   }
 }

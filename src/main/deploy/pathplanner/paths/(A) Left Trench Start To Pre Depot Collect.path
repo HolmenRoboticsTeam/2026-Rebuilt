@@ -3,35 +3,35 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 6.5,
-        "y": 5.6
+        "x": 4.4,
+        "y": 7.4
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.25,
-        "y": 5.6
+        "x": 4.08046948547674,
+        "y": 7.327924864014742
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Left Trench Start"
     },
     {
       "anchor": {
-        "x": 3.5,
-        "y": 5.6
+        "x": 0.6,
+        "y": 7.2
       },
       "prevControl": {
-        "x": 3.75,
-        "y": 5.6
+        "x": 1.255749749001419,
+        "y": 7.236445354620576
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Pre Depot Collect"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.01,
-      "rotationDegrees": 137.0
+      "waypointRelativePos": 0.3,
+      "rotationDegrees": -90.0
     }
   ],
   "constraintZones": [],
@@ -47,13 +47,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 137.0
+    "rotation": -119.99999999999999
   },
   "reversed": false,
-  "folder": null,
+  "folder": "A 3 Starts -TO- 4 pre-collects, 2 pre-climb  (Has branches)",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 137.0
+    "rotation": -90.0
   },
   "useDefaultConstraints": true
 }

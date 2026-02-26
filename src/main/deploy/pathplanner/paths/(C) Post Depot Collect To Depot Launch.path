@@ -3,45 +3,32 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.5,
-        "y": 0.7
+        "x": 0.6,
+        "y": 5.0
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.5,
-        "y": 0.7000000000000001
+        "x": 1.6457265555420766,
+        "y": 5.000461790340437
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Post Depot Collect"
     },
     {
       "anchor": {
-        "x": 0.4,
-        "y": 0.7
+        "x": 2.0,
+        "y": 5.0
       },
       "prevControl": {
-        "x": 1.4,
-        "y": 0.6999999999999998
+        "x": 1.6167299117388243,
+        "y": 5.1536530568609535
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Depot Launch"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.1,
-      "rotationDegrees": -135.0
-    },
-    {
-      "waypointRelativePos": 0.8,
-      "rotationDegrees": -135.0
-    },
-    {
-      "waypointRelativePos": 0.9,
-      "rotationDegrees": 180.0
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -55,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": 150.0
   },
   "reversed": false,
-  "folder": null,
+  "folder": "C 3 post-collects -TO- 3 launchs (No Branches)",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -135.0
+    "rotation": -119.99999999999999
   },
   "useDefaultConstraints": true
 }

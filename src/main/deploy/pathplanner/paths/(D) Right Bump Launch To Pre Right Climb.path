@@ -1,0 +1,68 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.0,
+        "y": 2.4
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.100831683264496,
+        "y": 1.853749705567168
+      },
+      "isLocked": false,
+      "linkedName": "Right Bump Launch"
+    },
+    {
+      "anchor": {
+        "x": 0.9,
+        "y": 1.9
+      },
+      "prevControl": {
+        "x": 1.1286869514439468,
+        "y": 1.79899367228102
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Pre Right Climb"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 1.0,
+      "maxWaypointRelativePos": 1.5,
+      "constraints": {
+        "maxVelocity": 1.0,
+        "maxAcceleration": 4.0,
+        "maxAngularVelocity": 720.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 4.0,
+    "maxAcceleration": 4.0,
+    "maxAngularVelocity": 720.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -90.0
+  },
+  "reversed": false,
+  "folder": "D 4 launchs -TO- 2 pre-collect, 2 starts, 2 pre-climb (Has Branches)",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -119.99999999999999
+  },
+  "useDefaultConstraints": true
+}

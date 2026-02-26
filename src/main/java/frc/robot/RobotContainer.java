@@ -11,6 +11,7 @@ import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.Meters;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathfindingCommand;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.FileVersionException;
@@ -26,7 +27,6 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants.FieldConstants;
-import frc.robot.commands.AutoCommandBuilder;
 import frc.robot.commands.AutoDriveCommands;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.StateLoggingCommands;
@@ -83,6 +83,18 @@ public class RobotContainer {
   private final CommandXboxController controller = new CommandXboxController(0);
   private final XboxController buttonBox = new XboxController(1);
 
+  // Switch 1
+  private final JoystickButton firstAutoToggleUp = new JoystickButton(buttonBox, 10);
+  private final JoystickButton firstAutoToggleDown = new JoystickButton(buttonBox, 11);
+
+  // Switch 2
+  private final JoystickButton secondAutoToggleUp = new JoystickButton(buttonBox, 12);
+  private final JoystickButton secondAutoToggleDown = new JoystickButton(buttonBox, 13);
+
+  // Switch 3
+  private final JoystickButton thirdAutoToggleUp = new JoystickButton(buttonBox, 14);
+  private final JoystickButton thirdAutoToggleDown = new JoystickButton(buttonBox, 15);
+
   // Left side
   private final JoystickButton reverseFeeder = new JoystickButton(buttonBox, 6);
   private final JoystickButton climbLeftSide = new JoystickButton(buttonBox, 5);
@@ -95,11 +107,6 @@ public class RobotContainer {
   private final JoystickButton unused = new JoystickButton(buttonBox, 3);
   private final JoystickButton climbRightSide = new JoystickButton(buttonBox, 2);
   private final JoystickButton moveToRightTrench = new JoystickButton(buttonBox, 1);
-
-  // Auto
-  private final AutoCommandBuilder autoCommandBuilder;
-  private final LoggedDashboardChooser<Boolean> useDynamicAuto;
-  private final LoggedDashboardChooser<Command> hardAutoChooser;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -210,29 +217,21 @@ public class RobotContainer {
         break;
     }
 
-    // Set up auto routines
-    autoCommandBuilder =
-        new AutoCommandBuilder(drive, vision, intake, indexer, feeder, turret, climber);
-    useDynamicAuto = new LoggedDashboardChooser<>("Use DynamicAuto");
-    useDynamicAuto.addDefaultOption("Yes, use DynamicAuto", true);
-    useDynamicAuto.addOption("No, use Hard Autos", false);
-    hardAutoChooser = new LoggedDashboardChooser<>("Hard Autos", AutoBuilder.buildAutoChooser());
-
-    // Set up SysId routines
-    hardAutoChooser.addOption(
-        "Drive Wheel Radius Characterization", DriveCommands.wheelRadiusCharacterization(drive));
-    hardAutoChooser.addOption(
-        "Drive Simple FF Characterization", DriveCommands.feedforwardCharacterization(drive));
-    hardAutoChooser.addOption(
-        "Drive SysId (Quasistatic Forward)",
-        drive.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
-    hardAutoChooser.addOption(
-        "Drive SysId (Quasistatic Reverse)",
-        drive.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
-    hardAutoChooser.addOption(
-        "Drive SysId (Dynamic Forward)", drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
-    hardAutoChooser.addOption(
-        "Drive SysId (Dynamic Reverse)", drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+    // SysId routines
+    // customAuto.addOption(
+    //     "Drive Wheel Radius Characterization", DriveCommands.wheelRadiusCharacterization(drive));
+    // customAuto.addOption(
+    //     "Drive Simple FF Characterization", DriveCommands.feedforwardCharacterization(drive));
+    // customAuto.addOption(
+    //     "Drive SysId (Quasistatic Forward)",
+    //     drive.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+    // customAuto.addOption(
+    //     "Drive SysId (Quasistatic Reverse)",
+    //     drive.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+    // customAuto.addOption(
+    //     "Drive SysId (Dynamic Forward)", drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
+    // customAuto.addOption(
+    //     "Drive SysId (Dynamic Reverse)", drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
 
     // Default command, normal field-relative drive
     drive.setDefaultCommand(
@@ -343,31 +342,15 @@ public class RobotContainer {
   }
 
   /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
+   * Gets autonomous data from the button box
+   * @return state of first switch, state of second switch, state of third switch.
    */
-  public Command getAutonomousCommand() {
-
-    if (useDynamicAuto.get()) {
-      try {
-        return autoCommandBuilder.buildAutoCommand();
-      } catch (FileVersionException | IOException | ParseException e) {
-        Elastic.sendNotification(
-            new Notification(
-                Elastic.NotificationLevel.WARNING,
-                "DynamicAuto Crash",
-                "Couldn't find the file for one of paths!"));
-        return Commands.parallel(
-            intake.start(),
-            indexer.start(),
-            feeder.start(),
-            turret.fullFieldAim(),
-            climber.calibrate());
-      }
-    } else {
-      return hardAutoChooser.get();
-    }
+  public int[] getAutonomousData() {
+    return new int[] {
+      firstAutoToggleUp.getAsBoolean() ? 1 : (firstAutoToggleDown.getAsBoolean() ? -1 : 0),
+      secondAutoToggleUp.getAsBoolean() ? 1 : (secondAutoToggleDown.getAsBoolean() ? -1 : 0),
+      thirdAutoToggleUp.getAsBoolean() ? 1 : (thirdAutoToggleDown.getAsBoolean() ? -1 : 0)
+    };
   }
 
   public void enabledInit() {

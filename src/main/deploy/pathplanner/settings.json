@@ -2,8 +2,18 @@
   "robotWidth": 0.902,
   "robotLength": 0.826,
   "holonomicMode": true,
-  "pathFolders": [],
-  "autoFolders": [],
+  "pathFolders": [
+    "A 3 Starts -TO- 4 pre-collects, 2 pre-climb  (Has branches)",
+    "B 4 pre-collects -TO- 4 post-collects (No Branches)",
+    "C 3 post-collects -TO- 3 launchs (No Branches)",
+    "D 4 launchs -TO- 2 pre-collect, 2 starts, 2 pre-climb (Has Branches)",
+    "E pre-climb -TO- post-climb (No Branches)"
+  ],
+  "autoFolders": [
+    "Hub Starts (M)",
+    "Left Trench Starts (U)",
+    "Right Trench Starts (D)"
+  ],
   "defaultMaxVel": 4.0,
   "defaultMaxAccel": 4.0,
   "defaultMaxAngVel": 720.0,

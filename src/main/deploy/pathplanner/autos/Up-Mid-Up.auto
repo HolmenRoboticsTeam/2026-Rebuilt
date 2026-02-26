@@ -1,0 +1,25 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "(A) Left Trench Start To Pre Left Climb"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "(E) Pre Left Climb To Post Left Climb"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "Left Trench Starts (U)",
+  "choreoAuto": false
+}

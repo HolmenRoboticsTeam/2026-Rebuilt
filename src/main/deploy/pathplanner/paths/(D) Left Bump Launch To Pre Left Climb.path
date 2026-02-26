@@ -3,44 +3,39 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.9,
-        "y": 1.8
+        "x": 3.0,
+        "y": 5.6
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.8965530839462635,
-        "y": 2.0499762364100205
+        "x": 1.9970607825499551,
+        "y": 5.111207522494302
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Left Bump Launch"
     },
     {
       "anchor": {
-        "x": 0.9,
-        "y": 2.8
+        "x": 1.2,
+        "y": 5.5
       },
       "prevControl": {
-        "x": 0.9,
-        "y": 2.55
+        "x": 1.4468763703704213,
+        "y": 5.553239611681418
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Pre Left Climb"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.1,
-      "rotationDegrees": -90.0
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.0,
-      "maxWaypointRelativePos": 1.0,
+      "minWaypointRelativePos": 1.0,
+      "maxWaypointRelativePos": 1.5,
       "constraints": {
-        "maxVelocity": 0.5,
+        "maxVelocity": 1.0,
         "maxAcceleration": 4.0,
         "maxAngularVelocity": 720.0,
         "maxAngularAcceleration": 720.0,
@@ -61,13 +56,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -90.0
+    "rotation": 90.0
   },
   "reversed": false,
-  "folder": null,
+  "folder": "D 4 launchs -TO- 2 pre-collect, 2 starts, 2 pre-climb (Has Branches)",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -90.0
+    "rotation": 119.99999999999999
   },
   "useDefaultConstraints": true
 }

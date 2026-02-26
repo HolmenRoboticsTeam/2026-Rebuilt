@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 0.6,
+        "y": 7.2
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 0.6016559058779194,
+        "y": 6.449100510827422
+      },
+      "isLocked": false,
+      "linkedName": "Pre Depot Collect"
+    },
+    {
+      "anchor": {
+        "x": 0.6,
+        "y": 5.0
+      },
+      "prevControl": {
+        "x": 0.6016176740360957,
+        "y": 5.607525873844316
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Post Depot Collect"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 4.0,
+    "maxAcceleration": 4.0,
+    "maxAngularVelocity": 720.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -119.99999999999999
+  },
+  "reversed": false,
+  "folder": "B 4 pre-collects -TO- 4 post-collects (No Branches)",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -119.99999999999999
+  },
+  "useDefaultConstraints": true
+}

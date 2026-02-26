@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.0,
+        "y": 2.4
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.5868897510165745,
+        "y": 1.508784435534688
+      },
+      "isLocked": false,
+      "linkedName": "Right Bump Launch"
+    },
+    {
+      "anchor": {
+        "x": 0.4,
+        "y": 0.6
+      },
+      "prevControl": {
+        "x": 1.320993644339444,
+        "y": 0.5665157205932608
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Outpost Collect & Launch"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 4.0,
+    "maxAcceleration": 4.0,
+    "maxAngularVelocity": 720.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "reversed": false,
+  "folder": "D 4 launchs -TO- 2 pre-collect, 2 starts, 2 pre-climb (Has Branches)",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -119.99999999999999
+  },
+  "useDefaultConstraints": true
+}

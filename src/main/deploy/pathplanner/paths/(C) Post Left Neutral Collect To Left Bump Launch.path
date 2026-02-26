@@ -3,75 +3,71 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.5,
-        "y": 7.4
+        "x": 7.7,
+        "y": 4.6
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.69701391455417,
-        "y": 7.4
+        "x": 7.638111969213378,
+        "y": 5.598083098567125
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Post Left Neutral Collect"
     },
     {
       "anchor": {
         "x": 6.0,
-        "y": 7.4
+        "y": 5.6
       },
       "prevControl": {
-        "x": 5.7044370521084815,
-        "y": 7.4
+        "x": 6.991,
+        "y": 5.6
       },
       "nextControl": {
-        "x": 6.271664405055765,
-        "y": 7.4
+        "x": 5.75,
+        "y": 5.6
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 7.6,
-        "y": 6.6
-      },
-      "prevControl": {
-        "x": 7.6,
-        "y": 7.6
-      },
-      "nextControl": {
-        "x": 7.6,
+        "x": 4.5,
         "y": 5.6
       },
-      "isLocked": true,
+      "prevControl": {
+        "x": 4.75,
+        "y": 5.6
+      },
+      "nextControl": {
+        "x": 4.25,
+        "y": 5.6
+      },
+      "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 7.6,
+        "x": 3.0,
         "y": 5.6
       },
       "prevControl": {
-        "x": 7.6,
-        "y": 6.6
+        "x": 3.25,
+        "y": 5.6
       },
       "nextControl": null,
-      "isLocked": true,
-      "linkedName": null
+      "isLocked": false,
+      "linkedName": "Left Bump Launch"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.1,
-      "rotationDegrees": -90.0
-    },
-    {
       "waypointRelativePos": 1.0,
-      "rotationDegrees": -90.0
+      "rotationDegrees": 137.0
     },
     {
-      "waypointRelativePos": 1.5,
-      "rotationDegrees": -70.0
+      "waypointRelativePos": 2.6,
+      "rotationDegrees": 135.0
     }
   ],
   "constraintZones": [],
@@ -87,13 +83,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -70.0
+    "rotation": 119.99999999999999
   },
   "reversed": false,
-  "folder": null,
+  "folder": "C 3 post-collects -TO- 3 launchs (No Branches)",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -90.0
+    "rotation": -100.0
   },
   "useDefaultConstraints": true
 }

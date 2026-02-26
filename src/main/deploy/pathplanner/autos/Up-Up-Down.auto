@@ -1,0 +1,43 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "(A) Left Trench Start To Pre Left Neutral Collect"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "(B) Pre Left Neutral Collect To Post Left Neutral Collect"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "(C) Post Left Neutral Collect To Left Bump Launch"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "(D) Left Bump Launch To Pre Left Climb"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "(E) Pre Left Climb To Post Left Climb"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "Left Trench Starts (U)",
+  "choreoAuto": false
+}
