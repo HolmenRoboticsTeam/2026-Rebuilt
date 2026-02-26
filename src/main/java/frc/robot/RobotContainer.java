@@ -12,6 +12,7 @@ import static edu.wpi.first.units.Units.Meters;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.commands.PathfindingCommand;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.FileVersionException;
@@ -78,6 +79,11 @@ public class RobotContainer {
   private final Turret turret;
 
   private final Climber climber;
+
+  // Auto
+  private final LoggedDashboardChooser<Boolean> autoSelectorType;
+  private final LoggedDashboardChooser<Command> hardAutoChooser;
+  private String[] autonomousData;
 
   // Controller
   private final CommandXboxController controller = new CommandXboxController(0);
@@ -217,21 +223,29 @@ public class RobotContainer {
         break;
     }
 
+    // Auto setup
+    NamedCommands.registerCommands(
+        Constants.getNamedCommand(drive, vision, intake, indexer, feeder, turret, climber));
+    autoSelectorType = new LoggedDashboardChooser<>("Auto Selector Type");
+    autoSelectorType.addDefaultOption("Button Box", true);
+    autoSelectorType.addOption("Use Dashboard Chooser", false);
+    hardAutoChooser = new LoggedDashboardChooser<>("Choose Auto", AutoBuilder.buildAutoChooser());
+
     // SysId routines
-    // customAuto.addOption(
-    //     "Drive Wheel Radius Characterization", DriveCommands.wheelRadiusCharacterization(drive));
-    // customAuto.addOption(
-    //     "Drive Simple FF Characterization", DriveCommands.feedforwardCharacterization(drive));
-    // customAuto.addOption(
-    //     "Drive SysId (Quasistatic Forward)",
-    //     drive.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
-    // customAuto.addOption(
-    //     "Drive SysId (Quasistatic Reverse)",
-    //     drive.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
-    // customAuto.addOption(
-    //     "Drive SysId (Dynamic Forward)", drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
-    // customAuto.addOption(
-    //     "Drive SysId (Dynamic Reverse)", drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+    hardAutoChooser.addOption(
+        "Drive Wheel Radius Characterization", DriveCommands.wheelRadiusCharacterization(drive));
+    hardAutoChooser.addOption(
+        "Drive Simple FF Characterization", DriveCommands.feedforwardCharacterization(drive));
+    hardAutoChooser.addOption(
+        "Drive SysId (Quasistatic Forward)",
+        drive.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+    hardAutoChooser.addOption(
+        "Drive SysId (Quasistatic Reverse)",
+        drive.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+    hardAutoChooser.addOption(
+        "Drive SysId (Dynamic Forward)", drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
+    hardAutoChooser.addOption(
+        "Drive SysId (Dynamic Reverse)", drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
 
     // Default command, normal field-relative drive
     drive.setDefaultCommand(
@@ -342,15 +356,18 @@ public class RobotContainer {
   }
 
   /**
-   * Gets autonomous data from the button box
-   * @return state of first switch, state of second switch, state of third switch.
+   * Use this to pass the autonomous command to the main {@link Robot} class.
+   *
+   * @return the command to run in autonomous
    */
-  public int[] getAutonomousData() {
-    return new int[] {
-      firstAutoToggleUp.getAsBoolean() ? 1 : (firstAutoToggleDown.getAsBoolean() ? -1 : 0),
-      secondAutoToggleUp.getAsBoolean() ? 1 : (secondAutoToggleDown.getAsBoolean() ? -1 : 0),
-      thirdAutoToggleUp.getAsBoolean() ? 1 : (thirdAutoToggleDown.getAsBoolean() ? -1 : 0)
-    };
+  public Command getAutonomousCommand() {
+
+    if (autoSelectorType.get()) {
+      String autoName = autonomousData[0] + "-" + autonomousData[1] + "-" + autonomousData[2];
+      return new PathPlannerAuto(autoName);
+    } else {
+      return hardAutoChooser.get();
+    }
   }
 
   public void enabledInit() {
@@ -359,5 +376,21 @@ public class RobotContainer {
 
   public void disabledInit() {
     CommandScheduler.getInstance().schedule(vision.setIMUMode(1));
+  }
+
+  public void disabledPeriodic() {
+    // Poll the button box before autonomous
+    autonomousData =
+        new String[] {
+          firstAutoToggleUp.getAsBoolean()
+              ? "Up"
+              : (firstAutoToggleDown.getAsBoolean() ? "Down" : "Mid"),
+          secondAutoToggleUp.getAsBoolean()
+              ? "Up"
+              : (secondAutoToggleDown.getAsBoolean() ? "Down" : "Mid"),
+          thirdAutoToggleUp.getAsBoolean()
+              ? "Up"
+              : (thirdAutoToggleDown.getAsBoolean() ? "Down" : "Mid")
+        };
   }
 }
