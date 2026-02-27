@@ -132,6 +132,7 @@ public class Turret extends SubsystemBase {
                           .times(shotData.timeOfFlightSec()));
 
               // Update shot data
+              distance = Meters.of(turretPose.get().getTranslation().getDistance(turretTarget));
               shotData = TurretDistanceCalc.getShotData(targetType, distance);
               /**
                * TLDR: The time of flight data should not be updated.
@@ -147,7 +148,10 @@ public class Turret extends SubsystemBase {
 
               // Get the target values
               Rotation2d rotation =
-                  turretTarget.minus(turretPose.get().getTranslation()).getAngle();
+                  turretTarget
+                      .minus(turretPose.get().getTranslation())
+                      .getAngle()
+                      .minus(robotPose.get().getRotation());
               Rotation2d angle = Rotation2d.fromRadians(shotData.angleRad());
               AngularVelocity rpm = RPM.of(shotData.RPM());
 
@@ -224,7 +228,10 @@ public class Turret extends SubsystemBase {
 
               // Get the target values
               Rotation2d rotation =
-                  turretTarget.minus(turretPose.get().getTranslation()).getAngle();
+                  turretTarget
+                      .minus(turretPose.get().getTranslation())
+                      .getAngle()
+                      .minus(robotPose.get().getRotation());
               Rotation2d angle = Rotation2d.fromRadians(shotData.angleRad());
               AngularVelocity rpm = RPM.of(shotData.RPM());
 
@@ -275,7 +282,10 @@ public class Turret extends SubsystemBase {
               Distance distance =
                   Meters.of(turretPose.get().getTranslation().getDistance(turretTarget));
               Rotation2d rotation =
-                  turretTarget.minus(turretPose.get().getTranslation()).getAngle();
+                  turretTarget
+                      .minus(turretPose.get().getTranslation())
+                      .getAngle()
+                      .minus(robotPose.get().getRotation());
 
               // Pull Tunable values
               double rpm = tunableRPM.get();
