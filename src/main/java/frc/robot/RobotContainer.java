@@ -14,13 +14,13 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.commands.PathfindingCommand;
-import com.pathplanner.lib.path.PathPlannerPath;
-import com.pathplanner.lib.util.FileVersionException;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -28,7 +28,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants.FieldConstants;
-import frc.robot.commands.AutoDriveCommands;
+import frc.robot.commands.AutoCommands;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.StateLoggingCommands;
 import frc.robot.subsystems.climber.Climber;
@@ -55,11 +55,7 @@ import frc.robot.subsystems.turret.TurretIOSim;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOLimelight;
-import frc.robot.util.Elastic;
-import frc.robot.util.Elastic.Notification;
 import frc.robot.util.FuelSim;
-import java.io.IOException;
-import org.json.simple.parser.ParseException;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
@@ -83,6 +79,7 @@ public class RobotContainer {
   // Auto
   private final LoggedDashboardChooser<Boolean> autoSelectorType;
   private final LoggedDashboardChooser<Command> hardAutoChooser;
+  private final Field2d autoField = new Field2d();
 
   // Controller
   private final CommandXboxController controller = new CommandXboxController(0);
@@ -278,6 +275,12 @@ public class RobotContainer {
     turret.setDefaultCommand(turret.fullFieldAim());
     // turret.setDefaultCommand(turret.calibrate());
 
+    // Auto Field
+    SmartDashboard.putData("AutoField", autoField);
+    CommandScheduler.getInstance()
+        .schedule(
+            AutoCommands.displayAutoField(autoField, () -> getAutoName(), () -> drive.getPose()));
+
     // Configure the button bindings
     configureButtonBindings();
 
@@ -340,11 +343,19 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
 
+    if (autoSelectorType.get()) {
+      return new PathPlannerAuto(getAutoName());
+    } else {
+      return hardAutoChooser.get();
+    }
+  }
+
+  private String getAutoName() {
     String[] autonomousData =
         new String[] {
           firstAutoToggleUp.getAsBoolean()
               ? "Left"
-              : (firstAutoToggleDown.getAsBoolean() ? "Hub" : "Right"),
+              : (firstAutoToggleDown.getAsBoolean() ? "Right" : "Hub"),
           secondAutoToggleUp.getAsBoolean()
               ? "Up"
               : (secondAutoToggleDown.getAsBoolean() ? "Down" : "Mid"),
@@ -353,12 +364,7 @@ public class RobotContainer {
               : (thirdAutoToggleDown.getAsBoolean() ? "Down" : "Mid")
         };
 
-    if (autoSelectorType.get()) {
-      String autoName = autonomousData[0] + "-" + autonomousData[1] + "-" + autonomousData[2];
-      return new PathPlannerAuto(autoName);
-    } else {
-      return hardAutoChooser.get();
-    }
+    return autonomousData[0] + "-" + autonomousData[1] + "-" + autonomousData[2];
   }
 
   public void enabledInit() {
