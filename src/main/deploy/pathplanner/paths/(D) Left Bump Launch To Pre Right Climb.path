@@ -8,32 +8,48 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.997060782549955,
-        "y": 5.111207522494302
+        "x": 1.9811290401138473,
+        "y": 5.273271648733913
       },
       "isLocked": false,
       "linkedName": "Left Bump Launch"
     },
     {
       "anchor": {
-        "x": 1.2,
-        "y": 5.5
+        "x": 2.0,
+        "y": 2.5
       },
       "prevControl": {
-        "x": 1.4468763703704213,
-        "y": 5.553239611681418
+        "x": 2.3958836065697278,
+        "y": 3.1465254916794345
+      },
+      "nextControl": {
+        "x": 1.4686915737619581,
+        "y": 1.632309507626772
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 0.9,
+        "y": 1.9
+      },
+      "prevControl": {
+        "x": 1.1301884417506654,
+        "y": 2.1748664393497474
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Pre Left Climb"
+      "linkedName": "Pre Right Climb"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 1.0,
-      "maxWaypointRelativePos": 1.5,
+      "minWaypointRelativePos": 2.0,
+      "maxWaypointRelativePos": 2.5,
       "constraints": {
         "maxVelocity": 1.0,
         "maxAcceleration": 4.0,
@@ -56,7 +72,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 90.0
+    "rotation": -90.0
   },
   "reversed": false,
   "folder": "D 4 launchs -TO- 4 pre-collect, 2 starts, 3 pre-climb (Has Branches)",

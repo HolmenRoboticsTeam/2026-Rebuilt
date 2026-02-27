@@ -21,13 +21,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "(A) Right Trench Start To Outpost Collect & Launch"
-                      }
-                    },
-                    {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 3.0
+                        "pathName": "(A) Right Trench Start To Right Bump Launch"
                       }
                     },
                     {
@@ -47,43 +41,30 @@
                             }
                           }
                         ]
-                      }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "(D) Outpost Collect & Launch To Pre Depot Collect"
                       }
                     },
                     {
                       "type": "named",
                       "data": {
-                        "name": "Intake Start"
+                        "name": "Climber Extend"
                       }
                     },
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "(B) Pre Depot Collect To Post Depot Collect & Launch"
+                        "pathName": "(D) Right Bump Launch To Pre Mid Climb"
                       }
                     },
                     {
-                      "type": "deadline",
+                      "type": "path",
                       "data": {
-                        "commands": [
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "Indexer Wait Until Out Of Fuel"
-                            }
-                          },
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "Feeder Auto"
-                            }
-                          }
-                        ]
+                        "pathName": "(E) Pre Mid Climb To Post Mid Climb"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Climber Retract"
                       }
                     }
                   ]

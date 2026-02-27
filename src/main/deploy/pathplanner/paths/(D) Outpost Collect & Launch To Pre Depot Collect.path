@@ -3,53 +3,64 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.6,
-        "y": 4.8
+        "x": 0.4,
+        "y": 0.6
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.4941292462531344,
-        "y": 5.224836941655072
+        "x": 1.1375539728137185,
+        "y": 1.5192882445688438
       },
       "isLocked": false,
-      "linkedName": "Post Depot Collect & Launch"
+      "linkedName": "Outpost Collect & Launch"
     },
     {
       "anchor": {
-        "x": 3.0,
-        "y": 7.4
+        "x": 2.0,
+        "y": 3.0
       },
       "prevControl": {
-        "x": 1.9953535259679838,
-        "y": 6.927835172469769
+        "x": 1.0699922276024583,
+        "y": 1.1585475373830343
       },
       "nextControl": {
-        "x": 3.4513520543303406,
-        "y": 7.612126922650713
+        "x": 2.188182731605295,
+        "y": 3.372609310181583
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 4.4,
-        "y": 7.4
+        "x": 2.0,
+        "y": 6.0
       },
       "prevControl": {
-        "x": 3.841807487910191,
-        "y": 7.510810638386378
+        "x": 2.355648119937347,
+        "y": 5.308029132692104
+      },
+      "nextControl": {
+        "x": 1.755124149841702,
+        "y": 6.476445522744916
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 0.6,
+        "y": 7.2
+      },
+      "prevControl": {
+        "x": 0.8051097218678689,
+        "y": 7.057066442025375
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Left Trench Start"
+      "linkedName": "Pre Depot Collect"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 1.0,
-      "rotationDegrees": -90.0
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -62,14 +73,14 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 4.0,
-    "rotation": -90.0
+    "velocity": 0,
+    "rotation": -119.99999999999999
   },
   "reversed": false,
   "folder": "D 4 launchs -TO- 4 pre-collect, 2 starts, 3 pre-climb (Has Branches)",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -160.0
+    "rotation": 0.0
   },
   "useDefaultConstraints": true
 }

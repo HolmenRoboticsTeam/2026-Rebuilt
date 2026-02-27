@@ -62,27 +62,34 @@
                       }
                     },
                     {
-                      "type": "named",
+                      "type": "path",
                       "data": {
-                        "name": "Climber Extend"
+                        "pathName": "(D) Right Bump Launch To Pre Depot Collect"
                       }
                     },
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "(D) Right Bump Launch To Pre Right Climb"
+                        "pathName": "(B) Pre Depot Collect To Post Depot Collect & Launch"
                       }
                     },
                     {
-                      "type": "path",
+                      "type": "deadline",
                       "data": {
-                        "pathName": "(E) Pre Right Climb To Post Right Climb"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "Climber Retract"
+                        "commands": [
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "Indexer Wait Until Out Of Fuel"
+                            }
+                          },
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "Feeder Auto"
+                            }
+                          }
+                        ]
                       }
                     }
                   ]

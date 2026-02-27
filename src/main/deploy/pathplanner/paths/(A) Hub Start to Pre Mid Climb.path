@@ -8,24 +8,24 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.057447971191168,
-        "y": 3.424543191679761
+        "x": 2.5338451681709495,
+        "y": 4.074871519736671
       },
       "isLocked": false,
       "linkedName": "Hub Start"
     },
     {
       "anchor": {
-        "x": 0.4,
-        "y": 0.6
+        "x": 2.0,
+        "y": 3.75
       },
       "prevControl": {
-        "x": 0.7968943364223514,
-        "y": 1.0431783021204863
+        "x": 2.960536433701877,
+        "y": 3.684302200457082
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Outpost Collect & Launch"
+      "linkedName": "Pre Mid Climb"
     }
   ],
   "rotationTargets": [],
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 90.0
   },
   "reversed": false,
   "folder": "A 3 Starts -TO- 4 pre-collects, 2 launchs, 3 pre-climb (Has branches)",

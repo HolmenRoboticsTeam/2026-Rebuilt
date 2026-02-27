@@ -21,38 +21,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "(A) Right Trench Start To Outpost Collect & Launch"
-                      }
-                    },
-                    {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 3.0
-                      }
-                    },
-                    {
-                      "type": "deadline",
-                      "data": {
-                        "commands": [
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "Indexer Wait Until Out Of Fuel"
-                            }
-                          },
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "Feeder Auto"
-                            }
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "(D) Outpost Collect & Launch To Pre Depot Collect"
+                        "pathName": "(A) Right Trench Start To Pre Right Neutral Collect"
                       }
                     },
                     {
@@ -64,7 +33,13 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "(B) Pre Depot Collect To Post Depot Collect & Launch"
+                        "pathName": "(B) Pre Right Neutral Collect To Post Right Neutral Collect"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "(C) Post Right Neutral Collect To Right Bump Launch"
                       }
                     },
                     {
@@ -84,6 +59,30 @@
                             }
                           }
                         ]
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Climber Extend"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "(D) Right Bump Launch To Pre Right Climb"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "(E) Pre Right Climb To Post Right Climb"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Climber Retract"
                       }
                     }
                   ]

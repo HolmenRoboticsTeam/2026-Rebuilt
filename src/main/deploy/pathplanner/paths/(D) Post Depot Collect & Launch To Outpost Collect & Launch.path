@@ -1,0 +1,111 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 0.6,
+        "y": 4.8
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 0.5144949641685828,
+        "y": 4.565076844803523
+      },
+      "isLocked": false,
+      "linkedName": "Post Depot Collect & Launch"
+    },
+    {
+      "anchor": {
+        "x": 0.5,
+        "y": 3.8
+      },
+      "prevControl": {
+        "x": 0.5,
+        "y": 4.05
+      },
+      "nextControl": {
+        "x": 0.5,
+        "y": 3.55
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 0.5,
+        "y": 2.8
+      },
+      "prevControl": {
+        "x": 0.4657722698641332,
+        "y": 3.0476458408488747
+      },
+      "nextControl": {
+        "x": 0.6195247078620442,
+        "y": 1.9352100573653044
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 0.8441433376736112,
+        "y": 1.4864090711805558
+      },
+      "prevControl": {
+        "x": 0.9221299288172483,
+        "y": 1.7239339995602843
+      },
+      "nextControl": {
+        "x": 0.501493628365045,
+        "y": 0.4427957208681874
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 0.4,
+        "y": 0.6
+      },
+      "prevControl": {
+        "x": 0.6131304732666403,
+        "y": 0.7306728792257136
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Outpost Collect & Launch"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.25,
+      "rotationDegrees": 180.0
+    },
+    {
+      "waypointRelativePos": 2.0,
+      "rotationDegrees": 180.0
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 4.0,
+    "maxAcceleration": 4.0,
+    "maxAngularVelocity": 720.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "reversed": false,
+  "folder": "D 4 launchs -TO- 4 pre-collect, 2 starts, 3 pre-climb (Has Branches)",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -160.0
+  },
+  "useDefaultConstraints": true
+}

@@ -25,6 +25,12 @@
                       }
                     },
                     {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 3.0
+                      }
+                    },
+                    {
                       "type": "deadline",
                       "data": {
                         "commands": [
@@ -46,25 +52,38 @@
                     {
                       "type": "named",
                       "data": {
-                        "name": "Climber Extend"
+                        "name": "Intake Start"
                       }
                     },
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "(D) Outpost Collect & Launch To Pre Right Climb"
+                        "pathName": "(D) Outpost Collect & Launch To Pre Depot Collect"
                       }
                     },
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "(E) Pre Right Climb To Post Right Climb"
+                        "pathName": "(B) Pre Depot Collect To Post Depot Collect & Launch"
                       }
                     },
                     {
-                      "type": "named",
+                      "type": "deadline",
                       "data": {
-                        "name": "Climber Retract"
+                        "commands": [
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "Indexer Wait Until Out Of Fuel"
+                            }
+                          },
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "Feeder Auto"
+                            }
+                          }
+                        ]
                       }
                     }
                   ]

@@ -21,38 +21,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "(A) Right Trench Start To Outpost Collect & Launch"
-                      }
-                    },
-                    {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 3.0
-                      }
-                    },
-                    {
-                      "type": "deadline",
-                      "data": {
-                        "commands": [
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "Indexer Wait Until Out Of Fuel"
-                            }
-                          },
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "Feeder Auto"
-                            }
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "(D) Outpost Collect & Launch To Pre Depot Collect"
+                        "pathName": "(A) Left Trench Start To Pre Depot Collect"
                       }
                     },
                     {
@@ -85,6 +54,30 @@
                           }
                         ]
                       }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Climber Extend"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "(D) Post Depot Collect & Launch To Pre Left Climb"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "(E) Pre Left Climb To Post Left Climb"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Climber Retract"
+                      }
                     }
                   ]
                 }
@@ -108,6 +101,6 @@
     }
   },
   "resetOdom": true,
-  "folder": "Right Trench Starts (D)",
+  "folder": "Left Trench Starts (U)",
   "choreoAuto": false
 }

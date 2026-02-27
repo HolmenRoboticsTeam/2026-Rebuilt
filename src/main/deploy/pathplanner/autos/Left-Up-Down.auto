@@ -62,27 +62,34 @@
                       }
                     },
                     {
-                      "type": "named",
-                      "data": {
-                        "name": "Climber Extend"
-                      }
-                    },
-                    {
                       "type": "path",
                       "data": {
-                        "pathName": "(D) Left Bump Launch To Pre Left Climb"
+                        "pathName": "(D) Left Bump Launch To Outpost Collect & Launch"
                       }
                     },
                     {
-                      "type": "path",
+                      "type": "wait",
                       "data": {
-                        "pathName": "(E) Pre Left Climb To Post Left Climb"
+                        "waitTime": 3.0
                       }
                     },
                     {
-                      "type": "named",
+                      "type": "deadline",
                       "data": {
-                        "name": "Climber Retract"
+                        "commands": [
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "Indexer Wait Until Out Of Fuel"
+                            }
+                          },
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "Feeder Auto"
+                            }
+                          }
+                        ]
                       }
                     }
                   ]

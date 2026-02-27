@@ -52,13 +52,13 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "(D) Left Bump Launch To Pre Left Climb"
+                        "pathName": "(D) Left Bump Launch To Pre Right Climb"
                       }
                     },
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "(E) Pre Left Climb To Post Left Climb"
+                        "pathName": "(E) Pre Right Climb To Post Right Climb"
                       }
                     },
                     {
