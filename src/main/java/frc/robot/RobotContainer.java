@@ -101,19 +101,19 @@ public class RobotContainer {
   private final JoystickButton thirdAutoToggleDown = new JoystickButton(buttonBox, 6);
 
   // Top Row
-  private final JoystickButton reverseFeeder = new JoystickButton(buttonBox, 10);
-  private final JoystickButton climbLeftSide = new JoystickButton(buttonBox, 11);
-  private final JoystickButton moveToLeftTrench = new JoystickButton(buttonBox, 12);
+  private final JoystickButton topRow1 = new JoystickButton(buttonBox, 10);
+  private final JoystickButton topRow2 = new JoystickButton(buttonBox, 11);
+  private final JoystickButton topRow3 = new JoystickButton(buttonBox, 12);
 
   // Mid Row
-  private final JoystickButton feedOutpost = new JoystickButton(buttonBox, 13);
-  private final JoystickButton unused0 = new JoystickButton(buttonBox, 14);
-  private final JoystickButton unused1 = new JoystickButton(buttonBox, 15);
+  private final JoystickButton midRow1 = new JoystickButton(buttonBox, 13);
+  private final JoystickButton midRow2 = new JoystickButton(buttonBox, 14);
+  private final JoystickButton midRow3 = new JoystickButton(buttonBox, 15);
 
   // Bottom Row
-  private final JoystickButton unused2 = new JoystickButton(buttonBox, 16);
-  private final JoystickButton climbRightSide = new JoystickButton(buttonBox, 17);
-  private final JoystickButton moveToRightTrench = new JoystickButton(buttonBox, 18);
+  private final JoystickButton lowRow1 = new JoystickButton(buttonBox, 16);
+  private final JoystickButton lowRow2 = new JoystickButton(buttonBox, 17);
+  private final JoystickButton lowRow3 = new JoystickButton(buttonBox, 18);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -331,47 +331,6 @@ public class RobotContainer {
 
     // #################### BUTTON BOX ####################
 
-    Command leftClimbCommand = null;
-    Command rightClimbCommand = null;
-    Command feedOutpostCommand = null;
-    try {
-      leftClimbCommand =
-          AutoDriveCommands.driveToPoseThenPath(
-              drive, PathPlannerPath.fromPathFile("Left Climb"), true);
-      rightClimbCommand =
-          AutoDriveCommands.driveToPoseThenPath(
-              drive, PathPlannerPath.fromPathFile("Right Climb"), true);
-      feedOutpostCommand =
-          AutoDriveCommands.driveToPoseThenPath(
-              drive, PathPlannerPath.fromPathFile("Feed Outpost"), false);
-    } catch (FileVersionException | IOException | ParseException e) {
-      Elastic.sendNotification(
-          new Notification(
-              Elastic.NotificationLevel.WARNING,
-              "Setting AutoDrive Button Bidings Crash",
-              "Couldn't find the file for one of paths! Falling back to simple moveToPose."));
-      leftClimbCommand =
-          leftClimbCommand == null
-              ? AutoDriveCommands.driveToPose(drive, FieldConstants.kLeftClimb, true)
-              : leftClimbCommand;
-      rightClimbCommand =
-          rightClimbCommand == null
-              ? AutoDriveCommands.driveToPose(drive, FieldConstants.kRightClimb, true)
-              : rightClimbCommand;
-      feedOutpostCommand = feedOutpostCommand == null ? Commands.none() : feedOutpostCommand;
-    }
-
-    climbLeftSide.whileTrue(leftClimbCommand.alongWith(climber.extend()));
-    climbRightSide.whileTrue(rightClimbCommand.alongWith(climber.extend()));
-
-    feedOutpost.whileTrue(feedOutpostCommand);
-
-    moveToLeftTrench.whileTrue(
-        AutoDriveCommands.driveToPose(drive, FieldConstants.kLeftBumpLaunch, false));
-    moveToRightTrench.whileTrue(
-        AutoDriveCommands.driveToPose(drive, FieldConstants.kRightBumpLaunch, false));
-
-    reverseFeeder.onTrue(feeder.reverse());
   }
 
   /**
@@ -381,11 +340,11 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
 
-    int[] autonomousData =
-    new String[] {
+    String[] autonomousData =
+        new String[] {
           firstAutoToggleUp.getAsBoolean()
-              ? "Up"
-              : (firstAutoToggleDown.getAsBoolean() ? "Down" : "Mid"),
+              ? "Left"
+              : (firstAutoToggleDown.getAsBoolean() ? "Hub" : "Right"),
           secondAutoToggleUp.getAsBoolean()
               ? "Up"
               : (secondAutoToggleDown.getAsBoolean() ? "Down" : "Mid"),
@@ -409,5 +368,4 @@ public class RobotContainer {
   public void disabledInit() {
     CommandScheduler.getInstance().schedule(vision.setIMUMode(1));
   }
-
 }
