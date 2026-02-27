@@ -83,7 +83,6 @@ public class RobotContainer {
   // Auto
   private final LoggedDashboardChooser<Boolean> autoSelectorType;
   private final LoggedDashboardChooser<Command> hardAutoChooser;
-  private String[] autonomousData;
 
   // Controller
   private final CommandXboxController controller = new CommandXboxController(0);
@@ -382,6 +381,19 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
 
+    int[] autonomousData =
+    new String[] {
+          firstAutoToggleUp.getAsBoolean()
+              ? "Up"
+              : (firstAutoToggleDown.getAsBoolean() ? "Down" : "Mid"),
+          secondAutoToggleUp.getAsBoolean()
+              ? "Up"
+              : (secondAutoToggleDown.getAsBoolean() ? "Down" : "Mid"),
+          thirdAutoToggleUp.getAsBoolean()
+              ? "Up"
+              : (thirdAutoToggleDown.getAsBoolean() ? "Down" : "Mid")
+        };
+
     if (autoSelectorType.get()) {
       String autoName = autonomousData[0] + "-" + autonomousData[1] + "-" + autonomousData[2];
       return new PathPlannerAuto(autoName);
@@ -398,19 +410,4 @@ public class RobotContainer {
     CommandScheduler.getInstance().schedule(vision.setIMUMode(1));
   }
 
-  public void disabledPeriodic() {
-    // Poll the button box before autonomous
-    autonomousData =
-        new String[] {
-          firstAutoToggleUp.getAsBoolean()
-              ? "Up"
-              : (firstAutoToggleDown.getAsBoolean() ? "Down" : "Mid"),
-          secondAutoToggleUp.getAsBoolean()
-              ? "Up"
-              : (secondAutoToggleDown.getAsBoolean() ? "Down" : "Mid"),
-          thirdAutoToggleUp.getAsBoolean()
-              ? "Up"
-              : (thirdAutoToggleDown.getAsBoolean() ? "Down" : "Mid")
-        };
-  }
 }
