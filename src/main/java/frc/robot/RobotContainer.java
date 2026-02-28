@@ -10,8 +10,6 @@ package frc.robot;
 import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.Meters;
 
-import java.util.Optional;
-
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
@@ -19,9 +17,9 @@ import com.pathplanner.lib.commands.PathfindingCommand;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.measure.Distance;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -64,7 +62,7 @@ import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOLimelight;
 import frc.robot.util.FuelSim;
 import frc.robot.util.HubShiftUtil;
-
+import java.util.Optional;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
@@ -338,10 +336,16 @@ public class RobotContainer {
     // #################### BUTTON BOX ####################
 
     // Shift Overriding
-    blueAutoWinnerOverrideToggleUp.onTrue(Commands.runOnce(() -> HubShiftUtil.setAllianceWinOverride(() -> Optional.of(Alliance.Blue))));
-    blueAutoWinnerOverrideToggleUp.onFalse(Commands.runOnce(() -> HubShiftUtil.setAllianceWinOverride(() -> Optional.empty())));
-    redAutoWinnerOverrideToggleDown.onTrue(Commands.runOnce(() -> HubShiftUtil.setAllianceWinOverride(() -> Optional.of(Alliance.Red))));
-    redAutoWinnerOverrideToggleDown.onFalse(Commands.runOnce(() -> HubShiftUtil.setAllianceWinOverride(() -> Optional.empty())));
+    blueAutoWinnerOverrideToggleUp.onTrue(
+        Commands.runOnce(
+            () -> HubShiftUtil.setAllianceWinOverride(() -> Optional.of(Alliance.Blue))));
+    blueAutoWinnerOverrideToggleUp.onFalse(
+        Commands.runOnce(() -> HubShiftUtil.setAllianceWinOverride(() -> Optional.empty())));
+    redAutoWinnerOverrideToggleDown.onTrue(
+        Commands.runOnce(
+            () -> HubShiftUtil.setAllianceWinOverride(() -> Optional.of(Alliance.Red))));
+    redAutoWinnerOverrideToggleDown.onFalse(
+        Commands.runOnce(() -> HubShiftUtil.setAllianceWinOverride(() -> Optional.empty())));
   }
 
   /**

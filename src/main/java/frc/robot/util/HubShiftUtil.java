@@ -9,8 +9,8 @@ package frc.robot.util;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import frc.robot.subsystems.turret.TurretDistanceCalc;
 import edu.wpi.first.wpilibj.Timer;
+import frc.robot.subsystems.turret.TurretDistanceCalc;
 import java.util.Optional;
 import java.util.function.Supplier;
 
