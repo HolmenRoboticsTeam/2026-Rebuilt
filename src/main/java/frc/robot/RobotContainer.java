@@ -10,6 +10,8 @@ package frc.robot;
 import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.Meters;
 
+import java.util.Optional;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
@@ -19,6 +21,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -39,14 +42,18 @@ import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIONavX;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
+import frc.robot.subsystems.drive.ModuleIOSpark;
 import frc.robot.subsystems.feeder.Feeder;
 import frc.robot.subsystems.feeder.FeederIO;
+import frc.robot.subsystems.feeder.FeederIOReal;
 import frc.robot.subsystems.feeder.FeederIOSim;
 import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.indexer.IndexerIO;
+import frc.robot.subsystems.indexer.IndexerIOReal;
 import frc.robot.subsystems.indexer.IndexerIOSim;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeIO;
+import frc.robot.subsystems.intake.IntakeIOReal;
 import frc.robot.subsystems.intake.IntakeIOSim;
 import frc.robot.subsystems.turret.Turret;
 import frc.robot.subsystems.turret.TurretIO;
@@ -56,6 +63,8 @@ import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOLimelight;
 import frc.robot.util.FuelSim;
+import frc.robot.util.HubShiftUtil;
+
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
@@ -86,62 +95,56 @@ public class RobotContainer {
   private final XboxController buttonBox = new XboxController(1);
 
   // Switch 1
-  private final JoystickButton firstAutoToggleUp = new JoystickButton(buttonBox, 1);
-  private final JoystickButton firstAutoToggleDown = new JoystickButton(buttonBox, 2);
+  private final JoystickButton firstAutoToggleUp = new JoystickButton(buttonBox, 11);
+  private final JoystickButton firstAutoToggleDown = new JoystickButton(buttonBox, 12);
 
   // Switch 2
-  private final JoystickButton secondAutoToggleUp = new JoystickButton(buttonBox, 3);
-  private final JoystickButton secondAutoToggleDown = new JoystickButton(buttonBox, 4);
+  private final JoystickButton secondAutoToggleUp = new JoystickButton(buttonBox, 13);
+  private final JoystickButton secondAutoToggleDown = new JoystickButton(buttonBox, 14);
 
   // Switch 3
-  private final JoystickButton thirdAutoToggleUp = new JoystickButton(buttonBox, 5);
-  private final JoystickButton thirdAutoToggleDown = new JoystickButton(buttonBox, 6);
+  private final JoystickButton thirdAutoToggleUp = new JoystickButton(buttonBox, 15);
+  private final JoystickButton thirdAutoToggleDown = new JoystickButton(buttonBox, 16);
+
+  // Switch 4 (Alliance Win Override)
+  private final JoystickButton blueAutoWinnerOverrideToggleUp = new JoystickButton(buttonBox, 17);
+  private final JoystickButton redAutoWinnerOverrideToggleDown = new JoystickButton(buttonBox, 18);
 
   // Top Row
-  private final JoystickButton topRow1 = new JoystickButton(buttonBox, 10);
-  private final JoystickButton topRow2 = new JoystickButton(buttonBox, 11);
-  private final JoystickButton topRow3 = new JoystickButton(buttonBox, 12);
+  private final JoystickButton topRow1 = new JoystickButton(buttonBox, 1);
+  private final JoystickButton topRow2 = new JoystickButton(buttonBox, 2);
+  private final JoystickButton topRow3 = new JoystickButton(buttonBox, 3);
 
   // Mid Row
-  private final JoystickButton midRow1 = new JoystickButton(buttonBox, 13);
-  private final JoystickButton midRow2 = new JoystickButton(buttonBox, 14);
-  private final JoystickButton midRow3 = new JoystickButton(buttonBox, 15);
+  private final JoystickButton midRow1 = new JoystickButton(buttonBox, 4);
+  private final JoystickButton midRow2 = new JoystickButton(buttonBox, 5);
+  private final JoystickButton midRow3 = new JoystickButton(buttonBox, 6);
 
   // Bottom Row
-  private final JoystickButton lowRow1 = new JoystickButton(buttonBox, 16);
-  private final JoystickButton lowRow2 = new JoystickButton(buttonBox, 17);
-  private final JoystickButton lowRow3 = new JoystickButton(buttonBox, 18);
+  private final JoystickButton lowRow1 = new JoystickButton(buttonBox, 7);
+  private final JoystickButton lowRow2 = new JoystickButton(buttonBox, 8);
+  private final JoystickButton lowRow3 = new JoystickButton(buttonBox, 9);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     switch (Constants.currentMode) {
       case REAL:
         // Real robot, instantiate hardware IO implementations
-        // drive =
-        //     new Drive(
-        //         new GyroIONavX(),
-        //         new ModuleIOSpark(0),
-        //         new ModuleIOSpark(1),
-        //         new ModuleIOSpark(2),
-        //         new ModuleIOSpark(3));
         drive =
             new Drive(
                 new GyroIONavX(),
-                new ModuleIO() {},
-                new ModuleIO() {},
-                new ModuleIO() {},
-                new ModuleIO() {});
+                new ModuleIOSpark(0),
+                new ModuleIOSpark(1),
+                new ModuleIOSpark(2),
+                new ModuleIOSpark(3));
         vision =
             new Vision(
                 (p, t, sd) -> drive.addVisionMeasurement(p, t, sd),
                 new VisionIOLimelight("limelight-three", () -> drive.getRotation()),
                 new VisionIOLimelight("limelight-two", () -> drive.getRotation()));
-        // intake = new Intake(new IntakeIOReal());
-        // indexer = new Indexer(new IndexerIOReal(), () -> feeder.hasFuel());
-        // feeder = new Feeder(new FeederIOReal(), () -> turret.isReadyForFuel());
-        intake = new Intake(new IntakeIO() {});
-        indexer = new Indexer(new IndexerIO() {}, () -> feeder.hasFuel());
-        feeder = new Feeder(new FeederIO() {}, () -> turret.isReadyForFuel());
+        intake = new Intake(new IntakeIOReal());
+        indexer = new Indexer(new IndexerIOReal(), () -> feeder.hasFuel());
+        feeder = new Feeder(new FeederIOReal(), () -> turret.isReadyForFuel());
         turret =
             new Turret(
                 new TurretIOReal(),
@@ -334,6 +337,11 @@ public class RobotContainer {
 
     // #################### BUTTON BOX ####################
 
+    // Shift Overriding
+    blueAutoWinnerOverrideToggleUp.onTrue(Commands.runOnce(() -> HubShiftUtil.setAllianceWinOverride(() -> Optional.of(Alliance.Blue))));
+    blueAutoWinnerOverrideToggleUp.onFalse(Commands.runOnce(() -> HubShiftUtil.setAllianceWinOverride(() -> Optional.empty())));
+    redAutoWinnerOverrideToggleDown.onTrue(Commands.runOnce(() -> HubShiftUtil.setAllianceWinOverride(() -> Optional.of(Alliance.Red))));
+    redAutoWinnerOverrideToggleDown.onFalse(Commands.runOnce(() -> HubShiftUtil.setAllianceWinOverride(() -> Optional.empty())));
   }
 
   /**

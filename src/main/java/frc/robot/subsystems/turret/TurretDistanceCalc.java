@@ -79,6 +79,14 @@ public class TurretDistanceCalc {
     }
   }
 
+  public static double getMaxTimeOfFlight() {
+    return 2.5;
+  }
+
+  public static double getMinTimeOfFlight() {
+    return 1.0;
+  }
+
   public record TurretShotData(double RPM, double angleRad, double timeOfFlightSec) {}
 
   public static TurretShotData interpolate(TurretShotData start, TurretShotData end, double t) {

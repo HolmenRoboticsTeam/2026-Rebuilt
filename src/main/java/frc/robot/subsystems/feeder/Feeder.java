@@ -39,7 +39,7 @@ public class Feeder extends SubsystemBase {
         stop(),
         Commands.waitUntil(() -> turretIsReady.get()),
         start(),
-        Commands.waitUntil(() -> !turretIsReady.get()).finallyDo(() -> io.setVolts(0.0)));
+        Commands.waitUntil(() -> !turretIsReady.get()).finallyDo(() -> io.setVolts(0.0))).withName("Feeder_Auto");
   }
 
   /**
@@ -60,7 +60,7 @@ public class Feeder extends SubsystemBase {
     return Commands.runOnce(
         () -> {
           io.setVolts(-FeederConstants.maxVolts);
-        });
+        }).withName("Feeder_Reverse");
   }
 
   /**
