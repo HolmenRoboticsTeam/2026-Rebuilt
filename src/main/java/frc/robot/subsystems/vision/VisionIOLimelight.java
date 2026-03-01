@@ -63,8 +63,11 @@ public class VisionIOLimelight implements VisionIO {
         ((RobotController.getFPGATime() - latencySubscriber.getLastChange()) / 1000) < 250;
 
     // Update orientation for MegaTag 2
+    double rotation = rotationSupplier.get().getDegrees();
+    // normalize to [-180, 180)
+    rotation = Math.IEEEremainder(rotation, 360.0);
     orientationPublisher.accept(
-        new double[] {rotationSupplier.get().getDegrees(), 0.0, 0.0, 0.0, 0.0, 0.0});
+        new double[] {rotation, 0.0, 0.0, 0.0, 0.0, 0.0});
     NetworkTableInstance.getDefault()
         .flush(); // Increases network traffic but recommended by Limelight
 

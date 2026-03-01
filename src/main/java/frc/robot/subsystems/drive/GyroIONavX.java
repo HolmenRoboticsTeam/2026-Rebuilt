@@ -7,13 +7,15 @@
 
 package frc.robot.subsystems.drive;
 
-import static edu.wpi.first.units.Units.Degree;
+import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.DegreesPerSecond;
-import static edu.wpi.first.units.Units.Kelvin;
 
 import com.studica.frc.Navx;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
+
 import java.util.Queue;
 
 /** IO implementation for NavX. */
@@ -24,20 +26,23 @@ public class GyroIONavX implements GyroIO {
   private final Queue<Double> yawTimestampQueue;
 
   public GyroIONavX() {
-    navX.resetYaw();
     yawTimestampQueue = SparkOdometryThread.getInstance().makeTimestampQueue();
     yawPositionQueue =
-        SparkOdometryThread.getInstance().registerSignal(() -> navX.getYaw().in(Degree));
-    navX.enableOptionalMessages(true, false, false, false, false, false, true, false, false, true);
+        SparkOdometryThread.getInstance().registerSignal(this::getAngle);
+    navX.enableOptionalMessages(true, true, false, false, false, false, true, false, false, false);
   }
 
   @Override
   public void updateInputs(GyroIOInputs inputs) {
-    System.out.println(navX.getTemperature().in(Kelvin));
-    inputs.connected = navX.getTemperature().in(Kelvin) != 0.0;
-    inputs.yawPosition = Rotation2d.fromDegrees(navX.getYaw().in(Degree));
+    double angleDeg = getAngle();
+    if (Double.isFinite(angleDeg)) {
+      inputs.connected = true;
+      inputs.yawPosition = Rotation2d.fromDegrees(angleDeg);
+    } else {
+      inputs.connected = false;
+    }
     inputs.yawVelocityRadPerSec =
-        Units.degreesToRadians(-navX.getAngularVel()[2].in(DegreesPerSecond));
+        Units.degreesToRadians(navX.getAngularVel()[2].in(DegreesPerSecond));
 
     inputs.odometryYawTimestamps =
         yawTimestampQueue.stream().mapToDouble((Double value) -> value).toArray();
@@ -47,5 +52,10 @@ public class GyroIONavX implements GyroIO {
             .toArray(Rotation2d[]::new);
     yawTimestampQueue.clear();
     yawPositionQueue.clear();
+  }
+
+  private double getAngle() {
+    double rawAngle = navX.getAngle().in(Degrees);
+    return rawAngle + (DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red ? 180.0 : 0.0);
   }
 }
