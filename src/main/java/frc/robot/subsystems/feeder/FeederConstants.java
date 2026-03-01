@@ -11,7 +11,7 @@ import edu.wpi.first.math.system.plant.DCMotor;
 /** Constants for the feeder subsystem. */
 public class FeederConstants {
 
-  public static final double maxVolts = 12.0;
+  public static final double maxVolts = 4.0;
 
   public static final double gearRatio = 3.0;
 
@@ -19,7 +19,8 @@ public class FeederConstants {
   public static class Real {
 
     public static final int motorID = 21;
-    public static final int lineBreakID = 0;
+    public static final int firstLineBreakID = 0;
+    public static final int secondLineBreak = 1;
 
     public static final SparkMaxConfig motorConfig;
 
@@ -27,6 +28,7 @@ public class FeederConstants {
       motorConfig = new SparkMaxConfig();
 
       motorConfig.idleMode(IdleMode.kBrake);
+      motorConfig.inverted(true);
 
       motorConfig
           .encoder

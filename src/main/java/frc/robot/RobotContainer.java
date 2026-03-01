@@ -109,9 +109,9 @@ public class RobotContainer {
   private final JoystickButton redAutoWinnerOverrideToggleDown = new JoystickButton(buttonBox, 18);
 
   // Top Row
-  private final JoystickButton topRow1 = new JoystickButton(buttonBox, 1);
-  private final JoystickButton topRow2 = new JoystickButton(buttonBox, 2);
-  private final JoystickButton topRow3 = new JoystickButton(buttonBox, 3);
+  private final JoystickButton startIntake = new JoystickButton(buttonBox, 1);
+  private final JoystickButton startIndexer = new JoystickButton(buttonBox, 2);
+  private final JoystickButton startFeeder = new JoystickButton(buttonBox, 3);
 
   // Mid Row
   private final JoystickButton midRow1 = new JoystickButton(buttonBox, 4);
@@ -137,12 +137,16 @@ public class RobotContainer {
                 new ModuleIOSpark(3));
         vision =
             new Vision(
-                (p, t, sd) -> drive.addVisionMeasurement(p, t, sd),
+                (p, t, sd) -> drive.addVisionPoseMeasurement(p, t, sd),
+                (r, t, sd) -> drive.addVisionRotationMeasurement(r, t, sd),
                 new VisionIOLimelight("limelight-three", () -> drive.getRotation()),
                 new VisionIOLimelight("limelight-two", () -> drive.getRotation()));
         intake = new Intake(new IntakeIOReal());
-        indexer = new Indexer(new IndexerIOReal(), () -> feeder.hasFuel());
+        indexer = new Indexer(new IndexerIOReal(), () -> true);
         feeder = new Feeder(new FeederIOReal(), () -> turret.isReadyForFuel());
+        // intake = new Intake(new IntakeIO() {});
+        // indexer = new Indexer(new IndexerIO() {}, () -> true);
+        // feeder = new Feeder(new FeederIO() {}, () -> turret.isReadyForFuel());
         turret =
             new Turret(
                 new TurretIOReal(),
@@ -150,6 +154,13 @@ public class RobotContainer {
                 () -> drive.getChassisSpeeds(),
                 () -> feeder.feedingFuel(),
                 (d) -> indexer.changeHeldFuelBy(d));
+        // turret =
+        //     new Turret(
+        //         new TurretIO() {},
+        //         () -> drive.getPose(),
+        //         () -> drive.getChassisSpeeds(),
+        //         () -> feeder.feedingFuel(),
+        //         (d) -> indexer.changeHeldFuelBy(d));
         // climber = new Climber(new ClimberIOReal());
         climber = new Climber(new ClimberIO() {});
         break;
@@ -165,7 +176,8 @@ public class RobotContainer {
                 new ModuleIOSim());
         vision =
             new Vision(
-                (p, t, sd) -> drive.addVisionMeasurement(p, t, sd),
+                (p, t, sd) -> drive.addVisionPoseMeasurement(p, t, sd),
+                (r, t, sd) -> drive.addVisionRotationMeasurement(r, t, sd),
                 // new VisionIOPhotonVisionSim(
                 //     "Camera0",
                 //     VisionConstants.robotToCamera0,
@@ -175,7 +187,7 @@ public class RobotContainer {
                 new VisionIO() {},
                 new VisionIO() {});
         intake = new Intake(new IntakeIOSim());
-        indexer = new Indexer(new IndexerIOSim(), () -> feeder.hasFuel());
+        indexer = new Indexer(new IndexerIOSim(), () -> true);
         feeder = new Feeder(new FeederIOSim(), () -> turret.isReadyForFuel());
         turret =
             new Turret(
@@ -223,11 +235,12 @@ public class RobotContainer {
                 new ModuleIO() {});
         vision =
             new Vision(
-                (p, t, sd) -> drive.addVisionMeasurement(p, t, sd),
+                (p, t, sd) -> drive.addVisionPoseMeasurement(p, t, sd),
+                (r, t, sd) -> drive.addVisionRotationMeasurement(r, t, sd),
                 new VisionIO() {},
                 new VisionIO() {});
         intake = new Intake(new IntakeIO() {});
-        indexer = new Indexer(new IndexerIO() {}, () -> feeder.hasFuel());
+        indexer = new Indexer(new IndexerIO() {}, () -> true);
         feeder = new Feeder(new FeederIO() {}, () -> turret.isReadyForFuel());
         turret =
             new Turret(
@@ -273,8 +286,12 @@ public class RobotContainer {
             () -> -controller.getRightX(),
             () -> -controller.getRightY()));
 
-    turret.setDefaultCommand(turret.fullFieldAim());
-    // turret.setDefaultCommand(turret.calibrate());
+    // turret.setDefaultCommand(turret.fullFieldAim(() -> controller.getRightTriggerAxis()));
+    turret.setDefaultCommand(turret.calibrate());
+
+    // intake.setDefaultCommand(intake.stop());
+    // indexer.setDefaultCommand(indexer.stop());
+    // feeder.setDefaultCommand(feeder.stop());
 
     // Auto Field
     SmartDashboard.putData("AutoField", autoField);
@@ -334,6 +351,18 @@ public class RobotContainer {
     controller.leftBumper().onTrue(climber.retract());
 
     // #################### BUTTON BOX ####################
+
+    controller.leftTrigger(0.9).onTrue(intake.start());
+    controller.leftTrigger(0.9).onFalse(intake.stop());
+
+    controller.a().onTrue(indexer.start());
+    controller.a().onFalse(indexer.stop());
+
+    controller.b().onTrue(feeder.reverse());
+    controller.b().onFalse(feeder.stop());
+
+    controller.y().onTrue(feeder.start());
+    controller.y().onFalse(feeder.stop());
 
     // Shift Overriding
     blueAutoWinnerOverrideToggleUp.onTrue(

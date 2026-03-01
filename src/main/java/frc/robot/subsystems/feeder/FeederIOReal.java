@@ -25,7 +25,7 @@ public class FeederIOReal implements FeederIO {
 
     feederMotor = new SparkMax(FeederConstants.Real.motorID, MotorType.kBrushless);
     encoder = feederMotor.getEncoder();
-    lineBreak = new DigitalInput(FeederConstants.Real.lineBreakID);
+    lineBreak = new DigitalInput(FeederConstants.Real.secondLineBreak);
 
     feederMotor.configure(
         FeederConstants.Real.motorConfig,

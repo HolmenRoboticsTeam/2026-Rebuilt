@@ -58,26 +58,26 @@ public class TurretConstants {
 
       rotationMotorConfig
           .closedLoop
-          .pid(0.5, 0.0, 0.0)
+          .pid(0.7, 0.0, 0.0)
           .outputRange(-0.2, 0.2)
-          .allowedClosedLoopError(0.006, ClosedLoopSlot.kSlot0)
+          .allowedClosedLoopError(0.003, ClosedLoopSlot.kSlot0)
           .feedForward
           .kS(0.4);
 
       rotationMotorConfig
           .absoluteEncoder
           .zeroCentered(true)
-          .zeroOffset(0.12281514)
+          .zeroOffset(0.74925095)
           .positionConversionFactor(rotationGearing * 3.0);
 
       rotationMotorConfig
           .softLimit
-          .forwardSoftLimit(Math.PI / 6)
-          .reverseSoftLimit(-Math.PI / 6)
+          .forwardSoftLimit(Math.PI / 2)
+          .reverseSoftLimit(-Math.PI / 2)
           .forwardSoftLimitEnabled(true)
           .reverseSoftLimitEnabled(true);
 
-      rotationMotorConfig.smartCurrentLimit(40);
+      rotationMotorConfig.smartCurrentLimit(60);
 
       // Angle Motor Config
 

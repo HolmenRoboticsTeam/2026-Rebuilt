@@ -234,7 +234,7 @@ public final class Constants {
             new Pair<String, Command>("Feeder Auto", feeder.autoFeed()),
 
             // Turret Commands
-            new Pair<String, Command>("Turret Full Field Aim", turret.fullFieldAim()),
+            new Pair<String, Command>("Turret Full Field Aim", turret.fullFieldAim(() -> 0.0)),
 
             // Climber Commands
             new Pair<String, Command>("Climber Calibrate", climber.calibrate()),

@@ -8,6 +8,7 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -49,12 +50,17 @@ public class AutoCommands {
                       }
 
                       int index = (int) Math.floor(robotIndex[0]);
-                      Rotation2d rot =
+                      Translation2d deltaTranslation =
                           autoPoses
                               .get(index + 1)
                               .getTranslation()
-                              .minus(autoPoses.get(index).getTranslation())
-                              .getAngle();
+                              .minus(autoPoses.get(index).getTranslation());
+
+                      Rotation2d rot =
+                          deltaTranslation.equals(new Translation2d())
+                              ? new Rotation2d()
+                              : deltaTranslation.getAngle();
+
                       Pose2d pose = new Pose2d(autoPoses.get(index).getTranslation(), rot);
 
                       field.setRobotPose(pose);

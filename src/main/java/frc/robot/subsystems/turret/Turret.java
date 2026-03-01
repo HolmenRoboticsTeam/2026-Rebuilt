@@ -16,6 +16,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -28,7 +29,6 @@ import frc.robot.subsystems.turret.TurretIO.FlyWheelMode;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
-import org.littletonrobotics.junction.networktables.LoggedNetworkNumber;
 
 /**
  * A subsystem for controlling the turret, including its three parts: rotation, angle, and flyWheel.
@@ -76,7 +76,7 @@ public class Turret extends SubsystemBase {
               robotPose
                   .get()
                   .getTranslation()
-                  .plus(
+                  .minus(
                       new Translation2d(
                           TurretConstants.turretYOffset, TurretConstants.turretXOffset));
           return new Pose2d(turretTrans, turretRot);
@@ -109,7 +109,7 @@ public class Turret extends SubsystemBase {
    *
    * @return A command with the given logic.
    */
-  public Command fullFieldAim() {
+  public Command fullFieldAim(Supplier<Double> rpmPercentage) {
 
     return Commands.run(
             () -> {
@@ -155,11 +155,14 @@ public class Turret extends SubsystemBase {
               Rotation2d angle = Rotation2d.fromRadians(shotData.angleRad());
               AngularVelocity rpm = RPM.of(shotData.RPM());
 
+              rpm = RPM.of(rpmPercentage.get() * 2500.0);
+
               // Set the Flywheel mode
-              boolean torqueCurrentControl =
-                  currentControlDebouncer.calculate(inputs.flyWheelIsTarget);
-              FlyWheelMode flyWheelMode =
-                  torqueCurrentControl ? FlyWheelMode.CURRENT : FlyWheelMode.VOLTAGE;
+              // boolean torqueCurrentControl =
+              //     currentControlDebouncer.calculate(inputs.flyWheelIsTarget);
+              // FlyWheelMode flyWheelMode =
+              //     torqueCurrentControl ? FlyWheelMode.CURRENT : FlyWheelMode.VOLTAGE;
+              FlyWheelMode flyWheelMode = FlyWheelMode.VOLTAGE;
 
               // Log the outputs
               Logger.recordOutput("Turret/Distance", distance);
@@ -171,7 +174,7 @@ public class Turret extends SubsystemBase {
               Logger.recordOutput("Turret/Rotation", rotation);
 
               // Set the outputs
-              io.setTargetRotation(rotation);
+              io.setTargetRotation(rotation.plus(Rotation2d.k180deg));
               io.setTargetAngle(angle);
               io.setFlyWheelMode(flyWheelMode);
               io.setFlyWheelRPM(rpm.in(RPM));
@@ -234,12 +237,13 @@ public class Turret extends SubsystemBase {
                       .minus(robotPose.get().getRotation());
               Rotation2d angle = Rotation2d.fromRadians(shotData.angleRad());
               AngularVelocity rpm = RPM.of(shotData.RPM());
+              FlyWheelMode flyWheelMode = FlyWheelMode.VOLTAGE;
 
               // Set the Flywheel mode
-              boolean torqueCurrentControl =
-                  currentControlDebouncer.calculate(inputs.flyWheelIsTarget);
-              FlyWheelMode flyWheelMode =
-                  torqueCurrentControl ? FlyWheelMode.CURRENT : FlyWheelMode.VOLTAGE;
+              // boolean torqueCurrentControl =
+              //     currentControlDebouncer.calculate(inputs.flyWheelIsTarget);
+              // FlyWheelMode flyWheelMode =
+              //     torqueCurrentControl ? FlyWheelMode.CURRENT : FlyWheelMode.VOLTAGE;
 
               // Log the outputs
               Logger.recordOutput("Turret/Distance", distance);
@@ -268,8 +272,8 @@ public class Turret extends SubsystemBase {
    */
   public Command calibrate() {
 
-    LoggedNetworkNumber tunableRPM = new LoggedNetworkNumber("/Tuning/RPM", 0.0);
-    LoggedNetworkNumber tunableAngle = new LoggedNetworkNumber("/Tuning/Angle", 0.0);
+    SmartDashboard.putNumber("RPM", 0.0);
+    SmartDashboard.putNumber("Angle", 0.0);
 
     return Commands.run(
             () -> {
@@ -285,17 +289,19 @@ public class Turret extends SubsystemBase {
                   turretTarget
                       .minus(turretPose.get().getTranslation())
                       .getAngle()
-                      .minus(robotPose.get().getRotation());
+                      .minus(robotPose.get().getRotation())
+                      .plus(Rotation2d.k180deg);
 
               // Pull Tunable values
-              double rpm = tunableRPM.get();
-              Rotation2d angle = Rotation2d.fromRadians(tunableAngle.get());
+              double rpm = SmartDashboard.getNumber("RPM", 0.0);
+              Rotation2d angle = Rotation2d.fromRadians(SmartDashboard.getNumber("Angle", 0.0));
 
               // Set the Flywheel mode
-              boolean torqueCurrentControl =
-                  currentControlDebouncer.calculate(inputs.flyWheelIsTarget);
-              FlyWheelMode flyWheelMode =
-                  torqueCurrentControl ? FlyWheelMode.CURRENT : FlyWheelMode.VOLTAGE;
+              // boolean torqueCurrentControl =
+              //     currentControlDebouncer.calculate(inputs.flyWheelIsTarget);
+              // FlyWheelMode flyWheelMode =
+              //     torqueCurrentControl ? FlyWheelMode.CURRENT : FlyWheelMode.VOLTAGE;
+              FlyWheelMode flyWheelMode = FlyWheelMode.VOLTAGE;
 
               // Log the outputs
               Logger.recordOutput("Turret/Distance", distance);

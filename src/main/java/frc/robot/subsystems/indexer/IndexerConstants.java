@@ -11,9 +11,9 @@ import edu.wpi.first.math.system.plant.DCMotor;
 /** Constants for the indexer subsystem. */
 public class IndexerConstants {
 
-  public static final double maxVolts = 12.0;
+  public static final double maxVolts = 4.0;
 
-  public static final double gearRatio = 3.0;
+  public static final double gearRatio = 1.0;
 
   /** The constants only for the real version of the indexer. */
   public static class Real {
@@ -27,6 +27,7 @@ public class IndexerConstants {
       motorConfig = new SparkMaxConfig();
 
       motorConfig.idleMode(IdleMode.kCoast);
+      motorConfig.inverted(true);
 
       motorConfig
           .encoder

@@ -14,17 +14,24 @@ import com.revrobotics.spark.SparkMax;
 /** The real implementation of the intake. */
 public class IntakeIOReal implements IntakeIO {
 
-  private SparkMax intakeMotor;
+  private SparkMax leftIntakeMotor;
+  private SparkMax rightIntakeMotor;
   private RelativeEncoder encoder;
 
   /** Creates a new real intake. */
   public IntakeIOReal() {
 
-    intakeMotor = new SparkMax(IntakeConstants.Real.motorID, MotorType.kBrushless);
-    encoder = intakeMotor.getEncoder();
+    leftIntakeMotor = new SparkMax(IntakeConstants.Real.leftMotorID, MotorType.kBrushless);
+    encoder = leftIntakeMotor.getEncoder();
 
-    intakeMotor.configure(
-        IntakeConstants.Real.motorConfig,
+    leftIntakeMotor.configure(
+        IntakeConstants.Real.leftMotorConfig,
+        ResetMode.kResetSafeParameters,
+        PersistMode.kPersistParameters);
+
+    rightIntakeMotor = new SparkMax(IntakeConstants.Real.rightMotorID, MotorType.kBrushless);
+    rightIntakeMotor.configure(
+        IntakeConstants.Real.rightMotorConfig,
         ResetMode.kResetSafeParameters,
         PersistMode.kPersistParameters);
   }
@@ -33,13 +40,13 @@ public class IntakeIOReal implements IntakeIO {
 
     inputs.positionRotations = encoder.getPosition();
     inputs.velocityRadPerSec = encoder.getVelocity();
-    inputs.appliedVolts = intakeMotor.getBusVoltage() * intakeMotor.getAppliedOutput();
-    inputs.currentAmps = intakeMotor.getOutputCurrent();
+    inputs.appliedVolts = leftIntakeMotor.getBusVoltage() * leftIntakeMotor.getAppliedOutput();
+    inputs.currentAmps = leftIntakeMotor.getOutputCurrent();
     inputs.isRunning = encoder.getVelocity() > 0.0;
   }
 
   @Override
   public void setVolts(double volts) {
-    intakeMotor.getClosedLoopController().setSetpoint(volts, ControlType.kVoltage);
+    leftIntakeMotor.getClosedLoopController().setSetpoint(volts, ControlType.kVoltage);
   }
 }

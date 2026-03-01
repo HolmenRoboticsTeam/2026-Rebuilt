@@ -88,9 +88,9 @@ public class Feeder extends SubsystemBase {
     return inputs.positionRotations;
   }
 
-  public boolean hasFuel() {
-    return inputs.hasFuel;
-  }
+  // public boolean hasFuel() {
+  //   return inputs.hasFuel;
+  // }
 
   /**
    * Checks the motor to see if the feeder to releasing fuel to the turret and if the feeder has

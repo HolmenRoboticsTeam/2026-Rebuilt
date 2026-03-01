@@ -21,7 +21,7 @@ public class ClimberConstants {
   public static class Real {
 
     public static final int motorID = 27;
-    public static final int limitSwitchID = 1;
+    public static final int limitSwitchID = 4;
 
     public static final SparkMaxConfig motorConfig;
 

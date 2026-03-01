@@ -13,6 +13,7 @@ import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.Alert;
@@ -27,12 +28,15 @@ import org.littletonrobotics.junction.Logger;
 
 public class Vision extends SubsystemBase {
   private final VisionPoseConsumer poseConsumer;
+  private final VisionRotationConsumer rotationConsumer;
   private final VisionIO[] io;
   private final VisionIOInputsAutoLogged[] inputs;
   private final Alert[] disconnectedAlerts;
 
-  public Vision(VisionPoseConsumer poseConsumer, VisionIO... io) {
+  public Vision(
+      VisionPoseConsumer poseConsumer, VisionRotationConsumer rotationConsumer, VisionIO... io) {
     this.poseConsumer = poseConsumer;
+    this.rotationConsumer = rotationConsumer;
     this.io = io;
 
     // Initialize inputs
@@ -61,6 +65,7 @@ public class Vision extends SubsystemBase {
     List<Pose3d> allTagPoses = new LinkedList<>();
     List<Pose3d> allRobotPoses = new LinkedList<>();
     List<Pose3d> allRobotPosesAccepted = new LinkedList<>();
+    List<Pose3d> allRobotRotationAccepted = new LinkedList<>();
     List<Pose3d> allRobotPosesRejected = new LinkedList<>();
 
     // Loop over cameras
@@ -72,6 +77,7 @@ public class Vision extends SubsystemBase {
       List<Pose3d> tagPoses = new LinkedList<>();
       List<Pose3d> robotPoses = new LinkedList<>();
       List<Pose3d> robotPosesAccepted = new LinkedList<>();
+      List<Pose3d> robotRotationAccepted = new LinkedList<>();
       List<Pose3d> robotPosesRejected = new LinkedList<>();
 
       // Add tag poses
@@ -102,6 +108,8 @@ public class Vision extends SubsystemBase {
         robotPoses.add(poseObservation.pose());
         if (rejectPose) {
           robotPosesRejected.add(poseObservation.pose());
+        } else if (poseObservation.type() == PoseObservationType.MEGATAG_1) {
+          robotRotationAccepted.add(poseObservation.pose());
         } else {
           robotPosesAccepted.add(poseObservation.pose());
         }
@@ -125,6 +133,14 @@ public class Vision extends SubsystemBase {
           angularStdDev *= cameraStdDevFactors[cameraIndex];
         }
 
+        if (poseObservation.type() == PoseObservationType.MEGATAG_1) {
+          rotationConsumer.acceptRotation(
+              poseObservation.pose().toPose2d().getRotation(),
+              poseObservation.timestamp(),
+              VecBuilder.fill(linearStdDev, linearStdDev, angularStdDev));
+          return;
+        }
+
         // Send vision observation
         poseConsumer.acceptPose(
             poseObservation.pose().toPose2d(),
@@ -143,11 +159,15 @@ public class Vision extends SubsystemBase {
           "Vision/Camera" + Integer.toString(cameraIndex) + "/RobotPosesAccepted",
           robotPosesAccepted.toArray(new Pose3d[0]));
       Logger.recordOutput(
+          "Vision/Camera" + Integer.toString(cameraIndex) + "/RobotRotationAccepted",
+          robotRotationAccepted.toArray(new Pose3d[0]));
+      Logger.recordOutput(
           "Vision/Camera" + Integer.toString(cameraIndex) + "/RobotPosesRejected",
           robotPosesRejected.toArray(new Pose3d[0]));
       allTagPoses.addAll(tagPoses);
       allRobotPoses.addAll(robotPoses);
       allRobotPosesAccepted.addAll(robotPosesAccepted);
+      allRobotRotationAccepted.addAll(allRobotRotationAccepted);
       allRobotPosesRejected.addAll(robotPosesRejected);
     }
 
@@ -156,6 +176,8 @@ public class Vision extends SubsystemBase {
     Logger.recordOutput("Vision/Summary/RobotPoses", allRobotPoses.toArray(new Pose3d[0]));
     Logger.recordOutput(
         "Vision/Summary/RobotPosesAccepted", allRobotPosesAccepted.toArray(new Pose3d[0]));
+    Logger.recordOutput(
+        "Vision/Summary/RobotRotationAccepted", allRobotRotationAccepted.toArray(new Pose3d[0]));
     Logger.recordOutput(
         "Vision/Summary/RobotPosesRejected", allRobotPosesRejected.toArray(new Pose3d[0]));
   }
@@ -193,6 +215,13 @@ public class Vision extends SubsystemBase {
   public static interface VisionPoseConsumer {
     public void acceptPose(
         Pose2d visionRobotPoseMeters,
+        double timestampSeconds,
+        Matrix<N3, N1> visionMeasurementStdDevs);
+  }
+
+  public static interface VisionRotationConsumer {
+    public void acceptRotation(
+        Rotation2d visionRobotRotation,
         double timestampSeconds,
         Matrix<N3, N1> visionMeasurementStdDevs);
   }

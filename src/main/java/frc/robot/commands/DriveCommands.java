@@ -89,11 +89,11 @@ public class DriveCommands {
               double xAngle = xAngleSupplier.getAsDouble();
               double yAngle = yAngleSupplier.getAsDouble();
 
-              if (MathUtil.isNear(0.0, xAngle, 0.1) // Stick is a neural, so snake drive
-                  && MathUtil.isNear(0.0, yAngle, 0.1)) {
-                xAngle = ySupplier.getAsDouble();
-                yAngle = xSupplier.getAsDouble();
-              }
+              // if (MathUtil.isNear(0.0, xAngle, 0.1) // Stick is a neural, so snake drive
+              //     && MathUtil.isNear(0.0, yAngle, 0.1)) {
+              //   xAngle = ySupplier.getAsDouble();
+              //   yAngle = xSupplier.getAsDouble();
+              // }
 
               // Calculate angular speed
               double omega =

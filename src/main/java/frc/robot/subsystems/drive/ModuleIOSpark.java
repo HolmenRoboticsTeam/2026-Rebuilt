@@ -166,6 +166,9 @@ public class ModuleIOSpark implements ModuleIO {
         SparkOdometryThread.getInstance().registerSignal(driveSpark, driveEncoder::getPosition);
     turnPositionQueue =
         SparkOdometryThread.getInstance().registerSignal(turnSpark, turnEncoder::getPosition);
+
+    // driveSpark.setPeriodicFrameTimeout(1000);
+    // turnSpark.setPeriodicFrameTimeout(1000);
   }
 
   @Override

@@ -51,7 +51,6 @@ public class Climber extends SubsystemBase {
   public Command retract() {
     return Commands.runOnce(
         () -> {
-          System.out.println("RETRACTING");
           io.setTargetHeight(ClimberConstants.retractedHeight);
         },
         this);

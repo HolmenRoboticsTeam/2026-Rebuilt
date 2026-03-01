@@ -43,7 +43,8 @@ public class IndexerIOReal implements IndexerIO {
     inputs.hasFuel = lineBreak.get();
   }
 
-  public void setVoltage(double volts) {
+  @Override
+  public void setVolts(double volts) {
     indexerMotor.getClosedLoopController().setSetpoint(volts, ControlType.kVoltage);
   }
 }
