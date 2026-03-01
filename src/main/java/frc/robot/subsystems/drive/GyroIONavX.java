@@ -53,6 +53,17 @@ public class GyroIONavX implements GyroIO {
     yawPositionQueue.clear();
   }
 
+  /**
+   * Gets the countinous angle from the IMU filtering algorithm.
+   *
+   * Unlike {@link com.studica.frc.Navx#getYaw()}, angle reported
+   * by this method is unbounded.
+   *
+   * Applies a 180deg offset if on Red alliance. Assumes robot boots
+   * while facing Blue alliance wall.
+   *
+   * @return The angle with the offset applied if on Red alliance.
+   */
   private double getAngle() {
     double rawAngle = navX.getAngle().in(Degrees);
     return rawAngle + (Constants.isBlueAlliance.get() ? 0.0 : 180.0);
