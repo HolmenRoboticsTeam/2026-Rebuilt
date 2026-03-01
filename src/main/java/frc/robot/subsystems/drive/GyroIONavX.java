@@ -13,8 +13,7 @@ import static edu.wpi.first.units.Units.DegreesPerSecond;
 import com.studica.frc.Navx;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import frc.robot.Constants;
 
 import java.util.Queue;
 
@@ -56,6 +55,6 @@ public class GyroIONavX implements GyroIO {
 
   private double getAngle() {
     double rawAngle = navX.getAngle().in(Degrees);
-    return rawAngle + (DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red ? 180.0 : 0.0);
+    return rawAngle + (Constants.isBlueAlliance.get() ? 0.0 : 180.0);
   }
 }
