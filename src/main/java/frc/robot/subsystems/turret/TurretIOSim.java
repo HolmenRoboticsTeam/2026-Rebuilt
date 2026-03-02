@@ -16,7 +16,9 @@ import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
+import frc.robot.Constants;
 import frc.robot.util.FuelSim;
+import java.util.function.Supplier;
 
 /** The sim implementation of the turret. */
 public class TurretIOSim implements TurretIO {
@@ -25,6 +27,7 @@ public class TurretIOSim implements TurretIO {
   private PIDController rotationController;
   private Rotation2d targetRotation = new Rotation2d();
   private double rotationAppliedVolts;
+  private Supplier<Double> getRotationOffset = () -> Constants.isBlueAlliance.get() ? 0.0 : Math.PI;
 
   private DCMotorSim angleMotorSim;
   private PIDController angleController;
@@ -140,7 +143,7 @@ public class TurretIOSim implements TurretIO {
 
   @Override
   public void setTargetRotation(Rotation2d rot) {
-    targetRotation = rot;
+    targetRotation = rot.plus(Rotation2d.fromRadians(getRotationOffset.get()));
   }
 
   @Override

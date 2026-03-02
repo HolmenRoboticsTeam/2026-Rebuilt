@@ -28,16 +28,16 @@ import org.littletonrobotics.junction.Logger;
 
 public class Vision extends SubsystemBase {
   private final VisionPoseConsumer poseConsumer;
-  private final VisionRotationConsumer rotationConsumer;
   private final VisionIO[] io;
   private final VisionIOInputsAutoLogged[] inputs;
   private final Alert[] disconnectedAlerts;
 
-  public Vision(
-      VisionPoseConsumer poseConsumer, VisionRotationConsumer rotationConsumer, VisionIO... io) {
+  private VisionRotationConsumer rotationConsumer;
+
+  public Vision(VisionPoseConsumer poseConsumer, VisionIO... io) {
     this.poseConsumer = poseConsumer;
-    this.rotationConsumer = rotationConsumer;
     this.io = io;
+    this.rotationConsumer = (r) -> {};
 
     // Initialize inputs
     this.inputs = new VisionIOInputsAutoLogged[io.length];
@@ -119,6 +119,12 @@ public class Vision extends SubsystemBase {
           continue;
         }
 
+        // If MegaTag 1, send rotation measurement.
+        if (poseObservation.type() == PoseObservationType.MEGATAG_1) {
+          rotationConsumer.acceptRotation(poseObservation.pose().toPose2d().getRotation());
+          continue;
+        }
+
         // Calculate standard deviations
         double stdDevFactor =
             Math.pow(poseObservation.averageTagDistance(), 2.0) / poseObservation.tagCount();
@@ -131,14 +137,6 @@ public class Vision extends SubsystemBase {
         if (cameraIndex < cameraStdDevFactors.length) {
           linearStdDev *= cameraStdDevFactors[cameraIndex];
           angularStdDev *= cameraStdDevFactors[cameraIndex];
-        }
-
-        if (poseObservation.type() == PoseObservationType.MEGATAG_1) {
-          rotationConsumer.acceptRotation(
-              poseObservation.pose().toPose2d().getRotation(),
-              poseObservation.timestamp(),
-              VecBuilder.fill(linearStdDev, linearStdDev, angularStdDev));
-          return;
         }
 
         // Send vision observation
@@ -212,6 +210,10 @@ public class Vision extends SubsystemBase {
         this);
   }
 
+  public void setRotationConsumer(VisionRotationConsumer consumer) {
+    this.rotationConsumer = consumer;
+  }
+
   public static interface VisionPoseConsumer {
     public void acceptPose(
         Pose2d visionRobotPoseMeters,
@@ -220,9 +222,6 @@ public class Vision extends SubsystemBase {
   }
 
   public static interface VisionRotationConsumer {
-    public void acceptRotation(
-        Rotation2d visionRobotRotation,
-        double timestampSeconds,
-        Matrix<N3, N1> visionMeasurementStdDevs);
+    public void acceptRotation(Rotation2d visionRobotRotation);
   }
 }

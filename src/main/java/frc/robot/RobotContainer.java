@@ -14,7 +14,6 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.commands.PathfindingCommand;
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -138,7 +137,6 @@ public class RobotContainer {
         vision =
             new Vision(
                 (p, t, sd) -> drive.addVisionPoseMeasurement(p, t, sd),
-                (r, t, sd) -> drive.addVisionRotationMeasurement(r, t, sd),
                 new VisionIOLimelight("limelight-three", () -> drive.getRotation()),
                 new VisionIOLimelight("limelight-two", () -> drive.getRotation()));
         intake = new Intake(new IntakeIOReal());
@@ -177,7 +175,6 @@ public class RobotContainer {
         vision =
             new Vision(
                 (p, t, sd) -> drive.addVisionPoseMeasurement(p, t, sd),
-                (r, t, sd) -> drive.addVisionRotationMeasurement(r, t, sd),
                 // new VisionIOPhotonVisionSim(
                 //     "Camera0",
                 //     VisionConstants.robotToCamera0,
@@ -236,7 +233,6 @@ public class RobotContainer {
         vision =
             new Vision(
                 (p, t, sd) -> drive.addVisionPoseMeasurement(p, t, sd),
-                (r, t, sd) -> drive.addVisionRotationMeasurement(r, t, sd),
                 new VisionIO() {},
                 new VisionIO() {});
         intake = new Intake(new IntakeIO() {});
@@ -322,15 +318,28 @@ public class RobotContainer {
     controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
 
     // Reset gyro to ZERO when Start button is pressed
-    controller
-        .start()
-        .onTrue(
-            Commands.runOnce(
-                    () ->
-                        drive.setPose(
-                            new Pose2d(drive.getPose().getTranslation(), Rotation2d.kZero)),
-                    drive)
-                .ignoringDisable(true));
+    controller.start().onTrue(Commands.runOnce(() -> drive.resetGyro(Rotation2d.kZero)));
+
+    // Resets gyro to the next vision MT1 measurement.
+    // boolean[] hasResetGyro = new boolean[1];
+    // controller
+    //     .start()
+    //     .onTrue(
+    //         Commands.sequence(
+    //             Commands.runOnce(
+    //                 () -> {
+    //                   vision.setRotationConsumer(
+    //                       (r) -> {
+    //                         drive.resetGyro(r);
+    //                         hasResetGyro[0] = true;
+    //                       });
+    //                 }),
+    //             Commands.waitUntil(() -> hasResetGyro[0]),
+    //             Commands.runOnce(
+    //                 () -> {
+    //                   vision.setRotationConsumer((r) -> {});
+    //                   hasResetGyro[0] = false;
+    //                 })));
 
     controller.leftTrigger(0.1).onTrue(intake.start());
 

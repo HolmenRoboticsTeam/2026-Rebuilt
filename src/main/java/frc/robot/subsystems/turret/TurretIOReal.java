@@ -13,12 +13,20 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
+import frc.robot.Constants;
+import java.util.function.Supplier;
 
 /** The real implementation of the turret. */
 public class TurretIOReal implements TurretIO {
 
   private SparkFlex rotationMotor;
   private RelativeEncoder rotationEncoder;
+  private Supplier<Double> getRotationOffset =
+      () ->
+          Constants.isBlueAlliance.get()
+              ? 0.0
+              : Math.PI; // This offset is used to flip the turret's zero point when on the red
+  // alliance, since the turret is mounted backwards on the red side.
 
   private SparkMax angleMotor;
   private RelativeEncoder angleEncoder;
@@ -36,7 +44,8 @@ public class TurretIOReal implements TurretIO {
 
     rotationMotor = new SparkFlex(TurretConstants.Real.rotationMotorID, MotorType.kBrushless);
     rotationEncoder = rotationMotor.getEncoder();
-    rotationEncoder.setPosition(rotationMotor.getAbsoluteEncoder().getPosition());
+    rotationEncoder.setPosition(
+        rotationMotor.getAbsoluteEncoder().getPosition() + getRotationOffset.get());
 
     rotationMotor.configure(
         TurretConstants.Real.rotationMotorConfig,

@@ -347,16 +347,6 @@ public class Drive extends SubsystemBase {
         visionRobotPoseMeters, timestampSeconds, visionMeasurementStdDevs);
   }
 
-  public void addVisionRotationMeasurement(
-      Rotation2d visionRobotRotation,
-      double timestampSeconds,
-      Matrix<N3, N1> visionMeasurementStdDevs) {
-    poseEstimator.addVisionMeasurement(
-        new Pose2d(getPose().getTranslation(), visionRobotRotation),
-        timestampSeconds,
-        visionMeasurementStdDevs);
-  }
-
   /** Returns the maximum linear speed in meters per sec. */
   public double getMaxLinearSpeedMetersPerSec() {
     return maxSpeedMetersPerSec;
@@ -365,5 +355,9 @@ public class Drive extends SubsystemBase {
   /** Returns the maximum angular speed in radians per sec. */
   public double getMaxAngularSpeedRadPerSec() {
     return maxSpeedMetersPerSec / driveBaseRadius;
+  }
+
+  public void resetGyro(Rotation2d offsetAngle) {
+    gyroIO.zeroGyro(offsetAngle);
   }
 }

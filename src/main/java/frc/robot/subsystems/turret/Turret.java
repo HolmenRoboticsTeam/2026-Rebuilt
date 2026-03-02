@@ -289,8 +289,7 @@ public class Turret extends SubsystemBase {
                   turretTarget
                       .minus(turretPose.get().getTranslation())
                       .getAngle()
-                      .minus(robotPose.get().getRotation())
-                      .plus(Rotation2d.k180deg);
+                      .minus(robotPose.get().getRotation());
 
               // Pull Tunable values
               double rpm = SmartDashboard.getNumber("RPM", 0.0);

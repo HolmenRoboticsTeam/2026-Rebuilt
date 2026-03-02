@@ -26,8 +26,9 @@ public class GyroIONavX implements GyroIO {
   private final Queue<Double> yawPositionQueue;
   private final Queue<Double> yawTimestampQueue;
   private final Supplier<Double> adjustedYaw =
-      () ->
-          Constants.isBlueAlliance.get() ? 0.0 - Math.toDegrees(0.1) : 180.0 - Math.toDegrees(0.1);
+      () -> (Constants.isBlueAlliance.get() ? 0.0 : 180.0) - startingZeroOffset;
+  private static double startingZeroOffset =
+      0.0; // This offset is used to adjust the gyro yaw to zero at the start of the match.
 
   public GyroIONavX() {
     yawTimestampQueue = SparkOdometryThread.getInstance().makeTimestampQueue();
@@ -36,6 +37,7 @@ public class GyroIONavX implements GyroIO {
             .registerSignal(() -> (navX.getYaw().in(Degree) + adjustedYaw.get()) % 360.0);
     navX.enableOptionalMessages(true, false, false, false, false, false, true, false, false, true);
     navX.resetYaw();
+    startingZeroOffset = navX.getYaw().in(Degree);
   }
 
   @Override
@@ -55,5 +57,11 @@ public class GyroIONavX implements GyroIO {
             .toArray(Rotation2d[]::new);
     yawTimestampQueue.clear();
     yawPositionQueue.clear();
+  }
+
+  @Override
+  public void zeroGyro(Rotation2d offsetAngle) {
+    navX.resetYaw();
+    startingZeroOffset = navX.getYaw().in(Degree) + offsetAngle.getDegrees();
   }
 }
