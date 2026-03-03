@@ -184,87 +184,6 @@ public class Turret extends SubsystemBase {
   }
 
   /**
-   * Creates and returns a command to control the turret with a target position and type.
-   *
-   * @param turretTarget the target translation
-   * @param targetType the target type
-   * @return A command with the given logic
-   */
-  public Command forceAim(Translation2d target, TargetType type) {
-
-    return Commands.run(
-            () -> {
-
-              // Checks for the trench
-              final TargetType targetType;
-              if (getTargetType() == TargetType.IN_TRENCH) {
-                targetType = TargetType.IN_TRENCH;
-              } else {
-                targetType = type;
-              }
-
-              // Get the shot data
-              Distance distance = Meters.of(turretPose.get().getTranslation().getDistance(target));
-              TurretShotData shotData = TurretDistanceCalc.getShotData(targetType, distance);
-
-              // Adjust target based on robot movement times time of flight.
-              final Translation2d turretTarget =
-                  target.minus(
-                      new Translation2d(
-                              robotVelocity.get().vxMetersPerSecond,
-                              robotVelocity.get().vyMetersPerSecond)
-                          .times(shotData.timeOfFlightSec()));
-
-              // Update shot data
-              shotData = TurretDistanceCalc.getShotData(targetType, distance);
-              /**
-               * TLDR: The time of flight data should not be updated.
-               *
-               * <p>The shot data needs to be update because me moved the target based on the
-               * velocity of the robot. The time of flight does not need to be updated because it is
-               * not affect by the robot's velocity. Why? The robot's velocity is only horizontal
-               * AND the time of flight to only based on when the fuel hit the target from above,
-               * its vertical position. So regardless of the velocity of the robot, the fuel's
-               * vertical velocity will not be affected. Therefore, the time of flight will remain
-               * unchanged.
-               */
-
-              // Get the target values
-              Rotation2d rotation =
-                  turretTarget
-                      .minus(turretPose.get().getTranslation())
-                      .getAngle()
-                      .minus(robotPose.get().getRotation());
-              Rotation2d angle = Rotation2d.fromRadians(shotData.angleRad());
-              AngularVelocity rpm = RPM.of(shotData.RPM());
-              FlyWheelMode flyWheelMode = FlyWheelMode.VOLTAGE;
-
-              // Set the Flywheel mode
-              // boolean torqueCurrentControl =
-              //     currentControlDebouncer.calculate(inputs.flyWheelIsTarget);
-              // FlyWheelMode flyWheelMode =
-              //     torqueCurrentControl ? FlyWheelMode.CURRENT : FlyWheelMode.VOLTAGE;
-
-              // Log the outputs
-              Logger.recordOutput("Turret/Distance", distance);
-              Logger.recordOutput("Turret/Target", turretTarget);
-              Logger.recordOutput("Turret/Type", targetType);
-              Logger.recordOutput("Turret/FlyWheelMode", flyWheelMode);
-              Logger.recordOutput("Turret/RPM", rpm);
-              Logger.recordOutput("Turret/Angle", angle);
-              Logger.recordOutput("Turret/Rotation", rotation);
-
-              // Set the outputs
-              io.setTargetRotation(rotation);
-              io.setTargetAngle(angle);
-              io.setFlyWheelMode(flyWheelMode);
-              io.setFlyWheelRPM(rpm.in(RPM));
-            },
-            this)
-        .withName("Turret_FullFieldAim");
-  }
-
-  /**
    * Creates and returns a command to pull RPM and Angle of the shooter from NetworkTables for
    * faster tuning.
    *
@@ -396,14 +315,19 @@ public class Turret extends SubsystemBase {
      * perfectly at the trench it will miss the check. However, it will only be for one cycle, then
      * the current turret position will be in the trench zone.
      */
-    Translation2d forwardTrans =
+    Translation2d halfStep =
         turretTrans.plus(
             new Translation2d(speeds.vxMetersPerSecond * 0.25, speeds.vyMetersPerSecond * 0.25)
                 .rotateBy(robotPose.get().getRotation()));
-    TargetType type = checkTrans(forwardTrans);
-    Logger.recordOutput("Turret/Step Check", new Translation2d[] {turretTrans, forwardTrans});
-    if (type == TargetType.IN_TRENCH) {
-      return type;
+    TargetType halfStepType = checkTrans(halfStep);
+    Translation2d fullStep =
+        turretTrans.plus(
+            new Translation2d(speeds.vxMetersPerSecond * 0.5, speeds.vyMetersPerSecond * 0.5)
+                .rotateBy(robotPose.get().getRotation()));
+    TargetType fullStepType = checkTrans(fullStep);
+    Logger.recordOutput("Turret/Step Check", new Translation2d[] {turretTrans, halfStep, fullStep});
+    if (halfStepType == TargetType.IN_TRENCH || fullStepType == TargetType.IN_TRENCH) {
+      return fullStepType;
     }
     return checkTrans(turretTrans);
   }
