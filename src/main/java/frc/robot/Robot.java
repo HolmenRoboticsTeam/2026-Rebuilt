@@ -9,6 +9,8 @@ package frc.robot;
 
 import com.pathplanner.lib.pathfinding.Pathfinding;
 import com.revrobotics.util.StatusLogger;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.util.Elastic;
@@ -100,6 +102,13 @@ public class Robot extends LoggedRobot {
     // timing (see the template project documentation for details)
     // Threads.setCurrentThreadPriority(true, 99);
 
+    SmartDashboard.putNumber(
+        "Remaining Time In Current Shift", HubShiftUtil.getOfficialShiftInfo().remainingTime());
+    SmartDashboard.putBoolean("Our Hub is Active?", HubShiftUtil.getOfficialShiftInfo().active());
+    SmartDashboard.putString(
+        "Current Shift", HubShiftUtil.getOfficialShiftInfo().currentShift().name());
+    SmartDashboard.putString(
+        "Auto Winner", HubShiftUtil.getFirstActiveAlliance() == Alliance.Blue ? "Red" : "Blue");
     Logger.recordOutput(
         "Active Commands",
         runningCommands.stream().map((c) -> c.getName()).toList().toArray(new String[0]));
@@ -144,7 +153,8 @@ public class Robot extends LoggedRobot {
   /** This function is called once when teleop is enabled. */
   @Override
   public void teleopInit() {
-    Elastic.selectTab("Teleoprated");
+    Elastic.selectTab("Teleoperated");
+    robotContainer.enabledInit();
     HubShiftUtil.initialize();
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
@@ -153,8 +163,6 @@ public class Robot extends LoggedRobot {
     if (autonomousCommand != null) {
       autonomousCommand.cancel();
     }
-
-    robotContainer.enabledInit();
   }
 
   /** This function is called periodically during operator control. */
@@ -164,7 +172,6 @@ public class Robot extends LoggedRobot {
   /** This function is called once when test mode is enabled. */
   @Override
   public void testInit() {
-    Elastic.selectTab("Teleoperated");
     // Cancels all running commands at the start of test mode.
     CommandScheduler.getInstance().cancelAll();
   }

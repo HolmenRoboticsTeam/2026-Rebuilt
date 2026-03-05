@@ -6,7 +6,66 @@
       "name": "Teleoperated",
       "grid_layout": {
         "layouts": [],
-        "containers": []
+        "containers": [
+          {
+            "title": "Remaining Time In Current Shift",
+            "x": 896.0,
+            "y": 0.0,
+            "width": 512.0,
+            "height": 384.0,
+            "type": "Match Time",
+            "properties": {
+              "topic": "/SmartDashboard/Remaining Time In Current Shift",
+              "period": 0.033,
+              "data_type": "double",
+              "time_display_mode": "Minutes and Seconds",
+              "red_start_time": 5,
+              "yellow_start_time": 10
+            }
+          },
+          {
+            "title": "Our Hub is Active?",
+            "x": 1024.0,
+            "y": 384.0,
+            "width": 384.0,
+            "height": 256.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/SmartDashboard/Our Hub is Active?",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4283215696,
+              "false_color": 4294198070,
+              "true_icon": "None",
+              "false_icon": "None"
+            }
+          },
+          {
+            "title": "Alerts",
+            "x": 640.0,
+            "y": 0.0,
+            "width": 256.0,
+            "height": 384.0,
+            "type": "Alerts",
+            "properties": {
+              "topic": "/SmartDashboard/Alerts",
+              "period": 0.06
+            }
+          },
+          {
+            "title": "Auto Winner",
+            "x": 896.0,
+            "y": 384.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Large Text Display",
+            "properties": {
+              "topic": "/SmartDashboard/Auto Winner",
+              "period": 0.06,
+              "data_type": "string"
+            }
+          }
+        ]
       }
     },
     {

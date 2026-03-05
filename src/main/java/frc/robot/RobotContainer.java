@@ -92,35 +92,35 @@ public class RobotContainer {
   private final XboxController buttonBox = new XboxController(1);
 
   // Switch 1
-  private final JoystickButton firstAutoToggleUp = new JoystickButton(buttonBox, 11);
-  private final JoystickButton firstAutoToggleDown = new JoystickButton(buttonBox, 12);
+  private final JoystickButton firstAutoToggleUp = new JoystickButton(buttonBox, 1);
+  private final JoystickButton firstAutoToggleDown = new JoystickButton(buttonBox, 2);
 
   // Switch 2
-  private final JoystickButton secondAutoToggleUp = new JoystickButton(buttonBox, 13);
-  private final JoystickButton secondAutoToggleDown = new JoystickButton(buttonBox, 14);
+  private final JoystickButton secondAutoToggleUp = new JoystickButton(buttonBox, 3);
+  private final JoystickButton secondAutoToggleDown = new JoystickButton(buttonBox, 4);
 
   // Switch 3
-  private final JoystickButton thirdAutoToggleUp = new JoystickButton(buttonBox, 15);
-  private final JoystickButton thirdAutoToggleDown = new JoystickButton(buttonBox, 16);
+  private final JoystickButton thirdAutoToggleUp = new JoystickButton(buttonBox, 5);
+  private final JoystickButton thirdAutoToggleDown = new JoystickButton(buttonBox, 6);
 
   // Switch 4 (Alliance Win Override)
-  private final JoystickButton blueAutoWinnerOverrideToggleUp = new JoystickButton(buttonBox, 17);
-  private final JoystickButton redAutoWinnerOverrideToggleDown = new JoystickButton(buttonBox, 18);
+  private final JoystickButton blueAutoWinnerOverrideToggleUp = new JoystickButton(buttonBox, 7);
+  private final JoystickButton redAutoWinnerOverrideToggleDown = new JoystickButton(buttonBox, 8);
 
   // Top Row
-  private final JoystickButton startIntake = new JoystickButton(buttonBox, 1);
-  private final JoystickButton startIndexer = new JoystickButton(buttonBox, 2);
-  private final JoystickButton startFeeder = new JoystickButton(buttonBox, 3);
+  private final JoystickButton startIntake = new JoystickButton(buttonBox, 11);
+  private final JoystickButton startIndexer = new JoystickButton(buttonBox, 12);
+  private final JoystickButton startFeeder = new JoystickButton(buttonBox, 13);
 
   // Mid Row
-  private final JoystickButton midRow1 = new JoystickButton(buttonBox, 4);
-  private final JoystickButton midRow2 = new JoystickButton(buttonBox, 5);
-  private final JoystickButton midRow3 = new JoystickButton(buttonBox, 6);
+  private final JoystickButton midRow1 = new JoystickButton(buttonBox, 14);
+  private final JoystickButton midRow2 = new JoystickButton(buttonBox, 15);
+  private final JoystickButton midRow3 = new JoystickButton(buttonBox, 16);
 
   // Bottom Row
-  private final JoystickButton lowRow1 = new JoystickButton(buttonBox, 7);
-  private final JoystickButton lowRow2 = new JoystickButton(buttonBox, 8);
-  private final JoystickButton lowRow3 = new JoystickButton(buttonBox, 9);
+  private final JoystickButton lowRow1 = new JoystickButton(buttonBox, 17);
+  private final JoystickButton lowRow2 = new JoystickButton(buttonBox, 18);
+  private final JoystickButton lowRow3 = new JoystickButton(buttonBox, 19);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
