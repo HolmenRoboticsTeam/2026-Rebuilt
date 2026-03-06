@@ -39,7 +39,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "(C) Post Left Neutral Collect To Left Bump Launch"
+                        "pathName": "(C) Post Left Neutral Collect To Left Trench Launch"
                       }
                     },
                     {
@@ -64,7 +64,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "(D) Left Bump Launch To Outpost Collect & Launch"
+                        "pathName": "(D) Left Trench Launch To Outpost Collect & Launch"
                       }
                     },
                     {

@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.638111969213378,
-        "y": 5.598083098567125
+        "x": 8.119296314544224,
+        "y": 5.734494054154988
       },
       "isLocked": false,
       "linkedName": "Post Left Neutral Collect"
@@ -17,15 +17,15 @@
     {
       "anchor": {
         "x": 6.0,
-        "y": 5.6
+        "y": 7.4
       },
       "prevControl": {
-        "x": 6.991,
-        "y": 5.6
+        "x": 6.972336690225556,
+        "y": 7.192755637791617
       },
       "nextControl": {
-        "x": 5.75,
-        "y": 5.6
+        "x": 5.630101623607175,
+        "y": 7.4788403377842965
       },
       "isLocked": false,
       "linkedName": null
@@ -33,15 +33,15 @@
     {
       "anchor": {
         "x": 4.5,
-        "y": 5.6
+        "y": 7.4
       },
       "prevControl": {
-        "x": 4.75,
-        "y": 5.6
+        "x": 4.904509251612533,
+        "y": 7.390723165027852
       },
       "nextControl": {
-        "x": 4.25,
-        "y": 5.6
+        "x": 3.1702331570890783,
+        "y": 7.430496280379108
       },
       "isLocked": false,
       "linkedName": null
@@ -49,25 +49,25 @@
     {
       "anchor": {
         "x": 3.0,
-        "y": 5.6
+        "y": 7.4
       },
       "prevControl": {
-        "x": 3.25,
-        "y": 5.6
+        "x": 3.464869798396821,
+        "y": 7.4016407873837995
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Left Bump Launch"
+      "linkedName": "Left Trench Launch"
     }
   ],
   "rotationTargets": [
     {
       "waypointRelativePos": 1.0,
-      "rotationDegrees": 137.0
+      "rotationDegrees": 90.0
     },
     {
-      "waypointRelativePos": 2.6,
-      "rotationDegrees": 135.0
+      "waypointRelativePos": 2.4,
+      "rotationDegrees": 90.0
     }
   ],
   "constraintZones": [],
@@ -83,7 +83,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 119.99999999999999
+    "rotation": 115.0
   },
   "reversed": false,
   "folder": "C 3 post-collects -TO- 3 launchs (No Branches)",

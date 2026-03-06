@@ -8,43 +8,32 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.6836049751845876,
-        "y": 7.391109482907757
+        "x": 3.389024003536921,
+        "y": 7.306263572602005
       },
       "isLocked": false,
       "linkedName": "Left Trench Start"
     },
     {
       "anchor": {
-        "x": 3.4,
+        "x": 3.0,
         "y": 7.4
       },
       "prevControl": {
-        "x": 3.64576947013721,
-        "y": 7.445797025541786
-      },
-      "nextControl": {
-        "x": 3.03202569541776,
-        "y": 7.3314311553169516
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 3.0,
-        "y": 5.6
-      },
-      "prevControl": {
-        "x": 2.75931946844572,
-        "y": 6.1549412401379655
+        "x": 3.986851184254871,
+        "y": 7.398208389257829
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Left Bump Launch"
+      "linkedName": "Left Trench Launch"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": -90.0
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -58,7 +47,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 119.99999999999999
+    "rotation": 115.0
   },
   "reversed": false,
   "folder": "A 3 Starts -TO- 4 pre-collects, 2 launchs, 3 pre-climb (Has branches)",

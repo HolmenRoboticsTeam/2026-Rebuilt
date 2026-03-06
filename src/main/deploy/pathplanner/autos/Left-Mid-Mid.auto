@@ -21,7 +21,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "(A) Left Trench Start To Left Bump Launch"
+                        "pathName": "(A) Left Trench Start To Left Trench Launch"
                       }
                     },
                     {
@@ -52,7 +52,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "(D) Left Bump Launch To Pre Mid Climb"
+                        "pathName": "(D) Left Trench Launch To Pre Mid Climb"
                       }
                     },
                     {

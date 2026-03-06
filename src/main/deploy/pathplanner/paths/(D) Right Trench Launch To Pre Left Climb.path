@@ -4,36 +4,52 @@
     {
       "anchor": {
         "x": 3.0,
-        "y": 2.4
+        "y": 0.7
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.576804547901229,
-        "y": 2.5305020014677018
+        "x": 3.124610687086805,
+        "y": 1.6853349959500843
       },
       "isLocked": false,
-      "linkedName": "Right Bump Launch"
+      "linkedName": "Right Trench Launch"
     },
     {
       "anchor": {
         "x": 2.0,
-        "y": 3.75
+        "y": 4.5
       },
       "prevControl": {
-        "x": 2.4173661094693633,
-        "y": 2.7129935444928974
+        "x": 2.4764012389177563,
+        "y": 2.8873306730578854
+      },
+      "nextControl": {
+        "x": 1.9291729328835863,
+        "y": 4.739757224215845
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.2,
+        "y": 5.5
+      },
+      "prevControl": {
+        "x": 1.439919250806016,
+        "y": 5.4297237373455305
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Pre Mid Climb"
+      "linkedName": "Pre Left Climb"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 1.0,
-      "maxWaypointRelativePos": 1.5,
+      "minWaypointRelativePos": 2.0,
+      "maxWaypointRelativePos": 2.5,
       "constraints": {
         "maxVelocity": 1.0,
         "maxAcceleration": 4.0,
@@ -62,7 +78,7 @@
   "folder": "D 4 launchs -TO- 4 pre-collect, 2 starts, 3 pre-climb (Has Branches)",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -119.99999999999999
+    "rotation": -115.0
   },
   "useDefaultConstraints": true
 }

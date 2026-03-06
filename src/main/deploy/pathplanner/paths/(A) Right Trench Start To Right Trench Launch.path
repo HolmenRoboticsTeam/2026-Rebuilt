@@ -3,32 +3,37 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.0,
-        "y": 5.6
+        "x": 4.4,
+        "y": 0.6
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.9977654338193056,
-        "y": 6.0817652913894875
+        "x": 3.3422927806671314,
+        "y": 0.7425093859687637
       },
       "isLocked": false,
-      "linkedName": "Left Bump Launch"
+      "linkedName": "Right Trench Start"
     },
     {
       "anchor": {
-        "x": 0.6,
-        "y": 7.2
+        "x": 3.0,
+        "y": 0.7
       },
       "prevControl": {
-        "x": 1.7334342314508335,
-        "y": 6.438637380352643
+        "x": 3.6484548987123326,
+        "y": 0.7527430479915949
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Pre Depot Collect"
+      "linkedName": "Right Trench Launch"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": 90.0
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -42,13 +47,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -119.99999999999999
+    "rotation": -115.0
   },
   "reversed": false,
-  "folder": "D 4 launchs -TO- 4 pre-collect, 2 starts, 3 pre-climb (Has Branches)",
+  "folder": "A 3 Starts -TO- 4 pre-collects, 2 launchs, 3 pre-climb (Has branches)",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 119.99999999999999
+    "rotation": 90.0
   },
   "useDefaultConstraints": true
 }

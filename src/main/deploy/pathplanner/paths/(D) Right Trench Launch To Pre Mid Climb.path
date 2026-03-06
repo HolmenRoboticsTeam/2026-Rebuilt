@@ -4,28 +4,28 @@
     {
       "anchor": {
         "x": 3.0,
-        "y": 5.6
+        "y": 0.7
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.997060782549955,
-        "y": 5.111207522494302
+        "x": 2.2884241721276632,
+        "y": 0.7704657091542313
       },
       "isLocked": false,
-      "linkedName": "Left Bump Launch"
+      "linkedName": "Right Trench Launch"
     },
     {
       "anchor": {
-        "x": 1.2,
-        "y": 5.5
+        "x": 2.0,
+        "y": 3.75
       },
       "prevControl": {
-        "x": 1.4468763703704213,
-        "y": 5.553239611681418
+        "x": 2.1819646214905393,
+        "y": 2.580220361927438
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Pre Left Climb"
+      "linkedName": "Pre Mid Climb"
     }
   ],
   "rotationTargets": [],
@@ -62,7 +62,7 @@
   "folder": "D 4 launchs -TO- 4 pre-collect, 2 starts, 3 pre-climb (Has Branches)",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 119.99999999999999
+    "rotation": -115.0
   },
   "useDefaultConstraints": true
 }

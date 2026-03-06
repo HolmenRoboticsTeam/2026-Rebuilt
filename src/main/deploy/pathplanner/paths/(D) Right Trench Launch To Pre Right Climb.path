@@ -4,48 +4,46 @@
     {
       "anchor": {
         "x": 3.0,
-        "y": 5.6
+        "y": 0.7
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.401265634961762,
-        "y": 4.774608995626242
+        "x": 2.5848414413469554,
+        "y": 0.5883498608025768
       },
       "isLocked": false,
-      "linkedName": "Left Bump Launch"
+      "linkedName": "Right Trench Launch"
     },
     {
       "anchor": {
-        "x": 2.0,
-        "y": 3.0
+        "x": 0.9,
+        "y": 1.9
       },
       "prevControl": {
-        "x": 2.3674149828413307,
-        "y": 3.6602554301089603
-      },
-      "nextControl": {
-        "x": 1.5537782328220935,
-        "y": 2.198126482122092
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 0.4,
-        "y": 0.6
-      },
-      "prevControl": {
-        "x": 1.0305642758957743,
-        "y": 1.7808941136124066
+        "x": 2.069535840362181,
+        "y": 1.6007372118362038
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Outpost Collect & Launch"
+      "linkedName": "Pre Right Climb"
     }
   ],
   "rotationTargets": [],
-  "constraintZones": [],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 1.0,
+      "maxWaypointRelativePos": 1.5,
+      "constraints": {
+        "maxVelocity": 1.0,
+        "maxAcceleration": 4.0,
+        "maxAngularVelocity": 720.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
@@ -58,13 +56,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": -90.0
   },
   "reversed": false,
   "folder": "D 4 launchs -TO- 4 pre-collect, 2 starts, 3 pre-climb (Has Branches)",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 119.99999999999999
+    "rotation": -115.0
   },
   "useDefaultConstraints": true
 }

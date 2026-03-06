@@ -4,44 +4,44 @@
     {
       "anchor": {
         "x": 3.0,
-        "y": 2.4
+        "y": 0.7
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.0101664888890554,
-        "y": 2.7739271083799237
+        "x": 2.8207478194937003,
+        "y": 1.538649490705572
       },
       "isLocked": false,
-      "linkedName": "Right Bump Launch"
+      "linkedName": "Right Trench Launch"
     },
     {
       "anchor": {
-        "x": 2.0,
-        "y": 4.5
+        "x": 1.975602756076389,
+        "y": 6.268799696180556
       },
       "prevControl": {
-        "x": 2.4224471050933016,
-        "y": 3.6570560126061173
+        "x": 2.537157412272225,
+        "y": 5.423674282644088
       },
       "nextControl": {
-        "x": 1.8879898113948743,
-        "y": 4.723503283306184
+        "x": 1.7253463348498101,
+        "y": 6.645429217716411
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.2,
-        "y": 5.5
+        "x": 0.6,
+        "y": 7.2
       },
       "prevControl": {
-        "x": 1.424722248171184,
-        "y": 5.390455893919897
+        "x": 1.5003776139718257,
+        "y": 6.626578160351241
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Pre Left Climb"
+      "linkedName": "Pre Depot Collect"
     }
   ],
   "rotationTargets": [],
@@ -72,13 +72,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 90.0
+    "rotation": -119.99999999999999
   },
   "reversed": false,
   "folder": "D 4 launchs -TO- 4 pre-collect, 2 starts, 3 pre-climb (Has Branches)",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -119.99999999999999
+    "rotation": -115.0
   },
   "useDefaultConstraints": true
 }
