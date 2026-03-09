@@ -15,6 +15,8 @@ public class IndexerConstants {
 
   public static final double gearRatio = 1.0;
 
+  public static final double hasFuelDebouncerTime = 0.25;
+
   /** The constants only for the real version of the indexer. */
   public static class Real {
 

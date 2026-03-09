@@ -1,5 +1,7 @@
 package frc.robot.subsystems.indexer;
 
+import edu.wpi.first.math.filter.Debouncer;
+import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -15,6 +17,7 @@ public class Indexer extends SubsystemBase {
   private final IndexerIOInputsAutoLogged inputs = new IndexerIOInputsAutoLogged();
 
   private Supplier<Boolean> feederHasFuel;
+  private Debouncer hasFuelDebouncer = new Debouncer(IndexerConstants.hasFuelDebouncerTime, DebounceType.kFalling);
   private int fuelHeldCount = 0;
 
   /**
@@ -85,7 +88,7 @@ public class Indexer extends SubsystemBase {
   }
 
   public boolean hasFuel() {
-    return inputs.hasFuel;
+    return hasFuelDebouncer.calculate(inputs.hasFuel);
   }
 
   public void changeHeldFuelBy(int delta) {
