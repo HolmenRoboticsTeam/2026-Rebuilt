@@ -62,20 +62,25 @@ public final class Constants {
 
     // #################### RECTANGLE ZONES ####################
 
+    public static final Rectangle2d kWholeField =
+        new Rectangle2d(
+            correctSide(new Translation2d(Inches.of(0.0), Inches.of(0.0))),
+            correctSide(new Translation2d(fieldLength, fieldWidth)));
+
     public static final Rectangle2d kHomeAllianceZone =
         new Rectangle2d( // Blue Alliance Zone
             correctSide(new Translation2d(Inches.of(0.0), Inches.of(0.0))),
-            correctSide(new Translation2d(Inches.of(157.06), Inches.of(316.64))));
+            correctSide(new Translation2d(Inches.of(157.06), fieldWidth)));
 
     public static final Rectangle2d kAllianceTrenchBumpZone =
         new Rectangle2d(
             correctSide(new Translation2d(Inches.of(157.06), Inches.of(0.0))),
-            correctSide(new Translation2d(Inches.of(206.06), Inches.of(316.64))));
+            correctSide(new Translation2d(Inches.of(206.06), fieldWidth)));
 
     public static final Rectangle2d kLeftNeutralSide =
         new Rectangle2d(
             correctSide(new Translation2d(Inches.of(206.06), Inches.of(158.32))),
-            correctSide(new Translation2d(Inches.of(464.06), Inches.of(316.64))));
+            correctSide(new Translation2d(Inches.of(464.06), fieldWidth)));
 
     public static final Rectangle2d kRightNeutralSide =
         new Rectangle2d(
@@ -85,17 +90,17 @@ public final class Constants {
     public static final Rectangle2d kOpposingTrenchBumpZone =
         new Rectangle2d(
             correctSide(new Translation2d(Inches.of(464.06), Inches.of(0.0))),
-            correctSide(new Translation2d(Inches.of(513.06), Inches.of(316.64))));
+            correctSide(new Translation2d(Inches.of(513.06), fieldWidth)));
 
     public static final Rectangle2d kLeftOpposingSide =
         new Rectangle2d(
             correctSide(new Translation2d(Inches.of(513.06), Inches.of(158.32))),
-            correctSide(new Translation2d(Inches.of(651.22), Inches.of(316.64))));
+            correctSide(new Translation2d(fieldLength, fieldWidth)));
 
     public static final Rectangle2d kRightOpposingSide =
         new Rectangle2d(
             correctSide(new Translation2d(Inches.of(513.06), Inches.of(0.0))),
-            correctSide(new Translation2d(Inches.of(651.22), Inches.of(158.8))));
+            correctSide(new Translation2d(fieldLength, Inches.of(158.8))));
 
     // #################### TRANSLATIONS POINTS ####################
 
@@ -234,7 +239,7 @@ public final class Constants {
             new Pair<String, Command>("Feeder Auto", feeder.autoFeed()),
 
             // Turret Commands
-            new Pair<String, Command>("Turret Full Field Aim", turret.fullFieldAim(() -> 0.0)),
+            new Pair<String, Command>("Turret Full Field Aim", turret.fullFieldAim()),
 
             // Climber Commands
             new Pair<String, Command>("Climber Calibrate", climber.calibrate()),

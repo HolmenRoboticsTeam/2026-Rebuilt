@@ -47,5 +47,7 @@ public class IndexerConstants {
 
     public static final DCMotor motorGearBox = DCMotor.getNEO(1);
     public static final double JKgMetersSquared = 0.004;
+
+    public static final int maxHopperCapacity = 20;
   }
 }

@@ -13,12 +13,6 @@
                 "data": {
                   "commands": [
                     {
-                      "type": "named",
-                      "data": {
-                        "name": "Climber Calibrate"
-                      }
-                    },
-                    {
                       "type": "path",
                       "data": {
                         "pathName": "(A) Right Trench Start To Right Trench Launch"

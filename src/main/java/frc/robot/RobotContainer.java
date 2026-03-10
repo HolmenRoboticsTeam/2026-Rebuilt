@@ -45,6 +45,7 @@ import frc.robot.subsystems.feeder.FeederIO;
 import frc.robot.subsystems.feeder.FeederIOReal;
 import frc.robot.subsystems.feeder.FeederIOSim;
 import frc.robot.subsystems.indexer.Indexer;
+import frc.robot.subsystems.indexer.IndexerConstants;
 import frc.robot.subsystems.indexer.IndexerIO;
 import frc.robot.subsystems.indexer.IndexerIOReal;
 import frc.robot.subsystems.indexer.IndexerIOSim;
@@ -212,13 +213,14 @@ public class RobotContainer {
                 Distance.ofRelativeUnits(-8.5, Inches).in(Meters),
                 Distance.ofRelativeUnits(8.5, Inches)
                     .in(Meters), // robot-centric coordinates for bounding box
-                () ->
-                    intake
-                        .isRunning(), // (optional) BooleanSupplier for whether the intake should be
-                // active at a given moment
-                () ->
-                    indexer.changeHeldFuelBy(
-                        1)); // (optional) Runnable called whenever a fuel is in-took
+                () -> {
+                  return intake.isRunning()
+                      && indexer.getHeldFuel() < IndexerConstants.Sim.maxHopperCapacity;
+                }, // (optional) BooleanSupplier for whether the intake should be active at a given
+                // moment
+                () -> {
+                  indexer.changeHeldFuelBy(1);
+                }); // (optional) Runnable called whenever a fuel is in-took
         break;
 
       default:
@@ -282,8 +284,8 @@ public class RobotContainer {
             () -> -controller.getRightX(),
             () -> -controller.getRightY()));
 
-    // turret.setDefaultCommand(turret.fullFieldAim(() -> controller.getRightTriggerAxis()));
-    turret.setDefaultCommand(turret.calibrate());
+    turret.setDefaultCommand(turret.fullFieldAim());
+    // turret.setDefaultCommand(turret.calibrate());
 
     // intake.setDefaultCommand(intake.stop());
     // indexer.setDefaultCommand(indexer.stop());

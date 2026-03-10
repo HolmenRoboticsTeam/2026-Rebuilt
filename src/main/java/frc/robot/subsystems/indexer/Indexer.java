@@ -17,7 +17,8 @@ public class Indexer extends SubsystemBase {
   private final IndexerIOInputsAutoLogged inputs = new IndexerIOInputsAutoLogged();
 
   private Supplier<Boolean> feederHasFuel;
-  private Debouncer hasFuelDebouncer = new Debouncer(IndexerConstants.hasFuelDebouncerTime, DebounceType.kFalling);
+  private Debouncer hasFuelDebouncer =
+      new Debouncer(IndexerConstants.hasFuelDebouncerTime, DebounceType.kFalling);
   private int fuelHeldCount = 0;
 
   /**

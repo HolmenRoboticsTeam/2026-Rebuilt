@@ -13,12 +13,6 @@
                 "data": {
                   "commands": [
                     {
-                      "type": "named",
-                      "data": {
-                        "name": "Climber Calibrate"
-                      }
-                    },
-                    {
                       "type": "deadline",
                       "data": {
                         "commands": [

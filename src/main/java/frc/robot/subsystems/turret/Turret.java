@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems.turret;
 
+import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.RPM;
 
@@ -86,7 +87,7 @@ public class Turret extends SubsystemBase {
     this.changeHeldFuelBy = changeHeldFuelBy;
   }
 
-  private double fuelHz = 0.3;
+  private double fuelHz = 0.2;
   private double lastFuel = Timer.getFPGATimestamp();
 
   @Override
@@ -109,7 +110,7 @@ public class Turret extends SubsystemBase {
    *
    * @return A command with the given logic.
    */
-  public Command fullFieldAim(Supplier<Double> rpmPercentage) {
+  public Command fullFieldAim() {
 
     return Commands.run(
             () -> {
@@ -154,8 +155,6 @@ public class Turret extends SubsystemBase {
                       .minus(robotPose.get().getRotation());
               Rotation2d angle = Rotation2d.fromRadians(shotData.angleRad());
               AngularVelocity rpm = RPM.of(shotData.RPM());
-
-              rpm = RPM.of(rpmPercentage.get() * 2500.0);
 
               // Set the Flywheel mode
               // boolean torqueCurrentControl =
@@ -315,20 +314,32 @@ public class Turret extends SubsystemBase {
      * perfectly at the trench it will miss the check. However, it will only be for one cycle, then
      * the current turret position will be in the trench zone.
      */
+
+    // Check in 0.25 seconds
     Translation2d halfStep =
         turretTrans.plus(
             new Translation2d(speeds.vxMetersPerSecond * 0.25, speeds.vyMetersPerSecond * 0.25)
                 .rotateBy(robotPose.get().getRotation()));
+    halfStep = forceInField(halfStep);
     TargetType halfStepType = checkTrans(halfStep);
+
+    // Check in 0.5 seconds
     Translation2d fullStep =
         turretTrans.plus(
             new Translation2d(speeds.vxMetersPerSecond * 0.5, speeds.vyMetersPerSecond * 0.5)
                 .rotateBy(robotPose.get().getRotation()));
+    fullStep = forceInField(fullStep);
     TargetType fullStepType = checkTrans(fullStep);
+
+    // Log the checks
     Logger.recordOutput("Turret/Step Check", new Translation2d[] {turretTrans, halfStep, fullStep});
+
+    // If any check lands in the Trench, the return IN_TRENCH.
     if (halfStepType == TargetType.IN_TRENCH || fullStepType == TargetType.IN_TRENCH) {
-      return fullStepType;
+      return TargetType.IN_TRENCH;
     }
+
+    // Otherwise, do the normal check.
     return checkTrans(turretTrans);
   }
 
@@ -357,5 +368,31 @@ public class Turret extends SubsystemBase {
     } else { // Out of the field
       return TargetType.INVALID;
     }
+  }
+
+  public Translation2d forceInField(Translation2d trans) {
+
+    if (FieldConstants.kWholeField.contains(trans)) return trans;
+
+    Distance xDistance;
+    Distance yDistance;
+
+    if (trans.getX() < 0.0) {
+      xDistance = Inches.of(0.0);
+    } else if (trans.getMeasureX().compareTo(FieldConstants.fieldLength) > 0) {
+      xDistance = FieldConstants.fieldLength.copy();
+    } else {
+      xDistance = trans.getMeasureX();
+    }
+
+    if (trans.getY() < 0.0) {
+      yDistance = Inches.of(0.0);
+    } else if (trans.getMeasureY().compareTo(FieldConstants.fieldWidth) > 0) {
+      yDistance = FieldConstants.fieldWidth.copy();
+    } else {
+      yDistance = trans.getMeasureY();
+    }
+
+    return new Translation2d(xDistance, yDistance);
   }
 }

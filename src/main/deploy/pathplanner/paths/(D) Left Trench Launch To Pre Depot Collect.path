@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.2772609814659521,
-        "y": 7.112612794812572
+        "x": 1.275517489881562,
+        "y": 7.124780308639974
       },
       "isLocked": false,
       "linkedName": "Left Trench Launch"
@@ -20,8 +20,8 @@
         "y": 7.2
       },
       "prevControl": {
-        "x": 1.2839329807803272,
-        "y": 6.726711994516562
+        "x": 1.2371688188085646,
+        "y": 6.804133987060539
       },
       "nextControl": null,
       "isLocked": false,
