@@ -31,9 +31,6 @@ import frc.robot.Constants.FieldConstants;
 import frc.robot.commands.AutoCommands;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.StateLoggingCommands;
-import frc.robot.subsystems.climber.Climber;
-import frc.robot.subsystems.climber.ClimberIO;
-import frc.robot.subsystems.climber.ClimberIOSim;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIONavX;
@@ -80,8 +77,6 @@ public class RobotContainer {
   private Indexer indexer;
   private Feeder feeder;
   private Turret turret;
-
-  private Climber climber;
 
   // Auto
   private final LoggedDashboardChooser<Boolean> autoSelectorType;
@@ -160,8 +155,6 @@ public class RobotContainer {
         //         () -> drive.getChassisSpeeds(),
         //         () -> feeder.feedingFuel(),
         //         (d) -> indexer.changeHeldFuelBy(d));
-        // climber = new Climber(new ClimberIOReal());
-        climber = new Climber(new ClimberIO() {});
         break;
 
       case SIM:
@@ -194,7 +187,6 @@ public class RobotContainer {
                 () -> drive.getChassisSpeeds(),
                 () -> feeder.feedingFuel(),
                 (d) -> indexer.changeHeldFuelBy(d));
-        climber = new Climber(new ClimberIOSim());
 
         // Register a robot for collision with fuel
         FuelSim.getInstance()
@@ -247,13 +239,12 @@ public class RobotContainer {
                 () -> drive.getChassisSpeeds(),
                 () -> feeder.feedingFuel(),
                 (d) -> indexer.changeHeldFuelBy(d));
-        climber = new Climber(new ClimberIO() {});
         break;
     }
 
     // Auto setup
     NamedCommands.registerCommands(
-        Constants.getNamedCommand(drive, vision, intake, indexer, feeder, turret, climber));
+        Constants.getNamedCommand(drive, vision, intake, indexer, feeder, turret));
     autoSelectorType = new LoggedDashboardChooser<>("Auto Selector Type");
     autoSelectorType.addDefaultOption("Use Button Box", true);
     autoSelectorType.addOption("Use Dashboard Chooser", false);
@@ -303,7 +294,7 @@ public class RobotContainer {
     CommandScheduler.getInstance().schedule(PathfindingCommand.warmupCommand());
 
     CommandScheduler.getInstance()
-        .schedule(StateLoggingCommands.logMechanisms(intake, indexer, feeder, turret, climber));
+        .schedule(StateLoggingCommands.logMechanisms(intake, indexer, feeder, turret));
   }
 
   /**
@@ -358,8 +349,6 @@ public class RobotContainer {
                     Commands.waitUntil(() -> !turret.isReadyForFuel()),
                     feeder.stop())));
     controller.rightTrigger(0.9).onFalse(Commands.parallel(feeder.stop(), vision.clearWhiteList()));
-
-    controller.leftBumper().onTrue(climber.retract());
 
     // #################### BUTTON BOX ####################
 

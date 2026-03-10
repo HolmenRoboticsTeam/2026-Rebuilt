@@ -21,7 +21,6 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import frc.robot.subsystems.climber.Climber;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.feeder.Feeder;
 import frc.robot.subsystems.indexer.Indexer;
@@ -217,13 +216,7 @@ public final class Constants {
   }
 
   public static List<Pair<String, Command>> getNamedCommand(
-      Drive drive,
-      Vision vision,
-      Intake intake,
-      Indexer indexer,
-      Feeder feeder,
-      Turret turret,
-      Climber climber) {
+      Drive drive, Vision vision, Intake intake, Indexer indexer, Feeder feeder, Turret turret) {
     return new ArrayList<Pair<String, Command>>(
         Arrays.asList(
             // Intake Commands
@@ -239,11 +232,6 @@ public final class Constants {
             new Pair<String, Command>("Feeder Auto", feeder.autoFeed()),
 
             // Turret Commands
-            new Pair<String, Command>("Turret Full Field Aim", turret.fullFieldAim()),
-
-            // Climber Commands
-            new Pair<String, Command>("Climber Calibrate", climber.calibrate()),
-            new Pair<String, Command>("Climber Extend", climber.extend()),
-            new Pair<String, Command>("Climber Retract", climber.retract())));
+            new Pair<String, Command>("Turret Full Field Aim", turret.fullFieldAim())));
   }
 }

@@ -314,7 +314,8 @@ public class Turret extends SubsystemBase {
     ChassisSpeeds speeds = robotVelocity.get();
     Translation2d turretTrans = turretPose.get().getTranslation();
 
-    // Take the difference in the angles of the current and last velocity, then scale it to predict the path of the robot.
+    // Take the difference in the angles of the current and last velocity, then scale it to predict
+    // the path of the robot.
     Rotation2d turnPredictRot =
         new Translation2d(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond)
             .getAngle()
@@ -336,15 +337,17 @@ public class Turret extends SubsystemBase {
       double time = stepNum * stepTime;
 
       // The actual prediction step.
-      // Turret position + (velocity * time). Then rotation by the angle to get field relative, then rotate by the turn prediction to get the predicted path of the robot.
+      // Turret position + (velocity * time). Then rotation by the angle to get field relative, then
+      // rotate by the turn prediction to get the predicted path of the robot.
       Translation2d step =
           turretTrans.plus(
               new Translation2d(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond)
                   .times(time)
                   .rotateBy(robotPose.get().getRotation())
                   .rotateBy(turnPredictRot.times(stepNum)));
-      
-      // Move any steps into the field to allow for better tracking, and then check the type of the step.
+
+      // Move any steps into the field to allow for better tracking, and then check the type of the
+      // step.
       step = forceInField(step);
       TargetType stepType = checkTrans(step);
       // Log the step.

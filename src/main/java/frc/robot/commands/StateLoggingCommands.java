@@ -8,7 +8,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import frc.robot.subsystems.climber.Climber;
 import frc.robot.subsystems.feeder.Feeder;
 import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.intake.Intake;
@@ -45,11 +44,6 @@ public class StateLoggingCommands {
   private static LoggedMechanismLigament2d flyWheelLigament =
       new LoggedMechanismLigament2d("flyWheel", 0.05, 0.0);
 
-  private static LoggedMechanism2d climberMechanism =
-      new LoggedMechanism2d(canvasWidth, canvasHeight);
-  private static LoggedMechanismLigament2d climberLigament =
-      new LoggedMechanismLigament2d("climber", 0.0, 90.0);
-
   static {
     intakeMechanism.getRoot("root", 1.0, 0.2).append(intakeLigament);
     intakeLigament.setColor(new Color8Bit(0, 0, 255));
@@ -68,13 +62,10 @@ public class StateLoggingCommands {
     flyWheelLigament.setColor(new Color8Bit(0, 255, 255));
     angleLigament.setLineWeight(2.5);
     flyWheelLigament.setLineWeight(1.0);
-
-    climberMechanism.getRoot("root", 0.1, 0.15).append(climberLigament);
-    climberLigament.setColor(new Color8Bit(0, 255, 255));
   }
 
   public static Command logMechanisms(
-      Intake intake, Indexer indexer, Feeder feeder, Turret turret, Climber climber) {
+      Intake intake, Indexer indexer, Feeder feeder, Turret turret) {
     return Commands.run(
             () -> {
               intakeLigament.setAngle(Rotation2d.fromRotations(intake.getPosition()));
@@ -84,15 +75,11 @@ public class StateLoggingCommands {
               angleLigament.setAngle(Rotation2d.fromRadians(turret.getAngle()));
               flyWheelLigament.setAngle(Rotation2d.fromRotations(turret.getFlyWheelPosition()));
 
-              climberLigament.setLength(climber.getHeight() - 0.1);
-
               Logger.recordOutput("Mechanism/Intake", intakeMechanism);
               Logger.recordOutput("Mechanism/Indexer", indexerMechanism);
               Logger.recordOutput("Mechanism/Feeder", feederMechanism);
 
               Logger.recordOutput("Mechanism/Turret", turretMechanism);
-
-              Logger.recordOutput("Mechanism/Climber", climberMechanism);
             })
         .ignoringDisable(true);
   }
