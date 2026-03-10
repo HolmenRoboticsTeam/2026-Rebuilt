@@ -77,9 +77,10 @@ public class Turret extends SubsystemBase {
               robotPose
                   .get()
                   .getTranslation()
-                  .minus(
+                  .plus(
                       new Translation2d(
-                          TurretConstants.turretYOffset, TurretConstants.turretXOffset));
+                              TurretConstants.turretXOffset, TurretConstants.turretYOffset)
+                          .rotateBy(robotPose.get().getRotation()));
           return new Pose2d(turretTrans, turretRot);
         };
     this.robotVelocity = robotVelocity;
@@ -299,6 +300,10 @@ public class Turret extends SubsystemBase {
     }
   }
 
+  private final int totalSteps = 3;
+  private final double stepTime = 0.2;
+  private ChassisSpeeds lastSpeeds = new ChassisSpeeds(0.0, 0.0, 0.0);
+
   /**
    * Find and returns which target type is correct based on the position and speed of the robot.
    *
@@ -309,37 +314,59 @@ public class Turret extends SubsystemBase {
     ChassisSpeeds speeds = robotVelocity.get();
     Translation2d turretTrans = turretPose.get().getTranslation();
 
-    /**
-     * The Trench zone is 1.2446 meter (49 inches). So, if the robot is going more than 4.9784 m/s
-     * perfectly at the trench it will miss the check. However, it will only be for one cycle, then
-     * the current turret position will be in the trench zone.
-     */
+    // Take the difference in the angles of the current and last velocity, then scale it to predict the path of the robot.
+    Rotation2d turnPredictRot =
+        new Translation2d(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond)
+            .getAngle()
+            .minus(
+                new Translation2d(lastSpeeds.vxMetersPerSecond, lastSpeeds.vyMetersPerSecond)
+                    .getAngle())
+            .times(3.2);
 
-    // Check in 0.25 seconds
-    Translation2d halfStep =
-        turretTrans.plus(
-            new Translation2d(speeds.vxMetersPerSecond * 0.25, speeds.vyMetersPerSecond * 0.25)
-                .rotateBy(robotPose.get().getRotation()));
-    halfStep = forceInField(halfStep);
-    TargetType halfStepType = checkTrans(halfStep);
-
-    // Check in 0.5 seconds
-    Translation2d fullStep =
-        turretTrans.plus(
-            new Translation2d(speeds.vxMetersPerSecond * 0.5, speeds.vyMetersPerSecond * 0.5)
-                .rotateBy(robotPose.get().getRotation()));
-    fullStep = forceInField(fullStep);
-    TargetType fullStepType = checkTrans(fullStep);
-
-    // Log the checks
-    Logger.recordOutput("Turret/Step Check", new Translation2d[] {turretTrans, halfStep, fullStep});
-
-    // If any check lands in the Trench, the return IN_TRENCH.
-    if (halfStepType == TargetType.IN_TRENCH || fullStepType == TargetType.IN_TRENCH) {
-      return TargetType.IN_TRENCH;
+    // Used for logging the predicted path of the robot.
+    Translation2d[] steps = new Translation2d[totalSteps];
+    for (int i = 0; i < totalSteps; i++) {
+      steps[i] = turretTrans;
     }
 
+    // Loop each step.
+    for (int stepNum = 1; stepNum < totalSteps; stepNum++) {
+
+      // The amount of time into the future to predict.
+      double time = stepNum * stepTime;
+
+      // The actual prediction step.
+      // Turret position + (velocity * time). Then rotation by the angle to get field relative, then rotate by the turn prediction to get the predicted path of the robot.
+      Translation2d step =
+          turretTrans.plus(
+              new Translation2d(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond)
+                  .times(time)
+                  .rotateBy(robotPose.get().getRotation())
+                  .rotateBy(turnPredictRot.times(stepNum)));
+      
+      // Move any steps into the field to allow for better tracking, and then check the type of the step.
+      step = forceInField(step);
+      TargetType stepType = checkTrans(step);
+      // Log the step.
+      steps[totalSteps - stepNum - 1] = step;
+
+      // If the step lands in the trench, return IN_TRENCH.
+      if (stepType == TargetType.IN_TRENCH) {
+        for (int i = stepNum + 1; i < totalSteps; i++) {
+          steps[totalSteps - i - 1] = step;
+        }
+
+        Logger.recordOutput("Turret/Steps", steps);
+        lastSpeeds = speeds;
+        return TargetType.IN_TRENCH;
+      }
+    }
+
+    // Log all the steps
+    Logger.recordOutput("Turret/Steps", steps);
+
     // Otherwise, do the normal check.
+    lastSpeeds = speeds;
     return checkTrans(turretTrans);
   }
 
