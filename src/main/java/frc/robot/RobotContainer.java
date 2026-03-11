@@ -397,11 +397,11 @@ public class RobotContainer {
               ? "Left"
               : (firstAutoToggleDown.getAsBoolean() ? "Right" : "Hub"),
           secondAutoToggleUp.getAsBoolean()
-              ? "Up"
-              : (secondAutoToggleDown.getAsBoolean() ? "Down" : "Mid"),
+              ? "Left"
+              : (secondAutoToggleDown.getAsBoolean() ? "Right" : "Mid"),
           thirdAutoToggleUp.getAsBoolean()
-              ? "Up"
-              : (thirdAutoToggleDown.getAsBoolean() ? "Down" : "Mid")
+              ? "Left"
+              : (thirdAutoToggleDown.getAsBoolean() ? "Right" : "Mid")
         };
 
     return autonomousData[0] + "-" + autonomousData[1] + "-" + autonomousData[2];

@@ -52,22 +52,23 @@ public class TurretDistanceCalc {
 
   private static void loadRealValues() {
     // TODO: Add real values
-    hubMap.put(122.047, new TurretShotData(1820, 0.0, 0.0));
+    hubMap.put(122.047, new TurretShotData(1820.0, 0.0, 0.0));
+
+    groundMap.put(0.0, new TurretShotData(0.0, 0.0, 0.0));
   }
 
   private static void loadSimValues() {
     hubMap.put(100.0, new TurretShotData(3050.0, 1.309, 0.0));
     hubMap.put(200.0, new TurretShotData(3100.0, 0.698, 0.0));
     hubMap.put(225.0, new TurretShotData(4100.0, 0.785, 0.0));
+
+    groundMap.put(0.0, new TurretShotData(4000, 0.5, 0.0));
   }
 
   static {
 
-    // Load some defaults
-    groundMap.put(0.0, new TurretShotData(0, 0, 0.0));
-
     // set the real or sim data
-    if (Constants.currentMode == Mode.REAL) {
+    if (Constants.currentMode != Mode.SIM) {
       loadRealValues();
     } else {
       loadSimValues();

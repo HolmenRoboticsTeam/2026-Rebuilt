@@ -3,64 +3,57 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.4,
-        "y": 0.6
+        "x": 3.0,
+        "y": 7.4
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.1375539728137185,
-        "y": 1.5192882445688438
+        "x": 3.237256530080947,
+        "y": 7.47879935871534
       },
       "isLocked": false,
-      "linkedName": "Outpost Collect & Launch"
+      "linkedName": "Left Trench Launch"
     },
     {
       "anchor": {
-        "x": 2.0,
-        "y": 3.0
+        "x": 5.5,
+        "y": 7.4
       },
       "prevControl": {
-        "x": 1.0699922276024583,
-        "y": 1.1585475373830343
+        "x": 5.092393379156106,
+        "y": 7.4762547572175535
       },
       "nextControl": {
-        "x": 2.188182731605295,
-        "y": 3.372609310181583
+        "x": 5.745736752579849,
+        "y": 7.354027742806016
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.0,
+        "x": 5.8,
         "y": 6.0
       },
       "prevControl": {
-        "x": 2.355648119937347,
-        "y": 5.308029132692104
-      },
-      "nextControl": {
-        "x": 1.755124149841702,
-        "y": 6.476445522744916
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 0.6,
-        "y": 7.2
-      },
-      "prevControl": {
-        "x": 0.8051097218678689,
-        "y": 7.057066442025375
+        "x": 6.102996091950004,
+        "y": 6.836266467811213
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Pre Depot Collect"
+      "linkedName": "Pre Left Neutral Collect ALT"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.1,
+      "rotationDegrees": 90.0
+    },
+    {
+      "waypointRelativePos": 1.15,
+      "rotationDegrees": 90.0
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -70,17 +63,17 @@
     "maxAngularVelocity": 720.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
-    "unlimited": false
+    "unlimited": true
   },
   "goalEndState": {
-    "velocity": 0,
-    "rotation": -119.99999999999999
+    "velocity": 4.0,
+    "rotation": -90.0
   },
   "reversed": false,
   "folder": "(Auto Assembled) D 5 launchs -TO- 4 pre-collect, 2 starts (Has Branches)",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 115.0
   },
   "useDefaultConstraints": true
 }

@@ -15,7 +15,13 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "(A) Right Trench Start To Right Trench Launch"
+                        "pathName": "(A) Right Trench Start To Outpost Collect & Launch"
+                      }
+                    },
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 3.0
                       }
                     },
                     {

@@ -15,7 +15,50 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "(A) Left Trench Start To Left Trench Launch"
+                        "pathName": "(A) Left Trench Start To Pre Depot Collect"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Intake Start"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "(B) Pre Depot Collect To Post Depot Collect & Launch"
+                      }
+                    },
+                    {
+                      "type": "deadline",
+                      "data": {
+                        "commands": [
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "Indexer Wait Until Out Of Fuel"
+                            }
+                          },
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "Feeder Auto"
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "(D) Post Depot Collect & Launch To Outpost Collect & Launch"
+                      }
+                    },
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 3.0
                       }
                     },
                     {

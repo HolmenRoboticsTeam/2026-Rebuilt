@@ -3,16 +3,32 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.4,
-        "y": 7.4
+        "x": 2.0,
+        "y": 4.0
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.08046948547674,
-        "y": 7.327924864014742
+        "x": 2.013016156241841,
+        "y": 5.11205375238597
       },
       "isLocked": false,
-      "linkedName": "Left Trench Start"
+      "linkedName": "Hub Launch"
+    },
+    {
+      "anchor": {
+        "x": 1.8931936848958335,
+        "y": 5.816755172164352
+      },
+      "prevControl": {
+        "x": 1.9694981202726662,
+        "y": 5.528261658848487
+      },
+      "nextControl": {
+        "x": 1.8292686905286022,
+        "y": 6.058444218451413
+      },
+      "isLocked": false,
+      "linkedName": null
     },
     {
       "anchor": {
@@ -20,20 +36,15 @@
         "y": 7.2
       },
       "prevControl": {
-        "x": 1.2557497490014184,
-        "y": 7.236445354620576
+        "x": 1.6682168656047747,
+        "y": 6.565663804475622
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": "Pre Depot Collect"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.3,
-      "rotationDegrees": -90.0
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -46,14 +57,14 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0.0,
+    "velocity": 0,
     "rotation": -119.99999999999999
   },
   "reversed": false,
-  "folder": "(Auto Assembled) A 3 Starts -TO- 4 pre-collects, 2 launchs (Has branches)",
+  "folder": "(Auto Assembled) D 5 launchs -TO- 4 pre-collect, 2 starts (Has Branches)",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -90.0
+    "rotation": 0.0
   },
   "useDefaultConstraints": true
 }

@@ -15,7 +15,44 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "(A) Right Trench Start To Right Trench Launch"
+                        "pathName": "(A) Hub Start To Hub Launch"
+                      }
+                    },
+                    {
+                      "type": "deadline",
+                      "data": {
+                        "commands": [
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "Indexer Wait Until Out Of Fuel"
+                            }
+                          },
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "Feeder Auto"
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Intake Start"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "(D) Hub Launch To Pre Depot Collect"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "(B) Pre Depot Collect To Post Depot Collect & Launch"
                       }
                     },
                     {
@@ -59,6 +96,6 @@
     }
   },
   "resetOdom": true,
-  "folder": "(Auto Assembled) Right Trench Starts",
+  "folder": "(Auto Assembled) Hub Starts",
   "choreoAuto": false
 }

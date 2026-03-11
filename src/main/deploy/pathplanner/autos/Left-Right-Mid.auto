@@ -15,7 +15,19 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "(A) Right Trench Start To Right Trench Launch"
+                        "pathName": "(A) Left Trench Start To Pre Depot Collect"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Intake Start"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "(B) Pre Depot Collect To Post Depot Collect & Launch"
                       }
                     },
                     {
@@ -59,6 +71,6 @@
     }
   },
   "resetOdom": true,
-  "folder": "(Auto Assembled) Right Trench Starts",
+  "folder": "(Auto Assembled) Left Trench Starts",
   "choreoAuto": false
 }

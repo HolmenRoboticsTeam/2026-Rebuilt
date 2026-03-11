@@ -3,16 +3,32 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.4,
-        "y": 7.4
+        "x": 7.7,
+        "y": 6.0
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.389024003536921,
-        "y": 7.306263572602005
+        "x": 6.859284915817818,
+        "y": 6.779519911176221
       },
       "isLocked": false,
-      "linkedName": "Left Trench Start"
+      "linkedName": "Post Left Neutral Collect ALT"
+    },
+    {
+      "anchor": {
+        "x": 5.5,
+        "y": 7.4
+      },
+      "prevControl": {
+        "x": 6.160122218799393,
+        "y": 7.369107640604576
+      },
+      "nextControl": {
+        "x": 3.9409021094392367,
+        "y": 7.4729625681369285
+      },
+      "isLocked": false,
+      "linkedName": null
     },
     {
       "anchor": {
@@ -20,8 +36,8 @@
         "y": 7.4
       },
       "prevControl": {
-        "x": 3.986851184254871,
-        "y": 7.398208389257829
+        "x": 3.7028957992582745,
+        "y": 7.469808509385327
       },
       "nextControl": null,
       "isLocked": false,
@@ -30,8 +46,12 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.5,
-      "rotationDegrees": -90.0
+      "waypointRelativePos": 1.0,
+      "rotationDegrees": 90.0
+    },
+    {
+      "waypointRelativePos": 1.8,
+      "rotationDegrees": 90.0
     }
   ],
   "constraintZones": [],
@@ -50,10 +70,10 @@
     "rotation": 115.0
   },
   "reversed": false,
-  "folder": "(Auto Assembled) A 3 Starts -TO- 4 pre-collects, 2 launchs (Has branches)",
+  "folder": "(Auto Assembled) C 4 post-collects -TO- 2 launchs (No Branches)",
   "idealStartingState": {
-    "velocity": 0,
-    "rotation": -90.0
+    "velocity": 4.0,
+    "rotation": 90.0
   },
   "useDefaultConstraints": true
 }

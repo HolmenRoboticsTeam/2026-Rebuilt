@@ -19,7 +19,7 @@ public class Indexer extends SubsystemBase {
   private Supplier<Boolean> feederHasFuel;
   private Debouncer hasFuelDebouncer =
       new Debouncer(IndexerConstants.hasFuelDebouncerTime, DebounceType.kFalling);
-  private int fuelHeldCount = 0;
+  private int fuelHeldCount = 8;
 
   /**
    * Creates a new indexer.
@@ -36,7 +36,7 @@ public class Indexer extends SubsystemBase {
 
     io.updateInputs(inputs);
     // This is bad, I don't care
-    if (Constants.currentMode != Mode.REAL) inputs.hasFuel = fuelHeldCount > 0;
+    if (Constants.currentMode == Mode.SIM) inputs.hasFuel = fuelHeldCount > 0;
     Logger.processInputs("Indexer", inputs);
 
     Logger.recordOutput("Indexer/HeldFuelCount", fuelHeldCount);

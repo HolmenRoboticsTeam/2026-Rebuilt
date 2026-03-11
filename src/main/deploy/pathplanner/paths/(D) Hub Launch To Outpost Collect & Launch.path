@@ -3,45 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.6,
-        "y": 4.8
+        "x": 2.0,
+        "y": 4.0
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.1387446148020937,
-        "y": 5.00188817388914
+        "x": 1.9541751458162813,
+        "y": 3.528291239054664
       },
       "isLocked": false,
-      "linkedName": "Post Depot Collect & Launch"
+      "linkedName": "Hub Launch"
     },
     {
       "anchor": {
-        "x": 1.7380819227430555,
-        "y": 4.8
+        "x": 2.0,
+        "y": 2.535903501157408
       },
       "prevControl": {
-        "x": 1.4385658274196114,
-        "y": 5.0971972471908735
+        "x": 2.159711391727779,
+        "y": 2.993953466931592
       },
       "nextControl": {
-        "x": 2.3538901761512387,
-        "y": 4.188959322828062
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 1.7380819227430555,
-        "y": 2.1525966435185184
-      },
-      "prevControl": {
-        "x": 1.9585510184007495,
-        "y": 3.068017671169949
-      },
-      "nextControl": {
-        "x": 1.4933386025786792,
-        "y": 1.1363853646209463
+        "x": 1.810681978761004,
+        "y": 1.9929421493662727
       },
       "isLocked": false,
       "linkedName": null
@@ -52,24 +36,15 @@
         "y": 0.6
       },
       "prevControl": {
-        "x": 0.3780398205241769,
-        "y": 0.9398818515934153
+        "x": 0.5770193373191643,
+        "y": 0.8908800787414328
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": "Outpost Collect & Launch"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.25,
-      "rotationDegrees": 180.0
-    },
-    {
-      "waypointRelativePos": 1.0,
-      "rotationDegrees": 180.0
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -89,7 +64,7 @@
   "folder": "(Auto Assembled) D 5 launchs -TO- 4 pre-collect, 2 starts (Has Branches)",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -119.99999999999999
+    "rotation": 0.0
   },
   "useDefaultConstraints": true
 }

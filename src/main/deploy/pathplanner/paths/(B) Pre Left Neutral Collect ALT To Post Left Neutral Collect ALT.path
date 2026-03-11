@@ -3,67 +3,59 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 6.5,
-        "y": 2.1
+        "x": 5.8,
+        "y": 6.0
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.466248213825899,
-        "y": 1.171825906427149
+        "x": 5.630776423664214,
+        "y": 5.815979943451463
       },
       "isLocked": false,
-      "linkedName": "Post Right Neutral Collect"
+      "linkedName": "Pre Left Neutral Collect ALT"
     },
     {
       "anchor": {
-        "x": 5.6,
-        "y": 0.7
+        "x": 7.0,
+        "y": 4.0
       },
       "prevControl": {
-        "x": 5.902912620419004,
-        "y": 0.8067637182153544
+        "x": 6.005351303943773,
+        "y": 3.6666083091005177
       },
       "nextControl": {
-        "x": 5.1859088530001545,
-        "y": 0.5540506154130818
+        "x": 8.346126196358515,
+        "y": 4.451201806776092
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 4.5,
-        "y": 0.7
+        "x": 7.7,
+        "y": 6.0
       },
       "prevControl": {
-        "x": 4.900699878600343,
-        "y": 0.7022965631738964
-      },
-      "nextControl": {
-        "x": 2.9537262146557595,
-        "y": 0.6911377177238301
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 3.0,
-        "y": 0.7
-      },
-      "prevControl": {
-        "x": 3.710493799312972,
-        "y": 0.6779592308430906
+        "x": 7.8307850541849415,
+        "y": 5.786938343191831
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Right Trench Launch"
+      "linkedName": "Post Left Neutral Collect ALT"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 2.4,
+      "waypointRelativePos": 0.3,
       "rotationDegrees": -90.0
+    },
+    {
+      "waypointRelativePos": 1.0,
+      "rotationDegrees": 0.0
+    },
+    {
+      "waypointRelativePos": 1.5,
+      "rotationDegrees": 90.0
     }
   ],
   "constraintZones": [],
@@ -78,11 +70,11 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
-    "rotation": -115.0
+    "velocity": 4.0,
+    "rotation": 90.0
   },
   "reversed": false,
-  "folder": "(Auto Assembled) C 4 post-collects -TO- 2 launchs (No Branches)",
+  "folder": "(Auto Assembled) B 3 pre-collects -TO- 2 post-collects, 1 launch (No Branches)",
   "idealStartingState": {
     "velocity": 4.0,
     "rotation": -90.0

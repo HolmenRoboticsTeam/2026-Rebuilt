@@ -3,16 +3,16 @@
   "robotLength": 0.826,
   "holonomicMode": true,
   "pathFolders": [
-    "A 3 Starts -TO- 4 pre-collects, 2 launchs, 3 pre-climb (Has branches)",
-    "B 3 pre-collects -TO- 3 post-collects (No Branches)",
-    "C 3 post-collects -TO- 3 launchs (No Branches)",
-    "D 4 launchs -TO- 4 pre-collect, 2 starts, 3 pre-climb (Has Branches)",
-    "E pre-climb -TO- post-climb (No Branches)"
+    "(Auto Assembled) A 3 Starts -TO- 4 pre-collects, 2 launchs (Has branches)",
+    "(Auto Assembled) B 3 pre-collects -TO- 2 post-collects, 1 launch (No Branches)",
+    "(Auto Assembled) C 4 post-collects -TO- 2 launchs (No Branches)",
+    "(Auto Assembled) D 5 launchs -TO- 4 pre-collect, 2 starts (Has Branches)",
+    "Custom Paths"
   ],
   "autoFolders": [
-    "Hub Starts (M)",
-    "Left Trench Starts (U)",
-    "Right Trench Starts (D)"
+    "(Auto Assembled) Hub Starts",
+    "(Auto Assembled) Left Trench Starts",
+    "(Auto Assembled) Right Trench Starts"
   ],
   "defaultMaxVel": 4.0,
   "defaultMaxAccel": 4.0,

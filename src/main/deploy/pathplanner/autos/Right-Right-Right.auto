@@ -15,7 +15,25 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "(A) Right Trench Start To Right Trench Launch"
+                        "pathName": "(A) Right Trench Start To Pre Right Neutral Collect"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Intake Start"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "(B) Pre Right Neutral Collect To Post Right Neutral Collect"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "(C) Post Right Neutral Collect To Right Trench Launch"
                       }
                     },
                     {

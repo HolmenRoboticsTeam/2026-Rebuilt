@@ -42,10 +42,10 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -160.0
+    "rotation": -119.99999999999999
   },
   "reversed": false,
-  "folder": "B 3 pre-collects -TO- 3 post-collects (No Branches)",
+  "folder": "(Auto Assembled) B 3 pre-collects -TO- 2 post-collects, 1 launch (No Branches)",
   "idealStartingState": {
     "velocity": 0.0,
     "rotation": -119.99999999999999

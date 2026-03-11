@@ -3,37 +3,32 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.4,
-        "y": 0.6
+        "x": 3.6,
+        "y": 4.0
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.3422927806671314,
-        "y": 0.7425093859687637
+        "x": 2.8619839910590716,
+        "y": 4.0
       },
       "isLocked": false,
-      "linkedName": "Right Trench Start"
+      "linkedName": "Hub Start"
     },
     {
       "anchor": {
-        "x": 3.0,
-        "y": 0.7
+        "x": 2.0,
+        "y": 4.0
       },
       "prevControl": {
-        "x": 3.6484548987123326,
-        "y": 0.7527430479915949
+        "x": 2.6001271642208446,
+        "y": 4.0
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Right Trench Launch"
+      "linkedName": "Hub Launch"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.5,
-      "rotationDegrees": 90.0
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -47,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -115.0
+    "rotation": 0.0
   },
   "reversed": false,
   "folder": "(Auto Assembled) A 3 Starts -TO- 4 pre-collects, 2 launchs (Has branches)",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 90.0
+    "rotation": 0.0
   },
   "useDefaultConstraints": true
 }

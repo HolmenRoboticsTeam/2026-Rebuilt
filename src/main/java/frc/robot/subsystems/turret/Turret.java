@@ -96,7 +96,7 @@ public class Turret extends SubsystemBase {
     io.updateInputs(inputs);
     Logger.processInputs("Turret", inputs);
 
-    if (Constants.currentMode != Mode.REAL
+    if (Constants.currentMode == Mode.SIM
         && fedFuel.get()
         && lastFuel + fuelHz < Timer.getFPGATimestamp()) {
       io.shootFuel(robotPose.get().getRotation());
