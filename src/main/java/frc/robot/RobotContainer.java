@@ -133,8 +133,7 @@ public class RobotContainer {
         vision =
             new Vision(
                 (p, t, sd) -> drive.addVisionPoseMeasurement(p, t, sd),
-                new VisionIOLimelight("limelight-three", () -> drive.getRotation()),
-                new VisionIOLimelight("limelight-two", () -> drive.getRotation()));
+                new VisionIOLimelight("limelight", () -> drive.getRotation()));
         intake = new Intake(new IntakeIOReal());
         indexer = new Indexer(new IndexerIOReal(), () -> true);
         feeder = new Feeder(new FeederIOReal(), () -> turret.isReadyForFuel());
@@ -409,7 +408,7 @@ public class RobotContainer {
   }
 
   public void enabledInit() {
-    CommandScheduler.getInstance().schedule(vision.setIMUMode(3));
+    CommandScheduler.getInstance().schedule(vision.setIMUMode(4));
   }
 
   public void disabledInit() {
