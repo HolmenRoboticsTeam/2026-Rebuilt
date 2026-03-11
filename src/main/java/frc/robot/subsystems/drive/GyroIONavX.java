@@ -25,8 +25,6 @@ public class GyroIONavX implements GyroIO {
       new Navx(DriveConstants.navXCanId, (int) DriveConstants.odometryFrequency);
   private final Queue<Double> yawPositionQueue;
   private final Queue<Double> yawTimestampQueue;
-  private final Supplier<Double> adjustedYaw =
-      () -> (Constants.isBlueAlliance.get() ? 0.0 : 180.0) - startingZeroOffset;
   private static double startingZeroOffset =
       0.0; // This offset is used to adjust the gyro yaw to zero at the start of the match.
 
@@ -34,7 +32,7 @@ public class GyroIONavX implements GyroIO {
     yawTimestampQueue = SparkOdometryThread.getInstance().makeTimestampQueue();
     yawPositionQueue =
         SparkOdometryThread.getInstance()
-            .registerSignal(() -> (navX.getYaw().in(Degree) + adjustedYaw.get()) % 360.0);
+            .registerSignal(() -> (navX.getYaw().in(Degree)));
     navX.enableOptionalMessages(true, false, false, false, false, false, true, false, false, true);
     navX.resetYaw();
     startingZeroOffset = navX.getYaw().in(Degree);
@@ -44,7 +42,7 @@ public class GyroIONavX implements GyroIO {
   public void updateInputs(GyroIOInputs inputs) {
     inputs.connected = navX.getTemperature().in(Kelvin) != 0.0;
     inputs.yawPosition =
-        Rotation2d.fromDegrees((navX.getYaw().in(Degree) + adjustedYaw.get()) % 360.0);
+        Rotation2d.fromDegrees((navX.getYaw().in(Degree)));
     inputs.yawVelocityRadPerSec =
         Units.degreesToRadians(navX.getAngularVel()[2].in(DegreesPerSecond));
 
