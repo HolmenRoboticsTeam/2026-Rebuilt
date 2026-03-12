@@ -71,6 +71,7 @@ public class AutoCommands {
                       field.setRobotPose(robotPose.get());
                     })
                 .until(() -> DriverStation.isDisabled()))
-        .ignoringDisable(true);
+        .ignoringDisable(true)
+        .withName("displayAutoField");
   }
 }

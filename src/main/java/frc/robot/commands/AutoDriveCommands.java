@@ -31,10 +31,11 @@ public class AutoDriveCommands {
 
     if (withPreciseMove) {
       return Commands.sequence(
-          AutoBuilder.pathfindToPose(pose, constraints), preciseMove(drive, pose));
+              AutoBuilder.pathfindToPose(pose, constraints), preciseMove(drive, pose))
+          .withName("driveToPoseWithPreciseMove");
     }
 
-    return AutoBuilder.pathfindToPose(pose, constraints);
+    return AutoBuilder.pathfindToPose(pose, constraints).withName("driveToPose");
   }
 
   public static Command driveToPoseThenPath(
@@ -42,13 +43,15 @@ public class AutoDriveCommands {
 
     if (withPreciseMove) {
       return Commands.sequence(
-          pathFindAndFollowPathFixer(path),
-          preciseMove(
-              drive,
-              FieldConstants.correctSide(path.getPathPoses().get(path.getPathPoses().size() - 1))));
+              pathFindAndFollowPathFixer(path),
+              preciseMove(
+                  drive,
+                  FieldConstants.correctSide(
+                      path.getPathPoses().get(path.getPathPoses().size() - 1))))
+          .withName("driveToPoseThenPathWithPreciseMove");
     }
 
-    return pathFindAndFollowPathFixer(path);
+    return pathFindAndFollowPathFixer(path).withName("driveToPoseThenPath");
   }
 
   private static Command pathFindAndFollowPathFixer(PathPlannerPath path) {

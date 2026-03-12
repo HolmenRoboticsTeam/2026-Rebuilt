@@ -290,7 +290,8 @@ public class RobotContainer {
     // Configure the button bindings
     configureButtonBindings();
 
-    CommandScheduler.getInstance().schedule(PathfindingCommand.warmupCommand());
+    CommandScheduler.getInstance()
+        .schedule(PathfindingCommand.warmupCommand().withName("Pathplanner_Warmup"));
 
     CommandScheduler.getInstance()
         .schedule(StateLoggingCommands.logMechanisms(intake, indexer, feeder, turret));

@@ -123,7 +123,8 @@ public class DriveCommands {
             drive)
 
         // Reset PID controller when command starts
-        .beforeStarting(() -> angleController.reset(drive.getRotation().getRadians()));
+        .beforeStarting(() -> angleController.reset(drive.getRotation().getRadians()))
+        .withName("Drive_joystickDriveAtAngle");
   }
 
   /**
@@ -144,7 +145,8 @@ public class DriveCommands {
     DoubleSupplier yAngleSupplier = () -> drive.getPose().getY() - transform.get().getY();
 
     return DriveCommands.joystickDriveAtAngle(
-        drive, xSupplier, ySupplier, xAngleSupplier, yAngleSupplier);
+            drive, xSupplier, ySupplier, xAngleSupplier, yAngleSupplier)
+        .withName("Drive_driveTowardsTransform");
   }
 
   /**

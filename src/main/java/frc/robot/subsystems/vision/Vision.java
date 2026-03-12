@@ -182,32 +182,35 @@ public class Vision extends SubsystemBase {
 
   public Command setWhiteList(int[] ids) {
     return Commands.runOnce(
-        () -> {
-          for (int cameraIndex = 0; cameraIndex < io.length; cameraIndex++) {
-            io[cameraIndex].setWhiteList(ids);
-          }
-        },
-        this);
+            () -> {
+              for (int cameraIndex = 0; cameraIndex < io.length; cameraIndex++) {
+                io[cameraIndex].setWhiteList(ids);
+              }
+            },
+            this)
+        .withName("Vision_SetWhiteList");
   }
 
   public Command clearWhiteList() {
     return Commands.runOnce(
-        () -> {
-          for (int cameraIndex = 0; cameraIndex < io.length; cameraIndex++) {
-            io[cameraIndex].clearWhiteList();
-          }
-        },
-        this);
+            () -> {
+              for (int cameraIndex = 0; cameraIndex < io.length; cameraIndex++) {
+                io[cameraIndex].clearWhiteList();
+              }
+            },
+            this)
+        .withName("Vision_ClearWhiteList");
   }
 
   public Command setIMUMode(int mode) {
     return Commands.runOnce(
-        () -> {
-          for (int cameraIndex = 0; cameraIndex < io.length; cameraIndex++) {
-            io[cameraIndex].setIMUMode(mode);
-          }
-        },
-        this);
+            () -> {
+              for (int cameraIndex = 0; cameraIndex < io.length; cameraIndex++) {
+                io[cameraIndex].setIMUMode(mode);
+              }
+            },
+            this)
+        .withName("Vision_SetIMUMode");
   }
 
   public void setRotationConsumer(VisionRotationConsumer consumer) {

@@ -81,6 +81,7 @@ public class StateLoggingCommands {
 
               Logger.recordOutput("Mechanism/Turret", turretMechanism);
             })
-        .ignoringDisable(true);
+        .ignoringDisable(true)
+        .withName("logMechanisms");
   }
 }

@@ -112,6 +112,13 @@ public class Robot extends LoggedRobot {
     Logger.recordOutput(
         "Active Commands",
         runningCommands.stream().map((c) -> c.getName()).toList().toArray(new String[0]));
+
+    String allCommandNames = "";
+    for (Command c : runningCommands) {
+      allCommandNames += c.getName() + ", ";
+    }
+    allCommandNames = allCommandNames.substring(0, allCommandNames.length() - 2);
+    Logger.recordOutput("Active Command Console", allCommandNames);
     // Runs the Scheduler. This is responsible for polling buttons, adding
     // newly-scheduled commands, running already-scheduled commands, removing
     // finished or interrupted commands, and running subsystem periodic() methods.

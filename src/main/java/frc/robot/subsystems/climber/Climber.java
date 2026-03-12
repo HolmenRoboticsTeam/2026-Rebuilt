@@ -37,10 +37,11 @@ public class Climber extends SubsystemBase {
    */
   public Command extend() {
     return Commands.runOnce(
-        () -> {
-          io.setTargetHeight(ClimberConstants.extendHeight);
-        },
-        this);
+            () -> {
+              io.setTargetHeight(ClimberConstants.extendHeight);
+            },
+            this)
+        .withName("Climber_Extend");
   }
 
   /**
@@ -50,10 +51,11 @@ public class Climber extends SubsystemBase {
    */
   public Command retract() {
     return Commands.runOnce(
-        () -> {
-          io.setTargetHeight(ClimberConstants.retractedHeight);
-        },
-        this);
+            () -> {
+              io.setTargetHeight(ClimberConstants.retractedHeight);
+            },
+            this)
+        .withName("Climber_Retract");
   }
 
   /**
@@ -72,7 +74,8 @@ public class Climber extends SubsystemBase {
               io.setTargetHeight(ClimberConstants.retractedHeight);
             },
             this)
-        .until(() -> inputs.hardStop);
+        .until(() -> inputs.hardStop)
+        .withName("Climber_Calibrate");
   }
 
   public double getHeight() {
