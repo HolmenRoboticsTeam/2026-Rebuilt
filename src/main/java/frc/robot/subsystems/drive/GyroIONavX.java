@@ -14,9 +14,7 @@ import static edu.wpi.first.units.Units.Kelvin;
 import com.studica.frc.Navx;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
-import frc.robot.Constants;
 import java.util.Queue;
-import java.util.function.Supplier;
 
 /** IO implementation for NavX. */
 public class GyroIONavX implements GyroIO {
@@ -31,8 +29,7 @@ public class GyroIONavX implements GyroIO {
   public GyroIONavX() {
     yawTimestampQueue = SparkOdometryThread.getInstance().makeTimestampQueue();
     yawPositionQueue =
-        SparkOdometryThread.getInstance()
-            .registerSignal(() -> (navX.getYaw().in(Degree)));
+        SparkOdometryThread.getInstance().registerSignal(() -> (navX.getYaw().in(Degree)));
     navX.enableOptionalMessages(true, false, false, false, false, false, true, false, false, true);
     navX.resetYaw();
     startingZeroOffset = navX.getYaw().in(Degree);
@@ -41,8 +38,7 @@ public class GyroIONavX implements GyroIO {
   @Override
   public void updateInputs(GyroIOInputs inputs) {
     inputs.connected = navX.getTemperature().in(Kelvin) != 0.0;
-    inputs.yawPosition =
-        Rotation2d.fromDegrees((navX.getYaw().in(Degree)));
+    inputs.yawPosition = Rotation2d.fromDegrees((navX.getYaw().in(Degree)));
     inputs.yawVelocityRadPerSec =
         Units.degreesToRadians(navX.getAngularVel()[2].in(DegreesPerSecond));
 

@@ -24,6 +24,8 @@ public class StateLoggingCommands {
 
   private static LoggedMechanism2d intakeMechanism =
       new LoggedMechanism2d(canvasWidth, canvasHeight);
+  private static LoggedMechanismLigament2d intakeAngleLigament =
+      new LoggedMechanismLigament2d("Intake Angle", 0.1, 0.0);
   private static LoggedMechanismLigament2d intakeLigament =
       new LoggedMechanismLigament2d("Intake", 0.1, 0.0);
 
@@ -39,14 +41,16 @@ public class StateLoggingCommands {
 
   private static LoggedMechanism2d turretMechanism =
       new LoggedMechanism2d(canvasWidth, canvasHeight);
-  private static LoggedMechanismLigament2d angleLigament =
+  private static LoggedMechanismLigament2d turretAngleLigament =
       new LoggedMechanismLigament2d("angle", 0.1, 0.0);
   private static LoggedMechanismLigament2d flyWheelLigament =
       new LoggedMechanismLigament2d("flyWheel", 0.05, 0.0);
 
   static {
-    intakeMechanism.getRoot("root", 1.0, 0.2).append(intakeLigament);
+    intakeMechanism.getRoot("root", 1.0, 0.2).append(intakeAngleLigament).append(intakeLigament);
+    intakeAngleLigament.setColor(new Color8Bit(0, 255, 0));
     intakeLigament.setColor(new Color8Bit(0, 0, 255));
+    intakeAngleLigament.setLineWeight(1.0);
     intakeLigament.setLineWeight(1.0);
 
     indexerMechanism.getRoot("root", 0.4, 0.4).append(indexerLigament);
@@ -57,10 +61,10 @@ public class StateLoggingCommands {
     feederLigament.setColor(new Color8Bit(0, 255, 0));
     feederLigament.setLineWeight(1.0);
 
-    turretMechanism.getRoot("root", 0.2, 0.4).append(angleLigament).append(flyWheelLigament);
-    angleLigament.setColor(new Color8Bit(255, 0, 255));
+    turretMechanism.getRoot("root", 0.2, 0.4).append(turretAngleLigament).append(flyWheelLigament);
+    turretAngleLigament.setColor(new Color8Bit(255, 0, 255));
     flyWheelLigament.setColor(new Color8Bit(0, 255, 255));
-    angleLigament.setLineWeight(2.5);
+    turretAngleLigament.setLineWeight(2.5);
     flyWheelLigament.setLineWeight(1.0);
   }
 
@@ -68,11 +72,16 @@ public class StateLoggingCommands {
       Intake intake, Indexer indexer, Feeder feeder, Turret turret) {
     return Commands.run(
             () -> {
-              intakeLigament.setAngle(Rotation2d.fromRotations(intake.getPosition()));
+              intakeAngleLigament.setAngle(
+                  Rotation2d.fromRadians(intake.getPivotPosition())
+                      .times(-1)
+                      .plus(Rotation2d.kCCW_90deg));
+              intakeLigament.setAngle(Rotation2d.fromRotations(intake.getIntakeRotations()));
+
               indexerLigament.setAngle(Rotation2d.fromRotations(indexer.getPosition()));
               feederLigament.setAngle(Rotation2d.fromRotations(feeder.getPosition()));
 
-              angleLigament.setAngle(Rotation2d.fromRadians(turret.getAngle()));
+              turretAngleLigament.setAngle(Rotation2d.fromRadians(turret.getAngle()));
               flyWheelLigament.setAngle(Rotation2d.fromRotations(turret.getFlyWheelPosition()));
 
               Logger.recordOutput("Mechanism/Intake", intakeMechanism);

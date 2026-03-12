@@ -333,9 +333,10 @@ public class RobotContainer {
     //                   hasResetGyro[0] = false;
     //                 })));
 
-    controller.leftTrigger(0.1).onTrue(intake.start());
+    controller.leftTrigger(0.1).onTrue(Commands.sequence(intake.extend(), intake.start()));
 
     controller.leftTrigger(0.1).onFalse(intake.stop());
+    controller.b().onTrue(intake.retract());
 
     controller
         .rightTrigger(0.95)

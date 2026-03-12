@@ -6,49 +6,71 @@ package frc.robot.subsystems.intake;
 
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
 
 /** Constants for the intake subsystem. */
 public class IntakeConstants {
 
-  public static final double maxVolts = 4.0;
+  public static final double pivotMaxVolts = 6.0;
+  public static final double rollersMaxVolts = 4.0;
 
-  public static final double gearRatio = 3.0;
+  public static final double pivotGearRatio = (2.0 * Math.PI) * (1.0 / 1.0);
+  public static final double rollersGearRatio = 1.0;
+
+  public static final Rotation2d retractAngle = Rotation2d.fromDegrees(-45.0);
+  public static final Rotation2d extendAngle = Rotation2d.fromDegrees(45);
 
   /** The constants only for the real version of the intake. */
   public static class Real {
 
-    public static final int leftMotorID = 18;
-    public static final int rightMotorID = 30;
+    public static final int pivotMotorID = 30;
+    public static final int rollerMotorID = 18;
 
-    public static final SparkMaxConfig leftMotorConfig;
-    public static final SparkMaxConfig rightMotorConfig;
+    public static final SparkMaxConfig pivotMotorConfig;
+    public static final SparkMaxConfig rollerMotorConfig;
 
     static {
-      leftMotorConfig = new SparkMaxConfig();
 
-      leftMotorConfig.idleMode(IdleMode.kCoast);
-      leftMotorConfig.inverted(true);
+      // Pivot config
 
-      leftMotorConfig
+      pivotMotorConfig = new SparkMaxConfig();
+
+      pivotMotorConfig.smartCurrentLimit(40).idleMode(IdleMode.kBrake).inverted(false);
+
+      pivotMotorConfig
           .encoder
-          .positionConversionFactor(gearRatio)
-          .velocityConversionFactor(gearRatio / 60.0);
+          .positionConversionFactor(pivotGearRatio)
+          .velocityConversionFactor(pivotGearRatio / 60.0); // Rads and Rads/sec
 
-      leftMotorConfig.closedLoop.pid(1.0, 0.0, 0.0);
+      pivotMotorConfig.closedLoop.pid(0.01, 0.0, 0.0);
 
-      leftMotorConfig.smartCurrentLimit(40);
+      // Roller Config
 
-      rightMotorConfig = new SparkMaxConfig();
+      rollerMotorConfig = new SparkMaxConfig();
 
-      rightMotorConfig.follow(leftMotorID, true);
+      rollerMotorConfig.smartCurrentLimit(40).idleMode(IdleMode.kCoast).inverted(false);
+
+      rollerMotorConfig
+          .encoder
+          .positionConversionFactor(rollersGearRatio)
+          .velocityConversionFactor(rollersGearRatio / 60.0); // Rotations and RPM
+
+      rollerMotorConfig.closedLoop.pid(1.0, 0.0, 0.0);
     }
   }
 
   /** The constants only for the sim version of the intake. */
   public static class Sim {
 
-    public static final DCMotor motorGearBox = DCMotor.getNEO(1);
-    public static final double JKgMetersSquared = 0.004;
+    public static final DCMotor pivotGearBox = DCMotor.getNEO(1);
+    public static final double pivotJKgMetersSquared = 0.004;
+
+    public static final double pivotP = 0.3;
+    public static final double pivotI = 0.0;
+    public static final double pivotD = 0.0;
+
+    public static final DCMotor rollerGearBox = DCMotor.getNEO(1);
+    public static final double rollerJKgMetersSquared = 0.004;
   }
 }

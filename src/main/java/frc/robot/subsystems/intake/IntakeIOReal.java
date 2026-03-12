@@ -10,43 +10,57 @@ import com.revrobotics.ResetMode;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
+import edu.wpi.first.math.geometry.Rotation2d;
 
 /** The real implementation of the intake. */
 public class IntakeIOReal implements IntakeIO {
 
-  private SparkMax leftIntakeMotor;
-  private SparkMax rightIntakeMotor;
-  private RelativeEncoder encoder;
+  private SparkMax pivotMotor;
+  private RelativeEncoder pivotEncoder;
+
+  private SparkMax rollerMotor;
+  private RelativeEncoder rollerEncoder;
 
   /** Creates a new real intake. */
   public IntakeIOReal() {
 
-    leftIntakeMotor = new SparkMax(IntakeConstants.Real.leftMotorID, MotorType.kBrushless);
-    encoder = leftIntakeMotor.getEncoder();
+    pivotMotor = new SparkMax(IntakeConstants.Real.pivotMotorID, MotorType.kBrushless);
+    pivotEncoder = pivotMotor.getEncoder();
 
-    leftIntakeMotor.configure(
-        IntakeConstants.Real.leftMotorConfig,
+    pivotMotor.configure(
+        IntakeConstants.Real.pivotMotorConfig,
         ResetMode.kResetSafeParameters,
         PersistMode.kPersistParameters);
 
-    rightIntakeMotor = new SparkMax(IntakeConstants.Real.rightMotorID, MotorType.kBrushless);
-    rightIntakeMotor.configure(
-        IntakeConstants.Real.rightMotorConfig,
+    rollerMotor = new SparkMax(IntakeConstants.Real.rollerMotorID, MotorType.kBrushless);
+    rollerEncoder = rollerMotor.getEncoder();
+
+    rollerMotor.configure(
+        IntakeConstants.Real.rollerMotorConfig,
         ResetMode.kResetSafeParameters,
         PersistMode.kPersistParameters);
   }
 
   public void updateInputs(IntakeIOInputs inputs) {
 
-    inputs.positionRotations = encoder.getPosition();
-    inputs.velocityRadPerSec = encoder.getVelocity();
-    inputs.appliedVolts = leftIntakeMotor.getBusVoltage() * leftIntakeMotor.getAppliedOutput();
-    inputs.currentAmps = leftIntakeMotor.getOutputCurrent();
-    inputs.isRunning = encoder.getVelocity() > 0.0;
+    inputs.pivotPositionRad = pivotEncoder.getPosition();
+    inputs.pivotVelocityRadPerSec = pivotEncoder.getVelocity();
+    inputs.pivotAppliedVolts = pivotMotor.getBusVoltage() * pivotMotor.getAppliedOutput();
+    inputs.pivotCurrentAmps = pivotMotor.getOutputCurrent();
+
+    inputs.rollerPositionRotations = rollerEncoder.getPosition();
+    inputs.rollerVelocityRPM = rollerEncoder.getVelocity();
+    inputs.rollerAppliedVolts = rollerMotor.getBusVoltage() * rollerMotor.getAppliedOutput();
+    inputs.rollerCurrentAmps = rollerMotor.getOutputCurrent();
   }
 
   @Override
-  public void setVolts(double volts) {
-    leftIntakeMotor.getClosedLoopController().setSetpoint(volts, ControlType.kVoltage);
+  public void setPivotAngle(Rotation2d angle) {
+    pivotMotor.getClosedLoopController().setSetpoint(angle.getRadians(), ControlType.kPosition);
+  }
+
+  @Override
+  public void setRollerVoltage(double volts) {
+    rollerMotor.getClosedLoopController().setSetpoint(volts, ControlType.kVoltage);
   }
 }
