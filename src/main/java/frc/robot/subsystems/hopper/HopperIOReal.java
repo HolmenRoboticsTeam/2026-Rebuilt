@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.subsystems.indexer;
+package frc.robot.subsystems.hopper;
 
 import com.revrobotics.PersistMode;
 import com.revrobotics.RelativeEncoder;
@@ -12,39 +12,39 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.wpilibj.DigitalInput;
 
-/** The real implementation of the indexer. */
-public class IndexerIOReal implements IndexerIO {
+/** The real implementation of the hopper. */
+public class HopperIOReal implements HopperIO {
 
-  private SparkMax indexerMotor;
+  private SparkMax hopperMotor;
   private RelativeEncoder encoder;
 
   private DigitalInput lineBreak;
 
-  /** Creates a new real indexer. */
-  public IndexerIOReal() {
+  /** Creates a new real hopper. */
+  public HopperIOReal() {
 
-    indexerMotor = new SparkMax(IndexerConstants.Real.motorID, MotorType.kBrushless);
-    encoder = indexerMotor.getEncoder();
+    hopperMotor = new SparkMax(HopperConstants.Real.motorID, MotorType.kBrushless);
+    encoder = hopperMotor.getEncoder();
 
-    indexerMotor.configure(
-        IndexerConstants.Real.motorConfig,
+    hopperMotor.configure(
+        HopperConstants.Real.motorConfig,
         ResetMode.kResetSafeParameters,
         PersistMode.kPersistParameters);
 
-    lineBreak = new DigitalInput(IndexerConstants.Real.lineBreakID);
+    lineBreak = new DigitalInput(HopperConstants.Real.lineBreakID);
   }
 
-  public void updateInputs(IndexerIOInputs inputs) {
+  public void updateInputs(HopperIOInputs inputs) {
 
     inputs.positionRotation = encoder.getPosition();
     inputs.velocityRPM = encoder.getVelocity();
-    inputs.appliedVolts = indexerMotor.getBusVoltage() * indexerMotor.getAppliedOutput();
-    inputs.currentAmps = indexerMotor.getOutputCurrent();
+    inputs.appliedVolts = hopperMotor.getBusVoltage() * hopperMotor.getAppliedOutput();
+    inputs.currentAmps = hopperMotor.getOutputCurrent();
     inputs.hasFuel = lineBreak.get();
   }
 
   @Override
   public void setVolts(double volts) {
-    indexerMotor.getClosedLoopController().setSetpoint(volts, ControlType.kVoltage);
+    hopperMotor.getClosedLoopController().setSetpoint(volts, ControlType.kVoltage);
   }
 }

@@ -23,7 +23,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.feeder.Feeder;
-import frc.robot.subsystems.indexer.Indexer;
+import frc.robot.subsystems.hopper.Hopper;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.turret.Turret;
 import frc.robot.subsystems.vision.Vision;
@@ -216,17 +216,17 @@ public final class Constants {
   }
 
   public static List<Pair<String, Command>> getNamedCommand(
-      Drive drive, Vision vision, Intake intake, Indexer indexer, Feeder feeder, Turret turret) {
+      Drive drive, Vision vision, Intake intake, Hopper hopper, Feeder feeder, Turret turret) {
     return new ArrayList<Pair<String, Command>>(
         Arrays.asList(
             // Intake Commands
             new Pair<String, Command>("Intake Start", intake.start()),
             new Pair<String, Command>("Intake Stop", intake.stop()),
 
-            // Indexer Commands
-            new Pair<String, Command>("Indexer Auto", indexer.autoIndex()),
+            // Hopper Commands
+            new Pair<String, Command>("Hopper Auto", hopper.autoIndex()),
             new Pair<String, Command>(
-                "Indexer Wait Until Out Of Fuel", Commands.waitUntil(() -> !indexer.hasFuel())),
+                "Hopper Wait Until Out Of Fuel", Commands.waitUntil(() -> !hopper.hasFuel())),
 
             // Feeder Commands
             new Pair<String, Command>("Feeder Auto", feeder.autoFeed()),

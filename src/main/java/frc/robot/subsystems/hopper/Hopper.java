@@ -1,4 +1,4 @@
-package frc.robot.subsystems.indexer;
+package frc.robot.subsystems.hopper;
 
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.filter.Debouncer.DebounceType;
@@ -10,23 +10,23 @@ import frc.robot.Constants.Mode;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 
-/** A subsystem for controlling the indexer. */
-public class Indexer extends SubsystemBase {
+/** A subsystem for controlling the hopper. */
+public class Hopper extends SubsystemBase {
 
-  private final IndexerIO io;
-  private final IndexerIOInputsAutoLogged inputs = new IndexerIOInputsAutoLogged();
+  private final HopperIO io;
+  private final HopperIOInputsAutoLogged inputs = new HopperIOInputsAutoLogged();
 
   private Supplier<Boolean> feederHasFuel;
   private Debouncer hasFuelDebouncer =
-      new Debouncer(IndexerConstants.hasFuelDebouncerTime, DebounceType.kFalling);
+      new Debouncer(HopperConstants.hasFuelDebouncerTime, DebounceType.kFalling);
   private int fuelHeldCount = 0;
 
   /**
-   * Creates a new indexer.
+   * Creates a new hopper.
    *
-   * @param io the implementation of the indexer.
+   * @param io the implementation of the hopper.
    */
-  public Indexer(IndexerIO io, Supplier<Boolean> feederHasFuel) {
+  public Hopper(HopperIO io, Supplier<Boolean> feederHasFuel) {
     this.io = io;
     this.feederHasFuel = feederHasFuel;
   }
@@ -37,9 +37,9 @@ public class Indexer extends SubsystemBase {
     io.updateInputs(inputs);
     // This is bad, I don't care
     if (Constants.currentMode != Mode.REAL) inputs.hasFuel = fuelHeldCount > 0;
-    Logger.processInputs("Indexer", inputs);
+    Logger.processInputs("Hopper", inputs);
 
-    Logger.recordOutput("Indexer/HeldFuelCount", fuelHeldCount);
+    Logger.recordOutput("Hopper/HeldFuelCount", fuelHeldCount);
   }
 
   public Command autoIndex() {
@@ -52,21 +52,21 @@ public class Indexer extends SubsystemBase {
   }
 
   /**
-   * Creates and returns a command that runs the indexer.
+   * Creates and returns a command that runs the hopper.
    *
    * @return A command with the given logic.
    */
   public Command start() {
     return Commands.runOnce(
             () -> {
-              io.setVolts(IndexerConstants.maxVolts);
+              io.setVolts(HopperConstants.maxVolts);
             },
             this)
-        .withName("Indexer_Start");
+        .withName("Hopper_Start");
   }
 
   /**
-   * Creates and returns a command that stops the indexer.
+   * Creates and returns a command that stops the hopper.
    *
    * @return A command with given logic.
    */
@@ -76,11 +76,11 @@ public class Indexer extends SubsystemBase {
               io.setVolts(0.0);
             },
             this)
-        .withName("Indexer_Stop");
+        .withName("Hopper_Stop");
   }
 
   /**
-   * Get the current position of the indexer
+   * Get the current position of the hopper
    *
    * @return the position in rotations
    */

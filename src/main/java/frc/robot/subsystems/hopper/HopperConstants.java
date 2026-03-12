@@ -2,14 +2,14 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.subsystems.indexer;
+package frc.robot.subsystems.hopper;
 
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.system.plant.DCMotor;
 
-/** Constants for the indexer subsystem. */
-public class IndexerConstants {
+/** Constants for the hopper subsystem. */
+public class HopperConstants {
 
   public static final double maxVolts = 4.0;
 
@@ -17,7 +17,7 @@ public class IndexerConstants {
 
   public static final double hasFuelDebouncerTime = 0.25;
 
-  /** The constants only for the real version of the indexer. */
+  /** The constants only for the real version of the hopper. */
   public static class Real {
 
     public static final int motorID = 20;
@@ -42,7 +42,7 @@ public class IndexerConstants {
     }
   }
 
-  /** The constants only for the sim version of the indexer. */
+  /** The constants only for the sim version of the hopper. */
   public static class Sim {
 
     public static final DCMotor motorGearBox = DCMotor.getNEO(1);

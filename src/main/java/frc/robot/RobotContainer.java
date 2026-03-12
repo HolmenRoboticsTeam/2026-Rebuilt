@@ -41,11 +41,11 @@ import frc.robot.subsystems.feeder.Feeder;
 import frc.robot.subsystems.feeder.FeederIO;
 import frc.robot.subsystems.feeder.FeederIOReal;
 import frc.robot.subsystems.feeder.FeederIOSim;
-import frc.robot.subsystems.indexer.Indexer;
-import frc.robot.subsystems.indexer.IndexerConstants;
-import frc.robot.subsystems.indexer.IndexerIO;
-import frc.robot.subsystems.indexer.IndexerIOReal;
-import frc.robot.subsystems.indexer.IndexerIOSim;
+import frc.robot.subsystems.hopper.Hopper;
+import frc.robot.subsystems.hopper.HopperConstants;
+import frc.robot.subsystems.hopper.HopperIO;
+import frc.robot.subsystems.hopper.HopperIOReal;
+import frc.robot.subsystems.hopper.HopperIOSim;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeIO;
 import frc.robot.subsystems.intake.IntakeIOReal;
@@ -74,7 +74,7 @@ public class RobotContainer {
   private Vision vision;
 
   private Intake intake;
-  private Indexer indexer;
+  private Hopper hopper;
   private Feeder feeder;
   private Turret turret;
 
@@ -105,7 +105,7 @@ public class RobotContainer {
 
   // Top Row
   private final JoystickButton startIntake = new JoystickButton(buttonBox, 11);
-  private final JoystickButton startIndexer = new JoystickButton(buttonBox, 12);
+  private final JoystickButton startHopper = new JoystickButton(buttonBox, 12);
   private final JoystickButton startFeeder = new JoystickButton(buttonBox, 13);
 
   // Mid Row
@@ -135,10 +135,10 @@ public class RobotContainer {
                 (p, t, sd) -> drive.addVisionPoseMeasurement(p, t, sd),
                 new VisionIOLimelight("limelight", () -> drive.getRotation()));
         intake = new Intake(new IntakeIOReal());
-        indexer = new Indexer(new IndexerIOReal(), () -> true);
+        hopper = new Hopper(new HopperIOReal(), () -> true);
         feeder = new Feeder(new FeederIOReal(), () -> turret.isReadyForFuel());
         // intake = new Intake(new IntakeIO() {});
-        // indexer = new Indexer(new IndexerIO() {}, () -> true);
+        // hopper = new Hopper(new HopperIO() {}, () -> true);
         // feeder = new Feeder(new FeederIO() {}, () -> turret.isReadyForFuel());
         turret =
             new Turret(
@@ -146,14 +146,14 @@ public class RobotContainer {
                 () -> drive.getPose(),
                 () -> drive.getChassisSpeeds(),
                 () -> feeder.feedingFuel(),
-                (d) -> indexer.changeHeldFuelBy(d));
+                (d) -> hopper.changeHeldFuelBy(d));
         // turret =
         //     new Turret(
         //         new TurretIO() {},
         //         () -> drive.getPose(),
         //         () -> drive.getChassisSpeeds(),
         //         () -> feeder.feedingFuel(),
-        //         (d) -> indexer.changeHeldFuelBy(d));
+        //         (d) -> hopper.changeHeldFuelBy(d));
         break;
 
       case SIM:
@@ -177,7 +177,7 @@ public class RobotContainer {
                 new VisionIO() {},
                 new VisionIO() {});
         intake = new Intake(new IntakeIOSim());
-        indexer = new Indexer(new IndexerIOSim(), () -> true);
+        hopper = new Hopper(new HopperIOSim(), () -> true);
         feeder = new Feeder(new FeederIOSim(), () -> turret.isReadyForFuel());
         turret =
             new Turret(
@@ -185,7 +185,7 @@ public class RobotContainer {
                 () -> drive.getPose(),
                 () -> drive.getChassisSpeeds(),
                 () -> feeder.feedingFuel(),
-                (d) -> indexer.changeHeldFuelBy(d));
+                (d) -> hopper.changeHeldFuelBy(d));
 
         // Register a robot for collision with fuel
         FuelSim.getInstance()
@@ -206,11 +206,11 @@ public class RobotContainer {
                     .in(Meters), // robot-centric coordinates for bounding box
                 () -> {
                   return intake.isRunning()
-                      && indexer.getHeldFuel() < IndexerConstants.Sim.maxHopperCapacity;
+                      && hopper.getHeldFuel() < HopperConstants.Sim.maxHopperCapacity;
                 }, // (optional) BooleanSupplier for whether the intake should be active at a given
                 // moment
                 () -> {
-                  indexer.changeHeldFuelBy(1);
+                  hopper.changeHeldFuelBy(1);
                 }); // (optional) Runnable called whenever a fuel is in-took
         break;
 
@@ -229,7 +229,7 @@ public class RobotContainer {
                 new VisionIO() {},
                 new VisionIO() {});
         intake = new Intake(new IntakeIO() {});
-        indexer = new Indexer(new IndexerIO() {}, () -> true);
+        hopper = new Hopper(new HopperIO() {}, () -> true);
         feeder = new Feeder(new FeederIO() {}, () -> turret.isReadyForFuel());
         turret =
             new Turret(
@@ -237,13 +237,13 @@ public class RobotContainer {
                 () -> drive.getPose(),
                 () -> drive.getChassisSpeeds(),
                 () -> feeder.feedingFuel(),
-                (d) -> indexer.changeHeldFuelBy(d));
+                (d) -> hopper.changeHeldFuelBy(d));
         break;
     }
 
     // Auto setup
     NamedCommands.registerCommands(
-        Constants.getNamedCommand(drive, vision, intake, indexer, feeder, turret));
+        Constants.getNamedCommand(drive, vision, intake, hopper, feeder, turret));
     autoSelectorType = new LoggedDashboardChooser<>("Auto Selector Type");
     autoSelectorType.addDefaultOption("Use Button Box", true);
     autoSelectorType.addOption("Use Dashboard Chooser", false);
@@ -278,7 +278,7 @@ public class RobotContainer {
     // turret.setDefaultCommand(turret.calibrate());
 
     // intake.setDefaultCommand(intake.stop());
-    // indexer.setDefaultCommand(indexer.stop());
+    // hopper.setDefaultCommand(hopper.stop());
     // feeder.setDefaultCommand(feeder.stop());
 
     // Auto Field
@@ -293,7 +293,7 @@ public class RobotContainer {
     CommandScheduler.getInstance().schedule(PathfindingCommand.warmupCommand());
 
     CommandScheduler.getInstance()
-        .schedule(StateLoggingCommands.logMechanisms(intake, indexer, feeder, turret));
+        .schedule(StateLoggingCommands.logMechanisms(intake, hopper, feeder, turret));
   }
 
   /**
@@ -355,8 +355,8 @@ public class RobotContainer {
     controller.leftTrigger(0.9).onTrue(intake.start());
     controller.leftTrigger(0.9).onFalse(intake.stop());
 
-    controller.a().onTrue(indexer.start());
-    controller.a().onFalse(indexer.stop());
+    controller.a().onTrue(hopper.start());
+    controller.a().onFalse(hopper.stop());
 
     controller.b().onTrue(feeder.reverse());
     controller.b().onFalse(feeder.stop());
