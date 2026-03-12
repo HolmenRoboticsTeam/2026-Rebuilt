@@ -13,7 +13,7 @@ public class FeederConstants {
 
   public static final double maxVolts = 4.0;
 
-  public static final double gearRatio = 3.0;
+  public static final double gearRatio = 1.0 / 3.0;
 
   /** The constants only for the real version of the feeder. */
   public static class Real {
@@ -27,8 +27,7 @@ public class FeederConstants {
     static {
       motorConfig = new SparkMaxConfig();
 
-      motorConfig.idleMode(IdleMode.kBrake);
-      motorConfig.inverted(true);
+      motorConfig.smartCurrentLimit(10).idleMode(IdleMode.kBrake).inverted(true);
 
       motorConfig
           .encoder
@@ -36,8 +35,6 @@ public class FeederConstants {
           .velocityConversionFactor(gearRatio / 60.0);
 
       motorConfig.closedLoop.pid(1.0, 0.0, 0.0);
-
-      motorConfig.smartCurrentLimit(40);
     }
   }
 

@@ -13,7 +13,7 @@ public class IndexerConstants {
 
   public static final double maxVolts = 4.0;
 
-  public static final double gearRatio = 1.0;
+  public static final double gearRatio = 1.0 / 5.0;
 
   public static final double hasFuelDebouncerTime = 0.25;
 
@@ -28,8 +28,7 @@ public class IndexerConstants {
     static {
       motorConfig = new SparkMaxConfig();
 
-      motorConfig.idleMode(IdleMode.kCoast);
-      motorConfig.inverted(true);
+      motorConfig.smartCurrentLimit(20).idleMode(IdleMode.kCoast).inverted(true);
 
       motorConfig
           .encoder
@@ -37,8 +36,6 @@ public class IndexerConstants {
           .velocityConversionFactor(gearRatio / 60.0);
 
       motorConfig.closedLoop.pid(1.0, 0.0, 0.0);
-
-      motorConfig.smartCurrentLimit(40);
     }
   }
 

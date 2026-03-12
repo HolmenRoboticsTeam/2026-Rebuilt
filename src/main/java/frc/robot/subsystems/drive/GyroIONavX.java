@@ -9,7 +9,6 @@ package frc.robot.subsystems.drive;
 
 import static edu.wpi.first.units.Units.Degree;
 import static edu.wpi.first.units.Units.DegreesPerSecond;
-import static edu.wpi.first.units.Units.Kelvin;
 
 import com.studica.frc.Navx;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -23,22 +22,19 @@ public class GyroIONavX implements GyroIO {
       new Navx(DriveConstants.navXCanId, (int) DriveConstants.odometryFrequency);
   private final Queue<Double> yawPositionQueue;
   private final Queue<Double> yawTimestampQueue;
-  private static double startingZeroOffset =
-      0.0; // This offset is used to adjust the gyro yaw to zero at the start of the match.
 
   public GyroIONavX() {
     yawTimestampQueue = SparkOdometryThread.getInstance().makeTimestampQueue();
     yawPositionQueue =
-        SparkOdometryThread.getInstance().registerSignal(() -> (navX.getYaw().in(Degree)));
-    navX.enableOptionalMessages(true, false, false, false, false, false, true, false, false, true);
+        SparkOdometryThread.getInstance().registerSignal(() -> navX.getYaw().in(Degree));
+    navX.enableOptionalMessages(true, false, false, false, false, false, true, false, false, false);
     navX.resetYaw();
-    startingZeroOffset = navX.getYaw().in(Degree);
   }
 
   @Override
   public void updateInputs(GyroIOInputs inputs) {
-    inputs.connected = navX.getTemperature().in(Kelvin) != 0.0;
-    inputs.yawPosition = Rotation2d.fromDegrees((navX.getYaw().in(Degree)));
+    inputs.connected = navX.getYaw().in(Degree) < 360.0; // 360 is a debug value only.
+    inputs.yawPosition = Rotation2d.fromDegrees(navX.getYaw().in(Degree));
     inputs.yawVelocityRadPerSec =
         Units.degreesToRadians(navX.getAngularVel()[2].in(DegreesPerSecond));
 
@@ -54,8 +50,7 @@ public class GyroIONavX implements GyroIO {
   }
 
   @Override
-  public void zeroGyro(Rotation2d offsetAngle) {
+  public void zeroGyro() {
     navX.resetYaw();
-    startingZeroOffset = navX.getYaw().in(Degree) + offsetAngle.getDegrees();
   }
 }

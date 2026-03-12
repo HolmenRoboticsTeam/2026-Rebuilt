@@ -357,7 +357,8 @@ public class Drive extends SubsystemBase {
     return maxSpeedMetersPerSec / driveBaseRadius;
   }
 
-  public void resetGyro(Rotation2d offsetAngle) {
-    gyroIO.zeroGyro(offsetAngle);
+  public void resetGyro() {
+    gyroIO.zeroGyro();
+    poseEstimator.resetPose(new Pose2d(getPose().getTranslation(), Rotation2d.kZero));
   }
 }

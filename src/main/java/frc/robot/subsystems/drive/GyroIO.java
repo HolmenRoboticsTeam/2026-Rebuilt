@@ -22,11 +22,6 @@ public interface GyroIO {
 
   public default void updateInputs(GyroIOInputs inputs) {}
 
-  /**
-   * Zeroes the gyro, then offsets the angle by the given offsetAngle, so that the gyro will read as
-   * the offsetAngle after this method is called.
-   *
-   * @param offsetAngle the offsetAngle
-   */
-  public default void zeroGyro(Rotation2d offsetAngle) {}
+  /** Zeroes the gyro. */
+  public default void zeroGyro() {}
 }

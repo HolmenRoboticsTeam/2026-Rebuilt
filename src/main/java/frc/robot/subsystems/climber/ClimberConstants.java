@@ -28,6 +28,8 @@ public class ClimberConstants {
     static {
       motorConfig = new SparkMaxConfig();
 
+      motorConfig.smartCurrentLimit(40);
+
       motorConfig
           .encoder
           .positionConversionFactor(motorToLengthRatio)

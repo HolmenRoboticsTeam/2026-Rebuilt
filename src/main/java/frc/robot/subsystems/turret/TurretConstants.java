@@ -7,6 +7,7 @@ package frc.robot.subsystems.turret;
 import static edu.wpi.first.units.Units.Inch;
 
 import com.revrobotics.spark.ClosedLoopSlot;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkFlexConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.system.plant.DCMotor;
@@ -49,12 +50,12 @@ public class TurretConstants {
 
       rotationMotorConfig = new SparkFlexConfig();
 
+      rotationMotorConfig.smartCurrentLimit(10).idleMode(IdleMode.kBrake).inverted(true);
+
       rotationMotorConfig
           .encoder
           .positionConversionFactor(rotationGearing)
           .velocityConversionFactor(rotationGearing / 60.0);
-
-      rotationMotorConfig.inverted(true);
 
       rotationMotorConfig
           .closedLoop
@@ -77,11 +78,11 @@ public class TurretConstants {
           .forwardSoftLimitEnabled(true)
           .reverseSoftLimitEnabled(true);
 
-      rotationMotorConfig.smartCurrentLimit(60);
-
       // Angle Motor Config
 
       angleMotorConfig = new SparkMaxConfig();
+
+      angleMotorConfig.smartCurrentLimit(20).idleMode(IdleMode.kBrake).inverted(true);
 
       angleMotorConfig
           .encoder
@@ -94,16 +95,13 @@ public class TurretConstants {
           .allowedClosedLoopError(0.01, ClosedLoopSlot.kSlot0)
           .feedForward
           .kS(0.25);
-      angleMotorConfig.inverted(true);
       angleMotorConfig.softLimit.forwardSoftLimit(0.0).reverseSoftLimit(0.45);
-
-      angleMotorConfig.smartCurrentLimit(40);
 
       // Left FlyWheel Motor Config
 
       leftFlyWheelMotorConfig = new SparkMaxConfig();
 
-      leftFlyWheelMotorConfig.inverted(false);
+      leftFlyWheelMotorConfig.smartCurrentLimit(20).idleMode(IdleMode.kBrake).inverted(false);
 
       leftFlyWheelMotorConfig
           .encoder
@@ -118,15 +116,11 @@ public class TurretConstants {
           .kV(0.00192)
           .kS(0.4);
 
-      leftFlyWheelMotorConfig.smartCurrentLimit(40);
-
       // Right FlyWheel Motor Config
 
       rightFlyWheelMotorConfig = new SparkMaxConfig();
 
-      rightFlyWheelMotorConfig.smartCurrentLimit(40);
-
-      rightFlyWheelMotorConfig.follow(leftFlyWheelMotorID, true);
+      rightFlyWheelMotorConfig.smartCurrentLimit(20).follow(leftFlyWheelMotorID, true);
     }
   }
 

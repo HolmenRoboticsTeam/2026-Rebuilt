@@ -14,7 +14,6 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.commands.PathfindingCommand;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -308,10 +307,13 @@ public class RobotContainer {
     // #################### DRIVER CONTROLLER ####################
 
     // Switch to X pattern when X button is pressed
-    controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
+    controller
+        .x()
+        .onTrue(
+            Commands.runOnce(drive::stopWithX, drive).ignoringDisable(true).withName("Zero Gyro"));
 
     // Reset gyro to ZERO when Start button is pressed
-    controller.start().onTrue(Commands.runOnce(() -> drive.resetGyro(Rotation2d.kZero)));
+    controller.start().onTrue(Commands.runOnce(() -> drive.resetGyro()));
 
     // Resets gyro to the next vision MT1 measurement.
     // boolean[] hasResetGyro = new boolean[1];

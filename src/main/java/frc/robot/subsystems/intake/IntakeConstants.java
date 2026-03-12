@@ -13,7 +13,7 @@ public class IntakeConstants {
 
   public static final double maxVolts = 4.0;
 
-  public static final double gearRatio = 3.0;
+  public static final double gearRatio = 1.0;
 
   /** The constants only for the real version of the intake. */
   public static class Real {
@@ -27,8 +27,7 @@ public class IntakeConstants {
     static {
       leftMotorConfig = new SparkMaxConfig();
 
-      leftMotorConfig.idleMode(IdleMode.kCoast);
-      leftMotorConfig.inverted(true);
+      leftMotorConfig.smartCurrentLimit(20).idleMode(IdleMode.kCoast).inverted(true);
 
       leftMotorConfig
           .encoder
@@ -36,8 +35,6 @@ public class IntakeConstants {
           .velocityConversionFactor(gearRatio / 60.0);
 
       leftMotorConfig.closedLoop.pid(1.0, 0.0, 0.0);
-
-      leftMotorConfig.smartCurrentLimit(40);
 
       rightMotorConfig = new SparkMaxConfig();
 
