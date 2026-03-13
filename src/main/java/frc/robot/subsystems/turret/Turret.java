@@ -8,6 +8,7 @@ import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.RPM;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -118,8 +119,7 @@ public class Turret extends SubsystemBase {
 
               // Get target translation and type based on turret position
               Translation2d turretTarget = getTargetTranslation();
-              // TargetType targetType = getTargetType();
-              TargetType targetType = TargetType.HUB;
+              TargetType targetType = getTargetType();
 
               // Get the shot data
               Distance distance =
@@ -200,7 +200,6 @@ public class Turret extends SubsystemBase {
 
               // Get target translation and type based on turret position
               Translation2d turretTarget = getTargetTranslation();
-              // TargetType targetType = getTargetType();
               TargetType targetType = TargetType.HUB;
 
               // Get distance and rotation for logging
@@ -289,12 +288,14 @@ public class Turret extends SubsystemBase {
         turretPose.get().getTranslation())) { // In Alliance Zone
       return FieldConstants.kHubPosition;
 
-    } else if (FieldConstants.kLeftNeutralSide.contains(
-        turretPose.get().getTranslation())) { // On Left Side
+    } else if (FieldConstants.kLeftNeutralSide.contains(turretPose.get().getTranslation())
+        || FieldConstants.kLeftOpposingSide.contains(
+            turretPose.get().getTranslation())) { // On Left Side
       return FieldConstants.kLeftCorner;
 
-    } else if (FieldConstants.kRightNeutralSide.contains(
-        turretPose.get().getTranslation())) { // On Right Side
+    } else if (FieldConstants.kRightNeutralSide.contains(turretPose.get().getTranslation())
+        || FieldConstants.kRightOpposingSide.contains(
+            turretPose.get().getTranslation())) { // On Right Side
       return FieldConstants.kRightCorner;
 
     } else { // Ok, the turret pose is outside the field, yay! // TODO: do a better check
@@ -315,6 +316,15 @@ public class Turret extends SubsystemBase {
 
     ChassisSpeeds speeds = robotVelocity.get();
     Translation2d turretTrans = turretPose.get().getTranslation();
+
+    // If the robot is moving very slowly, just do the normal check. To avoid a crash.
+    if ((MathUtil.isNear(0.0, speeds.vxMetersPerSecond, 0.05)
+            && MathUtil.isNear(0.0, speeds.vyMetersPerSecond, 0.05))
+        || MathUtil.isNear(0.0, lastSpeeds.vxMetersPerSecond, 0.05)
+            && MathUtil.isNear(0.0, lastSpeeds.vyMetersPerSecond, 0.05)) {
+      lastSpeeds = speeds;
+      return checkTrans(turretTrans);
+    }
 
     // Take the difference in the angles of the current and last velocity, then scale it to predict
     // the path of the robot.
@@ -402,13 +412,22 @@ public class Turret extends SubsystemBase {
     }
   }
 
+  /**
+   * Returns a new translation that is the same as the given translation but moved to the closest
+   * point in the field.
+   *
+   * @param trans the given translation.
+   * @return the translated translation.
+   */
   public Translation2d forceInField(Translation2d trans) {
 
+    // Already in the field, no need to move.
     if (FieldConstants.kWholeField.contains(trans)) return trans;
 
     Distance xDistance;
     Distance yDistance;
 
+    // Check X measure
     if (trans.getX() < 0.0) {
       xDistance = Inches.of(0.0);
     } else if (trans.getMeasureX().compareTo(FieldConstants.fieldLength) > 0) {
@@ -417,6 +436,7 @@ public class Turret extends SubsystemBase {
       xDistance = trans.getMeasureX();
     }
 
+    // Check Y measure
     if (trans.getY() < 0.0) {
       yDistance = Inches.of(0.0);
     } else if (trans.getMeasureY().compareTo(FieldConstants.fieldWidth) > 0) {
@@ -425,6 +445,7 @@ public class Turret extends SubsystemBase {
       yDistance = trans.getMeasureY();
     }
 
+    // Assemble the new translation and return it.
     return new Translation2d(xDistance, yDistance);
   }
 }
