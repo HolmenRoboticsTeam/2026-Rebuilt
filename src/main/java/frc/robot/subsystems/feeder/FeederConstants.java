@@ -27,7 +27,7 @@ public class FeederConstants {
     static {
       motorConfig = new SparkMaxConfig();
 
-      motorConfig.smartCurrentLimit(10).idleMode(IdleMode.kBrake).inverted(true);
+      motorConfig.smartCurrentLimit(10).idleMode(IdleMode.kBrake).inverted(false);
 
       motorConfig
           .encoder

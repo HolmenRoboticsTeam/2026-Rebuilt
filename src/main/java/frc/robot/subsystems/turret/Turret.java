@@ -118,7 +118,8 @@ public class Turret extends SubsystemBase {
 
               // Get target translation and type based on turret position
               Translation2d turretTarget = getTargetTranslation();
-              TargetType targetType = getTargetType();
+              // TargetType targetType = getTargetType();
+              TargetType targetType = TargetType.HUB;
 
               // Get the shot data
               Distance distance =
@@ -199,7 +200,8 @@ public class Turret extends SubsystemBase {
 
               // Get target translation and type based on turret position
               Translation2d turretTarget = getTargetTranslation();
-              TargetType targetType = getTargetType();
+              // TargetType targetType = getTargetType();
+              TargetType targetType = TargetType.HUB;
 
               // Get distance and rotation for logging
               Distance distance =

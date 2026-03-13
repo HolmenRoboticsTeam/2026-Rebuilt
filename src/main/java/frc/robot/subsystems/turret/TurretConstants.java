@@ -101,7 +101,7 @@ public class TurretConstants {
 
       leftFlyWheelMotorConfig = new SparkMaxConfig();
 
-      leftFlyWheelMotorConfig.smartCurrentLimit(20).idleMode(IdleMode.kBrake).inverted(false);
+      leftFlyWheelMotorConfig.smartCurrentLimit(40).idleMode(IdleMode.kBrake).inverted(false);
 
       leftFlyWheelMotorConfig
           .encoder

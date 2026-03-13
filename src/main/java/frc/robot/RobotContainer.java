@@ -273,8 +273,8 @@ public class RobotContainer {
             () -> -controller.getRightX(),
             () -> -controller.getRightY()));
 
-    turret.setDefaultCommand(turret.fullFieldAim());
-    // turret.setDefaultCommand(turret.calibrate());
+    // turret.setDefaultCommand(turret.fullFieldAim());
+    turret.setDefaultCommand(turret.calibrate());
 
     // intake.setDefaultCommand(intake.stop());
     // indexer.setDefaultCommand(indexer.stop());

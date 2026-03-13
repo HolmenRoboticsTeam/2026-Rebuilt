@@ -27,7 +27,7 @@ public class IntakeConstants {
     static {
       leftMotorConfig = new SparkMaxConfig();
 
-      leftMotorConfig.smartCurrentLimit(20).idleMode(IdleMode.kCoast).inverted(true);
+      leftMotorConfig.smartCurrentLimit(40).idleMode(IdleMode.kCoast).inverted(true);
 
       leftMotorConfig
           .encoder
