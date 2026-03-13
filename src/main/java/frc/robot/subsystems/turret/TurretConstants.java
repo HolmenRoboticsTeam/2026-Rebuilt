@@ -4,7 +4,7 @@
 
 package frc.robot.subsystems.turret;
 
-import static edu.wpi.first.units.Units.Inch;
+import static edu.wpi.first.units.Units.Inches;
 
 import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
@@ -16,8 +16,8 @@ import edu.wpi.first.units.measure.Distance;
 /** Constants for the turret subsystem. */
 public class TurretConstants {
 
-  public static final Distance turretXOffset = Distance.ofRelativeUnits(-6.0, Inch);
-  public static final Distance turretYOffset = Distance.ofRelativeUnits(0.0, Inch);
+  public static final Distance turretXOffset = Inches.of(-6.0);
+  public static final Distance turretYOffset = Inches.of(0.0);
 
   public static final double currentControlDebounce = 0.025;
 
@@ -28,6 +28,12 @@ public class TurretConstants {
   public static final double rotationGearing = (2.0 * Math.PI) * (1.0 / 3.0) * (10.0 / 88.0);
   public static final double angleGearing = (2.0 * Math.PI) * (15.0 / 36.0) * (10.0 / 192.0);
   public static final double flyWheelGearing = 1.0;
+
+  // These are for shifting that target translation for faster adjustments during competition. Note: These shift all targets (Hub & Ground).
+    public static final Distance targetXFieldOffset = Inches.of(0.0);
+    public static final Distance targetYFieldOffset = Inches.of(0.0);
+    public static final Distance turretForwardRobotOffset = Inches.of(0.0);
+    public static final Distance turretLeftRobotOffset = Inches.of(0.0);
 
   /** The constants only for the real version of the turret. */
   public static class Real {
@@ -101,7 +107,7 @@ public class TurretConstants {
 
       leftFlyWheelMotorConfig = new SparkMaxConfig();
 
-      leftFlyWheelMotorConfig.smartCurrentLimit(40).idleMode(IdleMode.kBrake).inverted(false);
+      leftFlyWheelMotorConfig.smartCurrentLimit(20).idleMode(IdleMode.kBrake).inverted(false);
 
       leftFlyWheelMotorConfig
           .encoder
@@ -147,6 +153,7 @@ public class TurretConstants {
 
     public static final double percentSpeedKept = 0.8;
     public static final double RPMToVelocityFactor = 0.0025;
-    public static final Distance turretHeight = Distance.ofRelativeUnits(20.0, Inch);
+    public static final Distance turretHeight = Inches.of(20.0);
+
   }
 }

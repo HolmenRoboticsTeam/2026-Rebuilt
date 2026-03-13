@@ -116,10 +116,12 @@ public class Turret extends SubsystemBase {
 
     return Commands.run(
             () -> {
+              // Get the target type based on the position.
+              TargetType targetType = getTargetType();
 
               // Get target translation and type based on turret position
               Translation2d turretTarget = getTargetTranslation();
-              TargetType targetType = getTargetType();
+
 
               // Get the shot data
               Distance distance =
@@ -198,9 +200,11 @@ public class Turret extends SubsystemBase {
     return Commands.run(
             () -> {
 
+              // Calibrate should alway point at the hub.
+              TargetType targetType =  TargetType.HUB;
+
               // Get target translation and type based on turret position
               Translation2d turretTarget = getTargetTranslation();
-              TargetType targetType = TargetType.HUB;
 
               // Get distance and rotation for logging
               Distance distance =
@@ -284,22 +288,27 @@ public class Turret extends SubsystemBase {
    * @return The position of the target.
    */
   private Translation2d getTargetTranslation() {
+
+    // Offset applied to the target to shift it for faster adjustments during competition.
+    Translation2d offset =
+        new Translation2d(TurretConstants.targetXFieldOffset, TurretConstants.targetYFieldOffset).plus(new Translation2d(TurretConstants.turretForwardRobotOffset, TurretConstants.turretLeftRobotOffset).rotateBy(robotPose.get().getRotation()));
+
     if (FieldConstants.kHomeAllianceZone.contains(
         turretPose.get().getTranslation())) { // In Alliance Zone
-      return FieldConstants.kHubPosition;
+      return FieldConstants.kHubPosition.plus(offset);
 
     } else if (FieldConstants.kLeftNeutralSide.contains(turretPose.get().getTranslation())
         || FieldConstants.kLeftOpposingSide.contains(
             turretPose.get().getTranslation())) { // On Left Side
-      return FieldConstants.kLeftCorner;
+      return FieldConstants.kLeftCorner.plus(offset);
 
     } else if (FieldConstants.kRightNeutralSide.contains(turretPose.get().getTranslation())
         || FieldConstants.kRightOpposingSide.contains(
             turretPose.get().getTranslation())) { // On Right Side
-      return FieldConstants.kRightCorner;
+      return FieldConstants.kRightCorner.plus(offset);
 
     } else { // Ok, the turret pose is outside the field, yay! // TODO: do a better check
-      return FieldConstants.kHubPosition;
+      return FieldConstants.kHubPosition.plus(offset);
     }
   }
 
