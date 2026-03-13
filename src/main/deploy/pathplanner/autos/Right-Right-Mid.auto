@@ -54,43 +54,6 @@
                           }
                         ]
                       }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "(D) Right Trench Launch To Pre Right Neutral Collect ALT"
-                      }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "(B) Pre Right Neutral Collect ALT To Post Right Neutral Collect ALT"
-                      }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "(C) Post Right Neutral Collect ALT TO Right Trench Launch"
-                      }
-                    },
-                    {
-                      "type": "deadline",
-                      "data": {
-                        "commands": [
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "Indexer Wait Until Out Of Fuel"
-                            }
-                          },
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "Feeder Auto"
-                            }
-                          }
-                        ]
-                      }
                     }
                   ]
                 }
