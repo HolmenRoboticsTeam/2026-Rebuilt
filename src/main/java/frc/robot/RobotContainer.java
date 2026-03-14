@@ -273,8 +273,8 @@ public class RobotContainer {
             () -> -controller.getRightX(),
             () -> -controller.getRightY()));
 
-    // turret.setDefaultCommand(turret.fullFieldAim());
-    turret.setDefaultCommand(turret.calibrate());
+    turret.setDefaultCommand(turret.fullFieldAim());
+    // turret.setDefaultCommand(turret.calibrate());
 
     // intake.setDefaultCommand(intake.stop());
     // indexer.setDefaultCommand(indexer.stop());
@@ -307,13 +307,13 @@ public class RobotContainer {
     // #################### DRIVER CONTROLLER ####################
 
     // Switch to X pattern when X button is pressed
-    controller
-        .x()
-        .onTrue(
-            Commands.runOnce(drive::stopWithX, drive).ignoringDisable(true).withName("Zero Gyro"));
+    controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
 
     // Reset gyro to ZERO when Start button is pressed
-    controller.start().onTrue(Commands.runOnce(() -> drive.resetGyro()));
+    controller
+        .start()
+        .onTrue(
+            Commands.runOnce(() -> drive.resetGyro()).ignoringDisable(true).withName("Zero Gyro"));
 
     // Resets gyro to the next vision MT1 measurement.
     // boolean[] hasResetGyro = new boolean[1];
@@ -364,6 +364,15 @@ public class RobotContainer {
     controller.b().onFalse(feeder.stop());
 
     controller.y().onTrue(feeder.start());
+    controller
+        .y()
+        .whileTrue(
+            DriveCommands.joystickDriveAtAngle(
+                drive,
+                () -> -controller.getLeftY() * 0.5,
+                () -> -controller.getLeftX() * 0.5,
+                () -> -controller.getRightX(),
+                () -> -controller.getRightY()));
     controller.y().onFalse(feeder.stop());
 
     // Shift Overriding

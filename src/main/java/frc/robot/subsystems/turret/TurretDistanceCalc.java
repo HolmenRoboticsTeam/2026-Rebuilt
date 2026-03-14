@@ -4,7 +4,7 @@
 
 package frc.robot.subsystems.turret;
 
-import static edu.wpi.first.units.Units.Inches;
+import static edu.wpi.first.units.Units.Meter;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.interpolation.InterpolatingTreeMap;
@@ -16,7 +16,7 @@ import frc.robot.Constants.Mode;
 /** Add your docs here. */
 public class TurretDistanceCalc {
 
-  // The key must be in inches!!!
+  // The key must be in meters!!!
   private static InterpolatingTreeMap<Double, TurretShotData> hubMap =
       new InterpolatingTreeMap<Double, TurretShotData>(
           InverseInterpolator.forDouble(), TurretDistanceCalc::interpolate);
@@ -35,16 +35,16 @@ public class TurretDistanceCalc {
 
     switch (type) {
       case HUB:
-        return hubMap.get(distance.in(Inches));
+        return hubMap.get(distance.in(Meter));
       case GROUND:
-        return groundMap.get(distance.in(Inches));
+        return groundMap.get(distance.in(Meter));
       case IN_TRENCH:
         // So that when the robot is under the trench the flywheel stays up to speed.
-        TurretShotData unchangedValue = hubMap.get(distance.in(Inches));
+        TurretShotData unchangedValue = hubMap.get(distance.in(Meter));
         return new TurretShotData(unchangedValue.RPM, 0.0, unchangedValue.timeOfFlightSec);
       case INVALID:
         // Look at the hub to try to fix pose estimation
-        return hubMap.get(distance.in(Inches));
+        return hubMap.get(distance.in(Meter));
     }
 
     return new TurretShotData(0, 0, 0); // How?
@@ -52,7 +52,12 @@ public class TurretDistanceCalc {
 
   private static void loadRealValues() {
     // TODO: Add real values
-    hubMap.put(122.047, new TurretShotData(1820.0, 0.0, 0.0));
+    hubMap.put(2.17, new TurretShotData(1650.0, 0.0, 0.42));
+    hubMap.put(2.78, new TurretShotData(1750.0, 0.0, 0.41));
+    hubMap.put(3.4, new TurretShotData(1850.0, 0.0, 0.63));
+    hubMap.put(3.65, new TurretShotData(1900.0, 0.0, 0.57));
+    hubMap.put(4.36, new TurretShotData(2100.0, 0.0, 1.0));
+    hubMap.put(4.46, new TurretShotData(2200.0, 0.0, 1.08));
 
     groundMap.put(0.0, new TurretShotData(0.0, 0.0, 0.0));
   }

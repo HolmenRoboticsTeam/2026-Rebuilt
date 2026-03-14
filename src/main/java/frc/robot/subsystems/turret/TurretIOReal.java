@@ -7,26 +7,19 @@ package frc.robot.subsystems.turret;
 import com.revrobotics.PersistMode;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.ResetMode;
+import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
-import frc.robot.Constants;
-import java.util.function.Supplier;
 
 /** The real implementation of the turret. */
 public class TurretIOReal implements TurretIO {
 
   private SparkFlex rotationMotor;
   private RelativeEncoder rotationEncoder;
-  private Supplier<Double> getRotationOffset =
-      () ->
-          Constants.isBlueAlliance.get()
-              ? 0.0
-              : Math.PI; // This offset is used to flip the turret's zero point when on the red
-  // alliance, since the turret is mounted backwards on the red side.
 
   private SparkMax angleMotor;
   private RelativeEncoder angleEncoder;
@@ -34,6 +27,7 @@ public class TurretIOReal implements TurretIO {
   private SparkMax flyWheelMotorLeft;
   private SparkMax flyWheelMotorRight;
   private RelativeEncoder flyWheelEncoderLeft;
+  private double targetRPM;
 
   private FlyWheelMode flyWheelMode;
 
@@ -44,8 +38,7 @@ public class TurretIOReal implements TurretIO {
 
     rotationMotor = new SparkFlex(TurretConstants.Real.rotationMotorID, MotorType.kBrushless);
     rotationEncoder = rotationMotor.getEncoder();
-    rotationEncoder.setPosition(
-        rotationMotor.getAbsoluteEncoder().getPosition() + getRotationOffset.get());
+    rotationEncoder.setPosition(rotationMotor.getAbsoluteEncoder().getPosition());
 
     rotationMotor.configure(
         TurretConstants.Real.rotationMotorConfig,
@@ -56,7 +49,6 @@ public class TurretIOReal implements TurretIO {
 
     angleMotor = new SparkMax(TurretConstants.Real.angleMotorID, MotorType.kBrushless);
     angleEncoder = angleMotor.getEncoder();
-    angleEncoder.setPosition(angleMotor.getAbsoluteEncoder().getPosition());
 
     angleMotor.configure(
         TurretConstants.Real.angleMotorConfig,
@@ -80,6 +72,8 @@ public class TurretIOReal implements TurretIO {
         TurretConstants.Real.rightFlyWheelMotorConfig,
         ResetMode.kResetSafeParameters,
         PersistMode.kPersistParameters);
+
+    targetRPM = 0.0;
   }
 
   @Override
@@ -111,7 +105,7 @@ public class TurretIOReal implements TurretIO {
     inputs.flyWheelCurrentAmps = flyWheelMotorLeft.getOutputCurrent();
     inputs.flyWheelIsTarget =
         MathUtil.isNear(
-            flyWheelMotorLeft.getClosedLoopController().getSetpoint(),
+            targetRPM,
             flyWheelMotorLeft.getEncoder().getVelocity(),
             TurretConstants.flyWheelTolerance);
   }
@@ -128,15 +122,17 @@ public class TurretIOReal implements TurretIO {
 
   @Override
   public void setFlyWheelRPM(double RPM) {
+    targetRPM = RPM;
 
     if (flyWheelMode == FlyWheelMode.CURRENT) {
 
-      // TODO: find proper hold amps.
       flyWheelMotorLeft
           .getClosedLoopController()
-          .setSetpoint(TurretConstants.Real.holdAmps, ControlType.kCurrent);
+          .setSetpoint(TurretConstants.Real.holdAmps, ControlType.kCurrent, ClosedLoopSlot.kSlot1);
     } else {
-      flyWheelMotorLeft.getClosedLoopController().setSetpoint(RPM, ControlType.kVelocity);
+      flyWheelMotorLeft
+          .getClosedLoopController()
+          .setSetpoint(RPM, ControlType.kVelocity, ClosedLoopSlot.kSlot0);
     }
   }
 

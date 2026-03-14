@@ -23,17 +23,18 @@ public class TurretConstants {
 
   public static final double rotationTolerance = Math.toRadians(3.0);
   public static final double angleTolerance = Math.toRadians(5.0);
-  public static final double flyWheelTolerance = 25.0; // RPM
+  public static final double flyWheelTolerance = 15.0; // RPM
 
   public static final double rotationGearing = (2.0 * Math.PI) * (1.0 / 3.0) * (10.0 / 88.0);
   public static final double angleGearing = (2.0 * Math.PI) * (15.0 / 36.0) * (10.0 / 192.0);
   public static final double flyWheelGearing = 1.0;
 
-  // These are for shifting that target translation for faster adjustments during competition. Note: These shift all targets (Hub & Ground).
-    public static final Distance targetXFieldOffset = Inches.of(0.0);
-    public static final Distance targetYFieldOffset = Inches.of(0.0);
-    public static final Distance turretForwardRobotOffset = Inches.of(0.0);
-    public static final Distance turretLeftRobotOffset = Inches.of(0.0);
+  // These are for shifting that target translation for faster adjustments during competition. Note:
+  // These shift all targets (Hub & Ground).
+  public static final Distance targetXFieldOffset = Inches.of(0.0);
+  public static final Distance targetYFieldOffset = Inches.of(0.0);
+  public static final Distance turretForwardRobotOffset = Inches.of(0.0);
+  public static final Distance turretLeftRobotOffset = Inches.of(0.0);
 
   /** The constants only for the real version of the turret. */
   public static class Real {
@@ -43,7 +44,7 @@ public class TurretConstants {
     public static final int leftFlyWheelMotorID = 24;
     public static final int rightFlyWheelMotorID = 25;
 
-    public static final double holdAmps = 30.0;
+    public static final double holdAmps = 10.0;
 
     public static final SparkFlexConfig rotationMotorConfig;
     public static final SparkMaxConfig angleMotorConfig;
@@ -56,7 +57,7 @@ public class TurretConstants {
 
       rotationMotorConfig = new SparkFlexConfig();
 
-      rotationMotorConfig.smartCurrentLimit(10).idleMode(IdleMode.kBrake).inverted(true);
+      rotationMotorConfig.smartCurrentLimit(30).idleMode(IdleMode.kBrake).inverted(true);
 
       rotationMotorConfig
           .encoder
@@ -116,11 +117,13 @@ public class TurretConstants {
 
       leftFlyWheelMotorConfig
           .closedLoop
-          .pid(0.0001, 0.0, 0.0)
+          .pid(0.00015, 0.0, 0.0)
           .allowedClosedLoopError(0.0, ClosedLoopSlot.kSlot0)
           .feedForward
           .kV(0.00192)
           .kS(0.4);
+
+      leftFlyWheelMotorConfig.closedLoop.pid(0.008, 0.0, 0.0, ClosedLoopSlot.kSlot1);
 
       // Right FlyWheel Motor Config
 
@@ -154,6 +157,5 @@ public class TurretConstants {
     public static final double percentSpeedKept = 0.8;
     public static final double RPMToVelocityFactor = 0.0025;
     public static final Distance turretHeight = Inches.of(20.0);
-
   }
 }

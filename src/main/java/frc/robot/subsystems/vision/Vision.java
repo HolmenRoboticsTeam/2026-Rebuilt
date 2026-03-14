@@ -210,6 +210,7 @@ public class Vision extends SubsystemBase {
               }
             },
             this)
+        .ignoringDisable(true)
         .withName("Vision_SetIMUMode");
   }
 

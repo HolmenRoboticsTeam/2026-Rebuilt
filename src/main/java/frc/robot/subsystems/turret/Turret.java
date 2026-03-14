@@ -122,7 +122,6 @@ public class Turret extends SubsystemBase {
               // Get target translation and type based on turret position
               Translation2d turretTarget = getTargetTranslation();
 
-
               // Get the shot data
               Distance distance =
                   Meters.of(turretPose.get().getTranslation().getDistance(turretTarget));
@@ -130,7 +129,7 @@ public class Turret extends SubsystemBase {
 
               // Adjust target based on robot movement times time of flight.
               turretTarget =
-                  turretTarget.minus(
+                  turretTarget.plus(
                       new Translation2d(
                               robotVelocity.get().vxMetersPerSecond,
                               robotVelocity.get().vyMetersPerSecond)
@@ -156,7 +155,8 @@ public class Turret extends SubsystemBase {
                   turretTarget
                       .minus(turretPose.get().getTranslation())
                       .getAngle()
-                      .minus(robotPose.get().getRotation());
+                      .minus(robotPose.get().getRotation())
+                      .plus(Rotation2d.k180deg);
               Rotation2d angle = Rotation2d.fromRadians(shotData.angleRad());
               AngularVelocity rpm = RPM.of(shotData.RPM());
 
@@ -177,7 +177,7 @@ public class Turret extends SubsystemBase {
               Logger.recordOutput("Turret/Rotation", rotation);
 
               // Set the outputs
-              io.setTargetRotation(rotation.plus(Rotation2d.k180deg));
+              io.setTargetRotation(rotation);
               io.setTargetAngle(angle);
               io.setFlyWheelMode(flyWheelMode);
               io.setFlyWheelRPM(rpm.in(RPM));
@@ -196,12 +196,14 @@ public class Turret extends SubsystemBase {
 
     SmartDashboard.putNumber("RPM", 0.0);
     SmartDashboard.putNumber("Angle", 0.0);
+    SmartDashboard.putNumber("Timeout", TurretConstants.currentControlDebounce);
 
     return Commands.run(
             () -> {
+              currentControlDebouncer.setDebounceTime(SmartDashboard.getNumber("Timeout", 0.0));
 
               // Calibrate should alway point at the hub.
-              TargetType targetType =  TargetType.HUB;
+              TargetType targetType = TargetType.HUB;
 
               // Get target translation and type based on turret position
               Translation2d turretTarget = getTargetTranslation();
@@ -213,7 +215,8 @@ public class Turret extends SubsystemBase {
                   turretTarget
                       .minus(turretPose.get().getTranslation())
                       .getAngle()
-                      .minus(robotPose.get().getRotation());
+                      .minus(robotPose.get().getRotation())
+                      .plus(Rotation2d.k180deg);
 
               // Pull Tunable values
               double rpm = SmartDashboard.getNumber("RPM", 0.0);
@@ -291,7 +294,12 @@ public class Turret extends SubsystemBase {
 
     // Offset applied to the target to shift it for faster adjustments during competition.
     Translation2d offset =
-        new Translation2d(TurretConstants.targetXFieldOffset, TurretConstants.targetYFieldOffset).plus(new Translation2d(TurretConstants.turretForwardRobotOffset, TurretConstants.turretLeftRobotOffset).rotateBy(robotPose.get().getRotation()));
+        new Translation2d(TurretConstants.targetXFieldOffset, TurretConstants.targetYFieldOffset)
+            .plus(
+                new Translation2d(
+                        TurretConstants.turretForwardRobotOffset,
+                        TurretConstants.turretLeftRobotOffset)
+                    .rotateBy(robotPose.get().getRotation()));
 
     if (FieldConstants.kHomeAllianceZone.contains(
         turretPose.get().getTranslation())) { // In Alliance Zone
