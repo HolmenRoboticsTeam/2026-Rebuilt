@@ -347,21 +347,21 @@ public class RobotContainer {
     // Shift Overriding
 
     buttonBoardController
-        .axisLessThan(4, -0.5)
+        .axisLessThan(3, -0.5)
         .onTrue(
             Commands.runOnce(
                 () -> HubShiftUtil.setAllianceWinOverride(() -> Optional.of(Alliance.Blue))));
     buttonBoardController
-        .axisLessThan(4, -0.5)
+        .axisLessThan(3, -0.5)
         .onFalse(
             Commands.runOnce(() -> HubShiftUtil.setAllianceWinOverride(() -> Optional.empty())));
     buttonBoardController
-        .axisLessThan(4, 0.5)
+        .axisLessThan(3, 0.5)
         .onTrue(
             Commands.runOnce(
                 () -> HubShiftUtil.setAllianceWinOverride(() -> Optional.of(Alliance.Red))));
     buttonBoardController
-        .axisLessThan(4, 0.5)
+        .axisLessThan(3, 0.5)
         .onFalse(
             Commands.runOnce(() -> HubShiftUtil.setAllianceWinOverride(() -> Optional.empty())));
   }
