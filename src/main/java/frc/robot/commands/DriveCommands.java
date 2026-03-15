@@ -65,6 +65,7 @@ public class DriveCommands {
    */
   public static Command joystickDriveAtAngle(
       Drive drive,
+      DoubleSupplier throttleSupplier,
       DoubleSupplier xSupplier,
       DoubleSupplier ySupplier,
       DoubleSupplier xAngleSupplier,
@@ -82,18 +83,20 @@ public class DriveCommands {
     // Construct command
     return Commands.run(
             () -> {
+              double xSpeed = xSupplier.getAsDouble();
+              double ySpeed = ySupplier.getAsDouble();
+
               // Get linear velocity
-              Translation2d linearVelocity =
-                  getLinearVelocityFromJoysticks(xSupplier.getAsDouble(), ySupplier.getAsDouble());
+              Translation2d linearVelocity = getLinearVelocityFromJoysticks(xSpeed, ySpeed);
 
               double xAngle = xAngleSupplier.getAsDouble();
               double yAngle = yAngleSupplier.getAsDouble();
 
-              // if (MathUtil.isNear(0.0, xAngle, 0.1) // Stick is a neural, so snake drive
-              //     && MathUtil.isNear(0.0, yAngle, 0.1)) {
-              //   xAngle = ySupplier.getAsDouble();
-              //   yAngle = xSupplier.getAsDouble();
-              // }
+              if (MathUtil.isNear(0.0, xAngle, 0.1) // Stick is a neural, so snake drive
+                  && MathUtil.isNear(0.0, yAngle, 0.1)) {
+                xAngle = ySupplier.getAsDouble();
+                yAngle = xSupplier.getAsDouble();
+              }
 
               // Calculate angular speed
               double omega =
@@ -107,8 +110,14 @@ public class DriveCommands {
               // Convert to field relative speeds & send command
               ChassisSpeeds speeds =
                   new ChassisSpeeds(
-                      linearVelocity.getX() * drive.getMaxLinearSpeedMetersPerSec(),
-                      linearVelocity.getY() * drive.getMaxLinearSpeedMetersPerSec(),
+                      linearVelocity.getX()
+                          * drive.getMaxLinearSpeedMetersPerSec()
+                          * 0.25
+                          * (throttleSupplier.getAsDouble() * 3.0 + 1.0),
+                      linearVelocity.getY()
+                          * drive.getMaxLinearSpeedMetersPerSec()
+                          * 0.25
+                          * (throttleSupplier.getAsDouble() * 3.0 + 1.0),
                       omega);
               boolean isFlipped =
                   DriverStation.getAlliance().isPresent()
@@ -145,7 +154,7 @@ public class DriveCommands {
     DoubleSupplier yAngleSupplier = () -> drive.getPose().getY() - transform.get().getY();
 
     return DriveCommands.joystickDriveAtAngle(
-            drive, xSupplier, ySupplier, xAngleSupplier, yAngleSupplier)
+            drive, () -> 1.0, xSupplier, ySupplier, xAngleSupplier, yAngleSupplier)
         .withName("Drive_driveTowardsTransform");
   }
 

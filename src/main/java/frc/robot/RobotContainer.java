@@ -25,7 +25,6 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import frc.robot.Constants.FieldConstants;
 import frc.robot.commands.AutoCommands;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.StateLoggingCommands;
@@ -237,6 +236,7 @@ public class RobotContainer {
     drive.setDefaultCommand(
         DriveCommands.joystickDriveAtAngle(
             drive,
+            () -> controller.getRightTriggerAxis(),
             () -> -controller.getLeftY(),
             () -> -controller.getLeftX(),
             () -> -controller.getRightX(),
@@ -245,9 +245,8 @@ public class RobotContainer {
     turret.setDefaultCommand(turret.fullFieldAim());
     // turret.setDefaultCommand(turret.calibrate());
 
-    // intake.setDefaultCommand(intake.stop());
-    // indexer.setDefaultCommand(indexer.stop());
-    // feeder.setDefaultCommand(feeder.stop());
+    // indexer.setDefaultCommand(indexer.autoIndex());
+    // feeder.setDefaultCommand(feeder.autoFeed());
 
     // Auto Field
     SmartDashboard.putData("AutoField", autoField);
@@ -284,65 +283,23 @@ public class RobotContainer {
         .onTrue(
             Commands.runOnce(() -> drive.resetGyro()).ignoringDisable(true).withName("Zero Gyro"));
 
-    // Resets gyro to the next vision MT1 measurement.
-    // boolean[] hasResetGyro = new boolean[1];
-    // controller
-    //     .start()
-    //     .onTrue(
-    //         Commands.sequence(
-    //             Commands.runOnce(
-    //                 () -> {
-    //                   vision.setRotationConsumer(
-    //                       (r) -> {
-    //                         drive.resetGyro(r);
-    //                         hasResetGyro[0] = true;
-    //                       });
-    //                 }),
-    //             Commands.waitUntil(() -> hasResetGyro[0]),
-    //             Commands.runOnce(
-    //                 () -> {
-    //                   vision.setRotationConsumer((r) -> {});
-    //                   hasResetGyro[0] = false;
-    //                 })));
-
     controller.leftTrigger(0.1).onTrue(intake.start());
 
     controller.leftTrigger(0.1).onFalse(intake.stop());
 
-    controller
-        .rightTrigger(0.95)
-        .onTrue(
-            Commands.sequence(
-                vision.setWhiteList(FieldConstants.kHubTags),
-                Commands.repeatingSequence(
-                    Commands.waitUntil(() -> turret.isReadyForFuel()),
-                    feeder.start(),
-                    Commands.waitUntil(() -> !turret.isReadyForFuel()),
-                    feeder.stop())));
-    controller.rightTrigger(0.9).onFalse(Commands.parallel(feeder.stop(), vision.clearWhiteList()));
+    // #################### BUTTON BOARD ####################
 
-    // #################### BUTTON BOX ####################
+    // Row Three
+    buttonBoardController.get(3, 1).whileTrue(intake.start()).onFalse(intake.stop());
 
-    controller.leftTrigger(0.9).onTrue(intake.start());
-    controller.leftTrigger(0.9).onFalse(intake.stop());
+    buttonBoardController.get(3, 2).whileTrue(indexer.start()).onFalse(indexer.stop());
 
-    controller.a().onTrue(indexer.start());
-    controller.a().onFalse(indexer.stop());
+    buttonBoardController.get(3, 3).whileTrue(feeder.start()).onFalse(feeder.stop());
 
-    controller.b().onTrue(feeder.reverse());
-    controller.b().onFalse(feeder.stop());
-
-    controller.y().onTrue(feeder.start());
-    controller
-        .y()
-        .whileTrue(
-            DriveCommands.joystickDriveAtAngle(
-                drive,
-                () -> -controller.getLeftY() * 0.5,
-                () -> -controller.getLeftX() * 0.5,
-                () -> -controller.getRightX(),
-                () -> -controller.getRightY()));
-    controller.y().onFalse(feeder.stop());
+    buttonBoardController
+        .get(3, 4)
+        .whileTrue(vision.ignoreVision(false))
+        .onFalse(vision.ignoreVision(true));
 
     // Shift Overriding
 
@@ -350,20 +307,24 @@ public class RobotContainer {
         .axisLessThan(3, -0.5)
         .onTrue(
             Commands.runOnce(
-                () -> HubShiftUtil.setAllianceWinOverride(() -> Optional.of(Alliance.Blue))));
+                    () -> HubShiftUtil.setAllianceWinOverride(() -> Optional.of(Alliance.Blue)))
+                .ignoringDisable(true));
     buttonBoardController
         .axisLessThan(3, -0.5)
         .onFalse(
-            Commands.runOnce(() -> HubShiftUtil.setAllianceWinOverride(() -> Optional.empty())));
+            Commands.runOnce(() -> HubShiftUtil.setAllianceWinOverride(() -> Optional.empty()))
+                .ignoringDisable(true));
     buttonBoardController
         .axisLessThan(3, 0.5)
         .onTrue(
             Commands.runOnce(
-                () -> HubShiftUtil.setAllianceWinOverride(() -> Optional.of(Alliance.Red))));
+                    () -> HubShiftUtil.setAllianceWinOverride(() -> Optional.of(Alliance.Red)))
+                .ignoringDisable(true));
     buttonBoardController
         .axisLessThan(3, 0.5)
         .onFalse(
-            Commands.runOnce(() -> HubShiftUtil.setAllianceWinOverride(() -> Optional.empty())));
+            Commands.runOnce(() -> HubShiftUtil.setAllianceWinOverride(() -> Optional.empty()))
+                .ignoringDisable(true));
   }
 
   /**

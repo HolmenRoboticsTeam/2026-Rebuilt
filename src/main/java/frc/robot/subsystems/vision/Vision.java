@@ -32,11 +32,13 @@ public class Vision extends SubsystemBase {
   private final VisionIOInputsAutoLogged[] inputs;
   private final Alert[] disconnectedAlerts;
 
+  private boolean ignoreVision;
   private VisionRotationConsumer rotationConsumer;
 
   public Vision(VisionPoseConsumer poseConsumer, VisionIO... io) {
     this.poseConsumer = poseConsumer;
     this.io = io;
+    this.ignoreVision = false;
     this.rotationConsumer = (r) -> {};
 
     // Initialize inputs
@@ -66,6 +68,7 @@ public class Vision extends SubsystemBase {
     List<Pose3d> allRobotPoses = new LinkedList<>();
     List<Pose3d> allRobotPosesAccepted = new LinkedList<>();
     List<Pose3d> allRobotRotationAccepted = new LinkedList<>();
+    List<Pose3d> allRobotPosesIgnored = new LinkedList<>();
     List<Pose3d> allRobotPosesRejected = new LinkedList<>();
 
     // Loop over cameras
@@ -78,6 +81,7 @@ public class Vision extends SubsystemBase {
       List<Pose3d> robotPoses = new LinkedList<>();
       List<Pose3d> robotPosesAccepted = new LinkedList<>();
       List<Pose3d> robotRotationAccepted = new LinkedList<>();
+      List<Pose3d> robotPosesIgnored = new LinkedList<>();
       List<Pose3d> robotPosesRejected = new LinkedList<>();
 
       // Add tag poses
@@ -110,6 +114,8 @@ public class Vision extends SubsystemBase {
           robotPosesRejected.add(poseObservation.pose());
         } else if (poseObservation.type() == PoseObservationType.MEGATAG_1) {
           robotRotationAccepted.add(poseObservation.pose());
+        } else if (this.ignoreVision) {
+          robotPosesIgnored.add(poseObservation.pose());
         } else {
           robotPosesAccepted.add(poseObservation.pose());
         }
@@ -122,6 +128,11 @@ public class Vision extends SubsystemBase {
         // If MegaTag 1, send rotation measurement.
         if (poseObservation.type() == PoseObservationType.MEGATAG_1) {
           rotationConsumer.acceptRotation(poseObservation.pose().toPose2d().getRotation());
+          continue;
+        }
+
+        // Skip if ignoring
+        if (this.ignoreVision) {
           continue;
         }
 
@@ -212,6 +223,15 @@ public class Vision extends SubsystemBase {
             this)
         .ignoringDisable(true)
         .withName("Vision_SetIMUMode");
+  }
+
+  public Command ignoreVision(boolean ignoreVision) {
+    return Commands.runOnce(
+            () -> {
+              this.ignoreVision = ignoreVision;
+            })
+        .ignoringDisable(true)
+        .withName("Vision_ignoreVision");
   }
 
   public void setRotationConsumer(VisionRotationConsumer consumer) {
