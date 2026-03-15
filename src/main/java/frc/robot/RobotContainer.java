@@ -24,7 +24,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants.FieldConstants;
 import frc.robot.commands.AutoCommands;
@@ -56,6 +55,7 @@ import frc.robot.subsystems.turret.TurretIOSim;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOLimelight;
+import frc.robot.util.ButtonBoardController;
 import frc.robot.util.FuelSim;
 import frc.robot.util.HubShiftUtil;
 import java.util.Optional;
@@ -84,38 +84,7 @@ public class RobotContainer {
 
   // Controller
   private final CommandXboxController controller = new CommandXboxController(0);
-  private final XboxController buttonBox = new XboxController(1);
-
-  // Switch 1
-  private final JoystickButton firstAutoToggleUp = new JoystickButton(buttonBox, 1);
-  private final JoystickButton firstAutoToggleDown = new JoystickButton(buttonBox, 2);
-
-  // Switch 2
-  private final JoystickButton secondAutoToggleUp = new JoystickButton(buttonBox, 3);
-  private final JoystickButton secondAutoToggleDown = new JoystickButton(buttonBox, 4);
-
-  // Switch 3
-  private final JoystickButton thirdAutoToggleUp = new JoystickButton(buttonBox, 5);
-  private final JoystickButton thirdAutoToggleDown = new JoystickButton(buttonBox, 6);
-
-  // Switch 4 (Alliance Win Override)
-  private final JoystickButton blueAutoWinnerOverrideToggleUp = new JoystickButton(buttonBox, 7);
-  private final JoystickButton redAutoWinnerOverrideToggleDown = new JoystickButton(buttonBox, 8);
-
-  // Top Row
-  private final JoystickButton startIntake = new JoystickButton(buttonBox, 11);
-  private final JoystickButton startIndexer = new JoystickButton(buttonBox, 12);
-  private final JoystickButton startFeeder = new JoystickButton(buttonBox, 13);
-
-  // Mid Row
-  private final JoystickButton midRow1 = new JoystickButton(buttonBox, 14);
-  private final JoystickButton midRow2 = new JoystickButton(buttonBox, 15);
-  private final JoystickButton midRow3 = new JoystickButton(buttonBox, 16);
-
-  // Bottom Row
-  private final JoystickButton lowRow1 = new JoystickButton(buttonBox, 17);
-  private final JoystickButton lowRow2 = new JoystickButton(buttonBox, 18);
-  private final JoystickButton lowRow3 = new JoystickButton(buttonBox, 19);
+  private final ButtonBoardController buttonBoardController = new ButtonBoardController(1, 2);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -376,16 +345,25 @@ public class RobotContainer {
     controller.y().onFalse(feeder.stop());
 
     // Shift Overriding
-    blueAutoWinnerOverrideToggleUp.onTrue(
-        Commands.runOnce(
-            () -> HubShiftUtil.setAllianceWinOverride(() -> Optional.of(Alliance.Blue))));
-    blueAutoWinnerOverrideToggleUp.onFalse(
-        Commands.runOnce(() -> HubShiftUtil.setAllianceWinOverride(() -> Optional.empty())));
-    redAutoWinnerOverrideToggleDown.onTrue(
-        Commands.runOnce(
-            () -> HubShiftUtil.setAllianceWinOverride(() -> Optional.of(Alliance.Red))));
-    redAutoWinnerOverrideToggleDown.onFalse(
-        Commands.runOnce(() -> HubShiftUtil.setAllianceWinOverride(() -> Optional.empty())));
+
+    buttonBoardController
+        .axisLessThan(4, -0.5)
+        .onTrue(
+            Commands.runOnce(
+                () -> HubShiftUtil.setAllianceWinOverride(() -> Optional.of(Alliance.Blue))));
+    buttonBoardController
+        .axisLessThan(4, -0.5)
+        .onFalse(
+            Commands.runOnce(() -> HubShiftUtil.setAllianceWinOverride(() -> Optional.empty())));
+    buttonBoardController
+        .axisLessThan(4, 0.5)
+        .onTrue(
+            Commands.runOnce(
+                () -> HubShiftUtil.setAllianceWinOverride(() -> Optional.of(Alliance.Red))));
+    buttonBoardController
+        .axisLessThan(4, 0.5)
+        .onFalse(
+            Commands.runOnce(() -> HubShiftUtil.setAllianceWinOverride(() -> Optional.empty())));
   }
 
   /**
@@ -405,15 +383,15 @@ public class RobotContainer {
   private String getAutoName() {
     String[] autonomousData =
         new String[] {
-          firstAutoToggleUp.getAsBoolean()
+          buttonBoardController.getRawAxis(0) < -0.5
               ? "Left"
-              : (firstAutoToggleDown.getAsBoolean() ? "Right" : "Hub"),
-          secondAutoToggleUp.getAsBoolean()
+              : (buttonBoardController.getRawAxis(0) > 0.5 ? "Right" : "Hub"),
+          buttonBoardController.getRawAxis(1) < -0.5
               ? "Left"
-              : (secondAutoToggleDown.getAsBoolean() ? "Right" : "Mid"),
-          thirdAutoToggleUp.getAsBoolean()
+              : (buttonBoardController.getRawAxis(1) > 0.5 ? "Right" : "Mid"),
+          buttonBoardController.getRawAxis(2) < -0.5
               ? "Left"
-              : (thirdAutoToggleDown.getAsBoolean() ? "Right" : "Mid")
+              : (buttonBoardController.getRawAxis(2) > 0.5 ? "Right" : "Mid")
         };
 
     return autonomousData[0] + "-" + autonomousData[1] + "-" + autonomousData[2];
