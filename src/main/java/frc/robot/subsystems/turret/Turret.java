@@ -27,7 +27,6 @@ import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.Mode;
 import frc.robot.subsystems.turret.TurretDistanceCalc.TargetType;
 import frc.robot.subsystems.turret.TurretDistanceCalc.TurretShotData;
-import frc.robot.subsystems.turret.TurretIO.FlyWheelMode;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
@@ -160,18 +159,10 @@ public class Turret extends SubsystemBase {
               Rotation2d angle = Rotation2d.fromRadians(shotData.angleRad());
               AngularVelocity rpm = RPM.of(shotData.RPM());
 
-              // Set the Flywheel mode
-              // boolean torqueCurrentControl =
-              //     currentControlDebouncer.calculate(inputs.flyWheelIsTarget);
-              // FlyWheelMode flyWheelMode =
-              //     torqueCurrentControl ? FlyWheelMode.CURRENT : FlyWheelMode.VOLTAGE;
-              FlyWheelMode flyWheelMode = FlyWheelMode.VOLTAGE;
-
               // Log the outputs
               Logger.recordOutput("Turret/Distance", distance);
               Logger.recordOutput("Turret/Target", turretTarget);
               Logger.recordOutput("Turret/Type", targetType);
-              Logger.recordOutput("Turret/FlyWheelMode", flyWheelMode);
               Logger.recordOutput("Turret/RPM", rpm);
               Logger.recordOutput("Turret/Angle", angle);
               Logger.recordOutput("Turret/Rotation", rotation);
@@ -179,7 +170,6 @@ public class Turret extends SubsystemBase {
               // Set the outputs
               io.setTargetRotation(rotation);
               io.setTargetAngle(angle);
-              io.setFlyWheelMode(flyWheelMode);
               io.setFlyWheelRPM(rpm.in(RPM));
             },
             this)
@@ -222,18 +212,10 @@ public class Turret extends SubsystemBase {
               double rpm = SmartDashboard.getNumber("RPM", 0.0);
               Rotation2d angle = Rotation2d.fromRadians(SmartDashboard.getNumber("Angle", 0.0));
 
-              // Set the Flywheel mode
-              // boolean torqueCurrentControl =
-              //     currentControlDebouncer.calculate(inputs.flyWheelIsTarget);
-              // FlyWheelMode flyWheelMode =
-              //     torqueCurrentControl ? FlyWheelMode.CURRENT : FlyWheelMode.VOLTAGE;
-              FlyWheelMode flyWheelMode = FlyWheelMode.VOLTAGE;
-
               // Log the outputs
               Logger.recordOutput("Turret/Distance", distance);
               Logger.recordOutput("Turret/Target", turretTarget);
               Logger.recordOutput("Turret/Type", targetType);
-              Logger.recordOutput("Turret/FlyWheelMode", flyWheelMode);
               Logger.recordOutput("Turret/RPM", rpm);
               Logger.recordOutput("Turret/Angle", angle);
               Logger.recordOutput("Turret/Rotation", rotation);
@@ -241,7 +223,6 @@ public class Turret extends SubsystemBase {
               // Set the outputs
               io.setTargetRotation(rotation);
               io.setTargetAngle(angle);
-              io.setFlyWheelMode(flyWheelMode);
               io.setFlyWheelRPM(rpm);
             },
             this)

@@ -66,25 +66,9 @@ public interface TurretIO {
   public default void setFlyWheelRPM(double RPM) {}
 
   /**
-   * Sets the mode of the flywheel.
-   *
-   * @param mode the desired mode.
-   */
-  public default void setFlyWheelMode(FlyWheelMode mode) {}
-
-  /**
    * Shoots fuel based on the robot current state (Only used for sim).
    *
    * @param robotRotation the rotation of the drive base.
    */
   public default void shootFuel(Rotation2d robotRotation) {}
-
-  /** The control mode of the flyWheel */
-  public enum FlyWheelMode {
-    /** Increasing speed */
-    VOLTAGE,
-
-    /** Constant torque */
-    CURRENT
-  }
 }

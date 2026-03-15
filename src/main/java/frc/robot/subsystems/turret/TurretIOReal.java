@@ -7,7 +7,6 @@ package frc.robot.subsystems.turret;
 import com.revrobotics.PersistMode;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.ResetMode;
-import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
@@ -27,9 +26,6 @@ public class TurretIOReal implements TurretIO {
   private SparkMax flyWheelMotorLeft;
   private SparkMax flyWheelMotorRight;
   private RelativeEncoder flyWheelEncoderLeft;
-  private double targetRPM;
-
-  private FlyWheelMode flyWheelMode;
 
   /** Creates a new real turret. */
   public TurretIOReal() {
@@ -72,8 +68,6 @@ public class TurretIOReal implements TurretIO {
         TurretConstants.Real.rightFlyWheelMotorConfig,
         ResetMode.kResetSafeParameters,
         PersistMode.kPersistParameters);
-
-    targetRPM = 0.0;
   }
 
   @Override
@@ -105,7 +99,7 @@ public class TurretIOReal implements TurretIO {
     inputs.flyWheelCurrentAmps = flyWheelMotorLeft.getOutputCurrent();
     inputs.flyWheelIsTarget =
         MathUtil.isNear(
-            targetRPM,
+            flyWheelMotorLeft.getClosedLoopController().getSetpoint(),
             flyWheelMotorLeft.getEncoder().getVelocity(),
             TurretConstants.flyWheelTolerance);
   }
@@ -122,22 +116,6 @@ public class TurretIOReal implements TurretIO {
 
   @Override
   public void setFlyWheelRPM(double RPM) {
-    targetRPM = RPM;
-
-    if (flyWheelMode == FlyWheelMode.CURRENT) {
-
-      flyWheelMotorLeft
-          .getClosedLoopController()
-          .setSetpoint(TurretConstants.Real.holdAmps, ControlType.kCurrent, ClosedLoopSlot.kSlot1);
-    } else {
-      flyWheelMotorLeft
-          .getClosedLoopController()
-          .setSetpoint(RPM, ControlType.kVelocity, ClosedLoopSlot.kSlot0);
-    }
-  }
-
-  @Override
-  public void setFlyWheelMode(FlyWheelMode mode) {
-    flyWheelMode = mode;
+    flyWheelMotorLeft.getClosedLoopController().setSetpoint(RPM, ControlType.kVelocity);
   }
 }
