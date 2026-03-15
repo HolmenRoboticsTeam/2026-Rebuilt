@@ -7,7 +7,8 @@
     "(Auto Assembled) B 3 pre-collects -TO- 2 post-collects, 1 launch (No Branches)",
     "(Auto Assembled) C 4 post-collects -TO- 2 launchs (No Branches)",
     "(Auto Assembled) D 5 launchs -TO- 4 pre-collect, 2 starts (Has Branches)",
-    "Custom Paths"
+    "Custom Paths",
+    "Single Paths"
   ],
   "autoFolders": [
     "(Auto Assembled) Hub Starts",

@@ -26,6 +26,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.AutoCommands;
+import frc.robot.commands.AutoDriveCommands;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.StateLoggingCommands;
 import frc.robot.subsystems.drive.Drive;
@@ -58,6 +59,7 @@ import frc.robot.util.ButtonBoardController;
 import frc.robot.util.FuelSim;
 import frc.robot.util.HubShiftUtil;
 import java.util.Optional;
+import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
@@ -289,7 +291,47 @@ public class RobotContainer {
 
     // #################### BUTTON BOARD ####################
 
-    // Row Three
+    // ###### ROW ONE ######
+
+    buttonBoardController
+        .get(1, 1)
+        .whileTrue(
+            AutoDriveCommands.driveToPoseThenPath(
+                drive, "Left Trench Pass Through To Launch", false));
+
+    buttonBoardController
+        .get(1, 2)
+        .whileTrue(
+            AutoDriveCommands.driveToPoseThenPath(drive, "Left Bump Pass Over To Launch", false));
+
+    buttonBoardController
+        .get(1, 3)
+        .whileTrue(
+            AutoDriveCommands.driveToPoseThenPath(drive, "Right Bump Pass Over To Launch", false));
+
+    buttonBoardController
+        .get(1, 4)
+        .whileTrue(
+            AutoDriveCommands.driveToPoseThenPath(
+                drive, "Right Trench Pass Through To Launch", false));
+
+    // ###### ROW TWO ######
+    Logger.recordOutput("Tuning/BadMeasurement", false);
+    buttonBoardController
+        .get(2, 2)
+        .onTrue(
+            Commands.sequence(
+                    Commands.run(() -> Logger.recordOutput("Tuning/BadMeasurement", true)),
+                    Commands.run(() -> Logger.recordOutput("Tuning/BadMeasurement", false)))
+                .ignoringDisable(true)
+                .withName("BadMeasurement"));
+
+    buttonBoardController
+        .get(2, 3)
+        .onTrue(
+            Commands.runOnce(() -> drive.resetGyro()).ignoringDisable(true).withName("Zero Gyro"));
+
+    // ###### ROW THREE ######
     buttonBoardController.get(3, 1).whileTrue(intake.start()).onFalse(intake.stop());
 
     buttonBoardController.get(3, 2).whileTrue(indexer.start()).onFalse(indexer.stop());

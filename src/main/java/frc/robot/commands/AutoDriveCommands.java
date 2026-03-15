@@ -10,6 +10,7 @@ import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.trajectory.PathPlannerTrajectoryState;
+import com.pathplanner.lib.util.FileVersionException;
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -17,7 +18,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants.FieldConstants;
 import frc.robot.subsystems.drive.Drive;
+import java.io.IOException;
 import java.util.function.BooleanSupplier;
+import org.json.simple.parser.ParseException;
+import org.littletonrobotics.junction.Logger;
 
 /** Add your docs here. */
 public class AutoDriveCommands {
@@ -27,6 +31,15 @@ public class AutoDriveCommands {
       new PPHolonomicDriveController(new PIDConstants(2.0, 0, 0), new PIDConstants(1.0, 0, 0));
   private static final Debouncer preciseMoveDebouncer = new Debouncer(1.0, DebounceType.kBoth);
 
+  /**
+   * Creates and returns a command that drives the robot to the given pose, using Pathplanner's
+   * pathfinding. With the option to precisely move to the target, should it be needed.
+   *
+   * @param drive the drive subsystem
+   * @param pose the target pose
+   * @param withPreciseMove whether or not to move precisely to the target
+   * @return A command with the given logic.
+   */
   public static Command driveToPose(Drive drive, Pose2d pose, boolean withPreciseMove) {
 
     if (withPreciseMove) {
@@ -38,8 +51,19 @@ public class AutoDriveCommands {
     return AutoBuilder.pathfindToPose(pose, constraints).withName("driveToPose");
   }
 
-  public static Command driveToPoseThenPath(
-      Drive drive, PathPlannerPath path, boolean withPreciseMove) {
+  /**
+   * Creates and returns a command that drives the robot to the given starting pose of the given
+   * path, using Pathplanner's pathfinding, then follows that path. With the option to precisely
+   * move to the target, should it be needed.
+   *
+   * @param drive the drive subsystem
+   * @param pathName the path to follow
+   * @param withPreciseMove whether or not to move precisely to the target
+   * @return A command with the given logic.
+   */
+  public static Command driveToPoseThenPath(Drive drive, String pathName, boolean withPreciseMove) {
+
+    PathPlannerPath path = getPath(drive, pathName);
 
     if (withPreciseMove) {
       return Commands.sequence(
@@ -54,12 +78,35 @@ public class AutoDriveCommands {
     return pathFindAndFollowPathFixer(path).withName("driveToPoseThenPath");
   }
 
+  /**
+   * Fixes an issue with paths not auto starting went using Pathplanner's default "Pathfind Then
+   * Follow Path".
+   *
+   * @param path The path to fix
+   * @return A fixed command.
+   */
   private static Command pathFindAndFollowPathFixer(PathPlannerPath path) {
+
+    Pose2d startOfPathPose =
+        FieldConstants.correctSide(
+            new Pose2d(
+                path.getPathPoses().get(0).getTranslation(),
+                path.getRotationTargets() != null
+                    ? path.getRotationTargets().get(0).rotation()
+                    : path.getInitialHeading()));
     return AutoBuilder.pathfindToPose(
-            FieldConstants.correctSide(path.getPathPoses().get(0)), constraints)
+            startOfPathPose, constraints, path.getIdealStartingState().velocityMPS())
         .andThen(AutoBuilder.followPath(path));
   }
 
+  /**
+   * Precisely moves to the given pose. Note: This will drive the robot at the target pose, ignoring
+   * obstacles.
+   *
+   * @param drive the drive subsystem
+   * @param pose the target pose
+   * @return A command with the given logic.
+   */
   private static Command preciseMove(Drive drive, Pose2d pose) {
 
     BooleanSupplier inPosition =
@@ -77,5 +124,14 @@ public class AutoDriveCommands {
                   preciseMoveController.calculateRobotRelativeSpeeds(drive.getPose(), goalPose));
             })
         .until(() -> preciseMoveDebouncer.calculate(inPosition.getAsBoolean()));
+  }
+
+  private static PathPlannerPath getPath(Drive drive, String pathName) {
+    try {
+      return PathPlannerPath.fromPathFile(pathName);
+    } catch (FileVersionException | IOException | ParseException e) {
+      Logger.recordOutput("PathPlannerIOException", true);
+      return (PathPlannerPath) PathPlannerPath.waypointsFromPoses(drive.getPose());
+    }
   }
 }

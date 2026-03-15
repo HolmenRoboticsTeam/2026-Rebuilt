@@ -53,7 +53,7 @@ public class ButtonBoardController {
     }
   }
 
-  public void linkButtons() {
+  private void linkButtons() {
     // ########## Left Side ##########
 
     // Col 1
