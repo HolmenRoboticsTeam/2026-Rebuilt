@@ -6,7 +6,6 @@ package frc.robot.subsystems.turret;
 
 import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.Meters;
-import static edu.wpi.first.units.Units.RPM;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.Debouncer;
@@ -15,7 +14,6 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -119,58 +117,64 @@ public class Turret extends SubsystemBase {
               TargetType targetType = getTargetType();
 
               // Get target translation and type based on turret position
-              Translation2d turretTarget = getTargetTranslation();
+              Translation2d targetTranslation = getTargetTranslation();
 
-              // Get the shot data
-              Distance distance =
-                  Meters.of(turretPose.get().getTranslation().getDistance(turretTarget));
-              TurretShotData shotData = TurretDistanceCalc.getShotData(targetType, distance);
+              // Get future translation
+              Translation2d futureTranslation =
+                  turretPose
+                      .get()
+                      .getTranslation()
+                      .plus(
+                          new Translation2d(
+                                  robotVelocity.get().vxMetersPerSecond,
+                                  robotVelocity.get().vyMetersPerSecond)
+                              .times(TurretConstants.Real.latencyCompensation));
 
-              // Adjust target based on robot movement times time of flight.
-              turretTarget =
-                  turretTarget.plus(
+              // Get target vector
+              Translation2d deltaTranslation = targetTranslation.minus(futureTranslation);
+              double distance = deltaTranslation.getNorm();
+              Translation2d targetDirection = deltaTranslation.div(distance);
+
+              // Look up base velocity
+              TurretShotData baselineData =
+                  TurretDistanceCalc.getShotData(targetType, Meters.of(distance));
+              double baselineVelocity = distance / baselineData.timeOfFlightSec();
+
+              // Build target velocity vector
+              Translation2d targetVelocity = targetDirection.times(baselineVelocity);
+
+              // Subtract robot velocity. The robot is already moving at at a base speed so remove
+              // extra speed.
+              Translation2d shotVelocity =
+                  targetVelocity.minus(
                       new Translation2d(
-                              robotVelocity.get().vxMetersPerSecond,
-                              robotVelocity.get().vyMetersPerSecond)
-                          .times(shotData.timeOfFlightSec()));
+                          robotVelocity.get().vxMetersPerSecond,
+                          robotVelocity.get().vyMetersPerSecond));
 
-              // Update shot data
-              distance = Meters.of(turretPose.get().getTranslation().getDistance(turretTarget));
-              shotData = TurretDistanceCalc.getShotData(targetType, distance);
-              /**
-               * TLDR: The time of flight data should not be updated.
-               *
-               * <p>The shot data needs to be update because me moved the target based on the
-               * velocity of the robot. The time of flight does not need to be updated because it is
-               * not affect by the robot's velocity. Why? The robot's velocity is only horizontal
-               * AND the time of flight to only based on when the fuel hit the target from above,
-               * its vertical position. So regardless of the velocity of the robot, the fuel's
-               * vertical velocity will not be affected. Therefore, the time of flight will remain
-               * unchanged.
-               */
+              // Calculate results
+              Rotation2d turretRotation = shotVelocity.getAngle();
+              double requiredVelocity = shotVelocity.getNorm();
 
-              // Get the target values
-              Rotation2d rotation =
-                  turretTarget
-                      .minus(turretPose.get().getTranslation())
-                      .getAngle()
-                      .minus(robotPose.get().getRotation())
-                      .plus(Rotation2d.k180deg);
-              Rotation2d angle = Rotation2d.fromRadians(shotData.angleRad());
-              AngularVelocity rpm = RPM.of(shotData.RPM());
+              // Loop up RPM from required velocity
+              double effectiveDistance =
+                  TurretDistanceCalc.velocityToEffectiveDistance(requiredVelocity, targetType);
+              TurretShotData requiredShotData =
+                  TurretDistanceCalc.getShotData(targetType, Meters.of(effectiveDistance));
+              double requiredRPM = requiredShotData.RPM();
+              Rotation2d requiredAngle = Rotation2d.fromRadians(requiredShotData.angleRad());
 
               // Log the outputs
               Logger.recordOutput("Turret/Distance", distance);
-              Logger.recordOutput("Turret/Target", turretTarget);
+              Logger.recordOutput("Turret/Target", targetTranslation);
               Logger.recordOutput("Turret/Type", targetType);
-              Logger.recordOutput("Turret/RPM", rpm);
-              Logger.recordOutput("Turret/Angle", angle);
-              Logger.recordOutput("Turret/Rotation", rotation);
+              Logger.recordOutput("Turret/RPM", requiredRPM);
+              Logger.recordOutput("Turret/Angle", requiredAngle);
+              Logger.recordOutput("Turret/Rotation", turretRotation);
 
               // Set the outputs
-              io.setTargetRotation(rotation);
-              io.setTargetAngle(angle);
-              io.setFlyWheelRPM(rpm.in(RPM));
+              io.setTargetRotation(turretRotation);
+              io.setTargetAngle(requiredAngle);
+              io.setFlyWheelRPM(requiredRPM);
             },
             this)
         .withName("Turret_FullFieldAim");

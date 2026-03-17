@@ -38,8 +38,8 @@ public class HubShiftUtil {
   private static final double minFuelCountDelay = 1.0;
   private static final double maxFuelCountDelay = 2.0;
   private static final double shiftEndFuelCountExtension = 3.0;
-  private static final double minTimeOfFlight = TurretDistanceCalc.getMinTimeOfFlight();
-  private static final double maxTimeOfFlight = TurretDistanceCalc.getMaxTimeOfFlight();
+  private static final double minTimeOfFlight = TurretDistanceCalc.getMinHubTimeOfFlight();
+  private static final double maxTimeOfFlight = TurretDistanceCalc.getMaxHubTimeOfFlight();
   private static final double approachingActiveFudge = -1 * (minTimeOfFlight + minFuelCountDelay);
   private static final double endingActiveFudge =
       shiftEndFuelCountExtension + -1 * (maxTimeOfFlight + maxFuelCountDelay);
