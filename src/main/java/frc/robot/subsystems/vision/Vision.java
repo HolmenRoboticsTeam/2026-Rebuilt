@@ -39,16 +39,12 @@ public class Vision extends SubsystemBase {
   List<Pose3d> allTagPoses = new LinkedList<>();
   List<Pose3d> allRobotPoses = new LinkedList<>();
   List<Pose3d> allRobotPosesAccepted = new LinkedList<>();
-  List<Pose3d> allRobotRotationAccepted = new LinkedList<>();
-  List<Pose3d> allRobotPosesIgnored = new LinkedList<>();
   List<Pose3d> allRobotPosesRejected = new LinkedList<>();
 
   // Initialize logging values
   List<Pose3d> tagPoses = new LinkedList<>();
   List<Pose3d> robotPoses = new LinkedList<>();
   List<Pose3d> robotPosesAccepted = new LinkedList<>();
-  List<Pose3d> robotRotationAccepted = new LinkedList<>();
-  List<Pose3d> robotPosesIgnored = new LinkedList<>();
   List<Pose3d> robotPosesRejected = new LinkedList<>();
 
   public Vision(VisionPoseConsumer poseConsumer, VisionIO... io) {
@@ -82,8 +78,6 @@ public class Vision extends SubsystemBase {
     allTagPoses.clear();
     allRobotPoses.clear();
     allRobotPosesAccepted.clear();
-    allRobotRotationAccepted.clear();
-    allRobotPosesIgnored.clear();
     allRobotPosesRejected.clear();
 
     // Loop over cameras
@@ -94,8 +88,6 @@ public class Vision extends SubsystemBase {
       tagPoses.clear();
       robotPoses.clear();
       robotPosesAccepted.clear();
-      robotRotationAccepted.clear();
-      robotPosesIgnored.clear();
       robotPosesRejected.clear();
 
       // Add tag poses
@@ -126,22 +118,12 @@ public class Vision extends SubsystemBase {
         robotPoses.add(poseObservation.pose());
         if (rejectPose) {
           robotPosesRejected.add(poseObservation.pose());
-        } else if (poseObservation.type() == PoseObservationType.MEGATAG_1) {
-          robotRotationAccepted.add(poseObservation.pose());
-        } else if (this.ignoreVision) {
-          robotPosesIgnored.add(poseObservation.pose());
         } else {
           robotPosesAccepted.add(poseObservation.pose());
         }
 
         // Skip if rejected
         if (rejectPose) {
-          continue;
-        }
-
-        // If MegaTag 1, send rotation measurement.
-        if (poseObservation.type() == PoseObservationType.MEGATAG_1) {
-          rotationConsumer.acceptRotation(poseObservation.pose().toPose2d().getRotation());
           continue;
         }
 
@@ -182,15 +164,11 @@ public class Vision extends SubsystemBase {
           "Vision/Camera" + Integer.toString(cameraIndex) + "/RobotPosesAccepted",
           robotPosesAccepted.toArray(new Pose3d[0]));
       Logger.recordOutput(
-          "Vision/Camera" + Integer.toString(cameraIndex) + "/RobotRotationAccepted",
-          robotRotationAccepted.toArray(new Pose3d[0]));
-      Logger.recordOutput(
           "Vision/Camera" + Integer.toString(cameraIndex) + "/RobotPosesRejected",
           robotPosesRejected.toArray(new Pose3d[0]));
       allTagPoses.addAll(tagPoses);
       allRobotPoses.addAll(robotPoses);
       allRobotPosesAccepted.addAll(robotPosesAccepted);
-      allRobotRotationAccepted.addAll(allRobotRotationAccepted);
       allRobotPosesRejected.addAll(robotPosesRejected);
     }
 
@@ -199,8 +177,6 @@ public class Vision extends SubsystemBase {
     Logger.recordOutput("Vision/Summary/RobotPoses", allRobotPoses.toArray(new Pose3d[0]));
     Logger.recordOutput(
         "Vision/Summary/RobotPosesAccepted", allRobotPosesAccepted.toArray(new Pose3d[0]));
-    Logger.recordOutput(
-        "Vision/Summary/RobotRotationAccepted", allRobotRotationAccepted.toArray(new Pose3d[0]));
     Logger.recordOutput(
         "Vision/Summary/RobotPosesRejected", allRobotPosesRejected.toArray(new Pose3d[0]));
   }

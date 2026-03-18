@@ -5,6 +5,8 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -12,6 +14,7 @@ import frc.robot.subsystems.feeder.Feeder;
 import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.turret.Turret;
+import frc.robot.util.HubShiftUtil;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.mechanism.LoggedMechanism2d;
 import org.littletonrobotics.junction.mechanism.LoggedMechanismLigament2d;
@@ -83,5 +86,22 @@ public class StateLoggingCommands {
             })
         .ignoringDisable(true)
         .withName("logMechanisms");
+  }
+
+  public static Command updateDashboard() {
+    return Commands.run(
+            () -> {
+              SmartDashboard.putNumber(
+                  "Remaining Time In Current Shift",
+                  HubShiftUtil.getOfficialShiftInfo().remainingTime());
+              SmartDashboard.putBoolean(
+                  "Our Hub is Active?", HubShiftUtil.getOfficialShiftInfo().active());
+              SmartDashboard.putString(
+                  "Current Shift", HubShiftUtil.getOfficialShiftInfo().currentShift().name());
+              SmartDashboard.putString(
+                  "Auto Winner",
+                  HubShiftUtil.getFirstActiveAlliance() == Alliance.Blue ? "Red" : "Blue");
+            })
+        .withName("updateDashboard");
   }
 }

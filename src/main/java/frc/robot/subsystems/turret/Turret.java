@@ -195,12 +195,9 @@ public class Turret extends SubsystemBase {
 
     SmartDashboard.putNumber("RPM", 0.0);
     SmartDashboard.putNumber("Angle", 0.0);
-    SmartDashboard.putNumber("Timeout", TurretConstants.currentControlDebounce);
 
     return Commands.run(
             () -> {
-              currentControlDebouncer.setDebounceTime(SmartDashboard.getNumber("Timeout", 0.0));
-
               // Calibrate should alway point at the hub.
               TargetType targetType = TargetType.HUB;
 
@@ -210,12 +207,7 @@ public class Turret extends SubsystemBase {
               // Get distance and rotation for logging
               Distance distance =
                   Meters.of(turretPose.get().getTranslation().getDistance(turretTarget));
-              Rotation2d rotation =
-                  turretTarget
-                      .minus(turretPose.get().getTranslation())
-                      .getAngle()
-                      .minus(robotPose.get().getRotation())
-                      .plus(Rotation2d.k180deg);
+              Rotation2d rotation = Rotation2d.kZero;
 
               // Pull Tunable values
               double rpm = SmartDashboard.getNumber("RPM", 0.0);

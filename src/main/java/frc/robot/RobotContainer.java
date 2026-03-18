@@ -259,11 +259,12 @@ public class RobotContainer {
     // Configure the button bindings
     configureButtonBindings();
 
+    // Schedule start-up commands.
     CommandScheduler.getInstance()
-        .schedule(PathfindingCommand.warmupCommand().withName("Pathplanner_Warmup"));
-
-    CommandScheduler.getInstance()
-        .schedule(StateLoggingCommands.logMechanisms(intake, indexer, feeder, turret));
+        .schedule(
+            PathfindingCommand.warmupCommand().withName("Pathplanner_Warmup"),
+            StateLoggingCommands.logMechanisms(intake, indexer, feeder, turret),
+            StateLoggingCommands.updateDashboard());
   }
 
   /**
@@ -342,10 +343,7 @@ public class RobotContainer {
 
     buttonBoardController.get(3, 3).whileTrue(feeder.start()).onFalse(feeder.stop());
 
-    buttonBoardController
-        .get(3, 4)
-        .whileTrue(vision.ignoreVision(false))
-        .onFalse(vision.ignoreVision(true));
+    buttonBoardController.get(3, 4).whileTrue(turret.fullFieldAim()).onFalse(turret.calibrate());
 
     // Shift Overriding
 
