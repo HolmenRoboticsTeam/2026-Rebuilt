@@ -121,7 +121,7 @@ public class TurretDistanceCalc {
 
   private static TurretShotData interpolate(TurretShotData start, TurretShotData end, double t) {
     return new TurretShotData(
-        MathUtil.interpolate(start.meters, start.meters, t),
+        MathUtil.interpolate(start.meters, end.meters, t),
         MathUtil.interpolate(start.RPM, end.RPM, t),
         MathUtil.interpolate(start.angleRad, end.angleRad, t),
         MathUtil.interpolate(start.timeOfFlightSec, end.timeOfFlightSec, t));
@@ -133,12 +133,15 @@ public class TurretDistanceCalc {
     hubDataPoints =
         new ArrayList<>(
             Arrays.asList(
-                new TurretShotData(2.17, 1650.0, 0.0, 0.42),
-                new TurretShotData(2.78, 1750.0, 0.0, 0.41),
-                new TurretShotData(3.4, 1850.0, 0.0, 0.63),
+                new TurretShotData(2.01, 1600.0, 0.0, 0.53),
+                new TurretShotData(2.60, 1700.0, 0.0, 0.63),
+                // new TurretShotData(2.17, 1650.0, 0.0, 0.42),
+                // new TurretShotData(2.78, 1750.0, 0.0, 0.41),
+                new TurretShotData(3.4, 1900.0, 0.0, 0.63),
                 new TurretShotData(3.65, 1900.0, 0.0, 0.57),
+                new TurretShotData(4.05, 2050.0, 0.0, 0.0),
                 new TurretShotData(4.36, 2100.0, 0.0, 1.0),
-                new TurretShotData(4.46, 2200.0, 0.0, 1.08)));
+                new TurretShotData(4.46, 2150.0, 0.0, 1.08)));
 
     for (TurretShotData dataPoint : hubDataPoints) {
       hubMap.put(dataPoint.meters, dataPoint);

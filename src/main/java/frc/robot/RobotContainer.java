@@ -289,6 +289,10 @@ public class RobotContainer {
 
     controller.leftTrigger(0.1).onFalse(intake.stop());
 
+    controller.a().onTrue(indexer.start()).onFalse(indexer.stop());
+    controller.b().onTrue(feeder.start()).onFalse(feeder.stop());
+    controller.y().onTrue(indexer.reverse()).onFalse(indexer.stop());
+
     // #################### BUTTON BOARD ####################
 
     // ###### ROW ONE ######

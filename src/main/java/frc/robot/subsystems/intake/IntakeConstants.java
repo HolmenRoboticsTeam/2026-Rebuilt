@@ -11,9 +11,9 @@ import edu.wpi.first.math.system.plant.DCMotor;
 /** Constants for the intake subsystem. */
 public class IntakeConstants {
 
-  public static final double maxVolts = 4.0;
+  public static final double maxVolts = 5.0;
 
-  public static final double gearRatio = 1.0;
+  public static final double gearRatio = (2.0 * Math.PI) * (1.0);
 
   /** The constants only for the real version of the intake. */
   public static class Real {

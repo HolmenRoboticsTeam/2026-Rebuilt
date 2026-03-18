@@ -79,6 +79,15 @@ public class Indexer extends SubsystemBase {
         .withName("Indexer_Stop");
   }
 
+  public Command reverse() {
+    return Commands.runOnce(
+            () -> {
+              io.setVolts(-IndexerConstants.maxVolts);
+            },
+            this)
+        .withName("Indexer_Start");
+  }
+
   /**
    * Get the current position of the indexer
    *

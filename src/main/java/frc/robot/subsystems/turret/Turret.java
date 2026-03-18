@@ -146,16 +146,21 @@ public class Turret extends SubsystemBase {
               // Subtract robot velocity. The robot is already moving at at a base speed so remove
               // extra speed.
               Translation2d shotVelocity =
-                  targetVelocity.minus(
+                  targetVelocity.plus(
                       new Translation2d(
                           robotVelocity.get().vxMetersPerSecond,
                           robotVelocity.get().vyMetersPerSecond));
 
               // Calculate results
-              Rotation2d turretRotation = shotVelocity.getAngle();
+              Rotation2d turretRotation =
+                  shotVelocity
+                      .getAngle()
+                      .minus(robotPose.get().getRotation())
+                      .plus(Rotation2d.k180deg);
+
               double requiredVelocity = shotVelocity.getNorm();
 
-              // Loop up RPM from required velocity
+              // Loop up RPM from required velocity[\]
               double effectiveDistance =
                   TurretDistanceCalc.velocityToEffectiveDistance(requiredVelocity, targetType);
               TurretShotData requiredShotData =

@@ -35,6 +35,22 @@ public class Vision extends SubsystemBase {
   private boolean ignoreVision;
   private VisionRotationConsumer rotationConsumer;
 
+  // Initialize logging values
+  List<Pose3d> allTagPoses = new LinkedList<>();
+  List<Pose3d> allRobotPoses = new LinkedList<>();
+  List<Pose3d> allRobotPosesAccepted = new LinkedList<>();
+  List<Pose3d> allRobotRotationAccepted = new LinkedList<>();
+  List<Pose3d> allRobotPosesIgnored = new LinkedList<>();
+  List<Pose3d> allRobotPosesRejected = new LinkedList<>();
+
+  // Initialize logging values
+  List<Pose3d> tagPoses = new LinkedList<>();
+  List<Pose3d> robotPoses = new LinkedList<>();
+  List<Pose3d> robotPosesAccepted = new LinkedList<>();
+  List<Pose3d> robotRotationAccepted = new LinkedList<>();
+  List<Pose3d> robotPosesIgnored = new LinkedList<>();
+  List<Pose3d> robotPosesRejected = new LinkedList<>();
+
   public Vision(VisionPoseConsumer poseConsumer, VisionIO... io) {
     this.poseConsumer = poseConsumer;
     this.io = io;
@@ -63,26 +79,24 @@ public class Vision extends SubsystemBase {
       Logger.processInputs("Vision/Camera" + Integer.toString(i), inputs[i]);
     }
 
-    // Initialize logging values
-    List<Pose3d> allTagPoses = new LinkedList<>();
-    List<Pose3d> allRobotPoses = new LinkedList<>();
-    List<Pose3d> allRobotPosesAccepted = new LinkedList<>();
-    List<Pose3d> allRobotRotationAccepted = new LinkedList<>();
-    List<Pose3d> allRobotPosesIgnored = new LinkedList<>();
-    List<Pose3d> allRobotPosesRejected = new LinkedList<>();
+    allTagPoses.clear();
+    allRobotPoses.clear();
+    allRobotPosesAccepted.clear();
+    allRobotRotationAccepted.clear();
+    allRobotPosesIgnored.clear();
+    allRobotPosesRejected.clear();
 
     // Loop over cameras
     for (int cameraIndex = 0; cameraIndex < io.length; cameraIndex++) {
       // Update disconnected alert
       disconnectedAlerts[cameraIndex].set(!inputs[cameraIndex].connected);
 
-      // Initialize logging values
-      List<Pose3d> tagPoses = new LinkedList<>();
-      List<Pose3d> robotPoses = new LinkedList<>();
-      List<Pose3d> robotPosesAccepted = new LinkedList<>();
-      List<Pose3d> robotRotationAccepted = new LinkedList<>();
-      List<Pose3d> robotPosesIgnored = new LinkedList<>();
-      List<Pose3d> robotPosesRejected = new LinkedList<>();
+      tagPoses.clear();
+      robotPoses.clear();
+      robotPosesAccepted.clear();
+      robotRotationAccepted.clear();
+      robotPosesIgnored.clear();
+      robotPosesRejected.clear();
 
       // Add tag poses
       for (int tagId : inputs[cameraIndex].tagIds) {
