@@ -70,7 +70,7 @@ public class AutoDriveCommands {
               pathFindAndFollowPathFixer(path),
               preciseMove(
                   drive,
-                  FieldConstants.correctSide(
+                  FieldConstants.allianceFlip(
                       path.getPathPoses().get(path.getPathPoses().size() - 1))))
           .withName("driveToPoseThenPathWithPreciseMove");
     }
@@ -88,7 +88,7 @@ public class AutoDriveCommands {
   private static Command pathFindAndFollowPathFixer(PathPlannerPath path) {
 
     Pose2d startOfPathPose =
-        FieldConstants.correctSide(
+        FieldConstants.allianceFlip(
             new Pose2d(
                 path.getPathPoses().get(0).getTranslation(),
                 path.getRotationTargets() != null

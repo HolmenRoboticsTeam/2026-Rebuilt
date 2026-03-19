@@ -8,7 +8,7 @@
 package frc.robot;
 
 import static edu.wpi.first.units.Units.Inches;
-import static edu.wpi.first.units.Units.Meter;
+import static edu.wpi.first.units.Units.Meters;
 
 import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -63,155 +63,122 @@ public final class Constants {
 
     public static final Rectangle2d kWholeField =
         new Rectangle2d(
-            correctSide(new Translation2d(Inches.of(0.0), Inches.of(0.0))),
-            correctSide(new Translation2d(fieldLength, fieldWidth)));
+            new Translation2d(Inches.of(0.0), Inches.of(0.0)),
+            new Translation2d(fieldLength, fieldWidth));
 
     public static final Rectangle2d kHomeAllianceZone =
         new Rectangle2d( // Blue Alliance Zone
-            correctSide(new Translation2d(Inches.of(0.0), Inches.of(0.0))),
-            correctSide(new Translation2d(Inches.of(157.06), fieldWidth)));
+            new Translation2d(Inches.of(0.0), Inches.of(0.0)),
+            new Translation2d(Inches.of(157.06), fieldWidth));
 
     public static final Rectangle2d kAllianceTrenchBumpZone =
         new Rectangle2d(
-            correctSide(new Translation2d(Inches.of(157.06), Inches.of(0.0))),
-            correctSide(new Translation2d(Inches.of(206.06), fieldWidth)));
+            new Translation2d(Inches.of(157.06), Inches.of(0.0)),
+            new Translation2d(Inches.of(206.06), fieldWidth));
 
     public static final Rectangle2d kLeftNeutralSide =
         new Rectangle2d(
-            correctSide(new Translation2d(Inches.of(206.06), Inches.of(158.32))),
-            correctSide(new Translation2d(Inches.of(464.06), fieldWidth)));
+            new Translation2d(Inches.of(206.06), Inches.of(158.32)),
+            new Translation2d(Inches.of(464.06), fieldWidth));
 
     public static final Rectangle2d kRightNeutralSide =
         new Rectangle2d(
-            correctSide(new Translation2d(Inches.of(206.06), Inches.of(0.0))),
-            correctSide(new Translation2d(Inches.of(464.06), Inches.of(158.8))));
+            new Translation2d(Inches.of(206.06), Inches.of(0.0)),
+            new Translation2d(Inches.of(464.06), Inches.of(158.8)));
 
     public static final Rectangle2d kOpposingTrenchBumpZone =
         new Rectangle2d(
-            correctSide(new Translation2d(Inches.of(464.06), Inches.of(0.0))),
-            correctSide(new Translation2d(Inches.of(513.06), fieldWidth)));
+            new Translation2d(Inches.of(464.06), Inches.of(0.0)),
+            new Translation2d(Inches.of(513.06), fieldWidth));
 
     public static final Rectangle2d kLeftOpposingSide =
         new Rectangle2d(
-            correctSide(new Translation2d(Inches.of(513.06), Inches.of(158.32))),
-            correctSide(new Translation2d(fieldLength, fieldWidth)));
+            new Translation2d(Inches.of(513.06), Inches.of(158.32)),
+            new Translation2d(fieldLength, fieldWidth));
 
     public static final Rectangle2d kRightOpposingSide =
         new Rectangle2d(
-            correctSide(new Translation2d(Inches.of(513.06), Inches.of(0.0))),
-            correctSide(new Translation2d(fieldLength, Inches.of(158.8))));
+            new Translation2d(Inches.of(513.06), Inches.of(0.0)),
+            new Translation2d(fieldLength, Inches.of(158.8)));
 
     // #################### TRANSLATIONS POINTS ####################
 
     public static final Translation2d kHubPosition =
-        correctSide(new Translation2d(Inches.of(181.56), Inches.of(158.32)));
+        new Translation2d(Inches.of(181.56), Inches.of(158.32));
 
     public static final Translation2d kLeftCorner =
-        correctSide(
-            new Translation2d(
-                Inches.of(15.50),
-                Inches.of(
-                    316.64 - 75.0
-                    /** Left Wall Minus Inches */
-                    )));
+        new Translation2d(
+            Inches.of(15.50),
+            Inches.of(
+                fieldWidth.minus(Inches.of(75.0))
+                /** Left Wall Minus Inches */
+                ));
 
     public static final Translation2d kRightCorner =
-        correctSide(new Translation2d(Inches.of(15.50), Inches.of(75.0)));
+        new Translation2d(Inches.of(15.50), Inches.of(75.0));
 
     // #################### POSE POSITIONS ####################
 
     // Auto Starting positions
 
     public static final Pose2d kLeftTrenchStart =
-        correctSide(
-            new Pose2d(
-                Distance.ofRelativeUnits(3.600, Meter),
-                Distance.ofRelativeUnits(7.400, Meter),
-                Rotation2d.fromDegrees(0.0)));
+        new Pose2d(Meters.of(3.600), Meters.of(7.400), Rotation2d.fromDegrees(0.0));
 
     public static final Pose2d kHubStart =
-        correctSide(
-            new Pose2d(
-                Distance.ofRelativeUnits(3.600, Meter),
-                Distance.ofRelativeUnits(4.000, Meter),
-                Rotation2d.fromDegrees(0.0)));
+        new Pose2d(Meters.of(3.600), Meters.of(4.000), Rotation2d.fromDegrees(0.0));
 
     public static final Pose2d kRightTrenchStart =
-        correctSide(
-            new Pose2d(
-                Distance.ofRelativeUnits(3.600, Meter),
-                Distance.ofRelativeUnits(0.600, Meter),
-                Rotation2d.fromDegrees(0.0)));
+        new Pose2d(Meters.of(3.600), Meters.of(0.600), Rotation2d.fromDegrees(0.0));
 
     // Drive to Ball Launching positions
 
     public static final Pose2d kLeftDepotLaunch =
-        correctSide(
-            new Pose2d(
-                Distance.ofRelativeUnits(1.500, Meter),
-                Distance.ofRelativeUnits(6.000, Meter),
-                Rotation2d.fromDegrees(0.0)));
+        new Pose2d(Meters.of(1.500), Meters.of(6.000), Rotation2d.fromDegrees(0.0));
 
     public static final Pose2d kLeftBumpLaunch =
-        correctSide(
-            new Pose2d(
-                Distance.ofRelativeUnits(3.500, Meter),
-                Distance.ofRelativeUnits(5.600, Meter),
-                Rotation2d.fromDegrees(137.0)));
+        new Pose2d(Meters.of(3.500), Meters.of(5.600), Rotation2d.fromDegrees(137.0));
 
     public static final Pose2d kRightBumpLaunch =
-        correctSide(
-            new Pose2d(
-                Distance.ofRelativeUnits(3.500, Meter),
-                Distance.ofRelativeUnits(2.400, Meter),
-                Rotation2d.fromDegrees(-137.0)));
+        new Pose2d(Meters.of(3.500), Meters.of(2.400), Rotation2d.fromDegrees(-137.0));
 
     public static final Pose2d kRightOutpostLaunch =
-        correctSide(
-            new Pose2d(
-                Distance.ofRelativeUnits(1.500, Meter),
-                Distance.ofRelativeUnits(2.000, Meter),
-                Rotation2d.fromDegrees(180.0)));
+        new Pose2d(Meters.of(1.500), Meters.of(2.000), Rotation2d.fromDegrees(180.0));
 
     // Climb Positions
 
     public static final Pose2d kLeftClimb =
-        correctSide(
-            new Pose2d(
-                Distance.ofRelativeUnits(1.200, Meter),
-                Distance.ofRelativeUnits(4.600, Meter),
-                Rotation2d.fromDegrees(90.0)));
+        new Pose2d(Meters.of(1.200), Meters.of(4.600), Rotation2d.fromDegrees(90.0));
 
     public static final Pose2d kRightClimb =
-        correctSide(
-            new Pose2d(
-                Distance.ofRelativeUnits(0.900, Meter),
-                Distance.ofRelativeUnits(2.800, Meter),
-                Rotation2d.fromDegrees(-90.0)));
+        new Pose2d(Meters.of(0.900), Meters.of(2.800), Rotation2d.fromDegrees(-90.0));
 
     // #################### OTHER DATA ####################
 
     public static final int[] kHubTags =
         isBlueAlliance.get()
-            ? new int[] {18, 19, 20, 21, 24, 25, 26, 27}
-            : new int[] {2, 3, 4, 5, 8, 9, 10, 11};
+            ? new int[] {18, 19, 20, 21, 24, 25, 26, 27} // Blue hub
+            : new int[] {2, 3, 4, 5, 8, 9, 10, 11}; // Red hub
 
     // #################### HELPER METHOD ####################
 
-    public static Translation2d correctSide(Translation2d trans) {
+    public static Translation2d allianceFlip(Translation2d trans) {
       if (isBlueAlliance.get()) return trans;
 
-      //   return new Translation2d(
-      //       trans.getMeasureX().minus(fieldLength), trans.getMeasureY().minus(fieldWidth));
       return new Translation2d(
           fieldLength.minus(trans.getMeasureX()), fieldWidth.minus(trans.getMeasureY()));
     }
 
-    public static Pose2d correctSide(Pose2d pose) {
+    public static Pose2d allianceFlip(Pose2d pose) {
       if (isBlueAlliance.get()) return pose;
 
       return new Pose2d(
-          correctSide(pose.getTranslation()), pose.getRotation().minus(Rotation2d.k180deg));
+          allianceFlip(pose.getTranslation()), pose.getRotation().minus(Rotation2d.k180deg));
+    }
+
+    public static Rectangle2d allianceFlip(Rectangle2d rect) {
+      if (isBlueAlliance.get()) return rect;
+
+      return new Rectangle2d(allianceFlip(rect.getCenter()), rect.getXWidth(), rect.getYWidth());
     }
   }
 

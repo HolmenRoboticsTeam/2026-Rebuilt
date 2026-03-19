@@ -283,22 +283,24 @@ public class Turret extends SubsystemBase {
                         TurretConstants.turretLeftRobotOffset)
                     .rotateBy(robotPose.get().getRotation()));
 
-    if (FieldConstants.kHomeAllianceZone.contains(
-        turretPose.get().getTranslation())) { // In Alliance Zone
-      return FieldConstants.kHubPosition.plus(offset);
+    if (FieldConstants.allianceFlip(FieldConstants.kHomeAllianceZone)
+        .contains(turretPose.get().getTranslation())) { // In Alliance Zone
+      return FieldConstants.allianceFlip(FieldConstants.kHubPosition).plus(offset);
 
-    } else if (FieldConstants.kLeftNeutralSide.contains(turretPose.get().getTranslation())
-        || FieldConstants.kLeftOpposingSide.contains(
-            turretPose.get().getTranslation())) { // On Left Side
-      return FieldConstants.kLeftCorner.plus(offset);
+    } else if (FieldConstants.allianceFlip(FieldConstants.kLeftNeutralSide)
+            .contains(turretPose.get().getTranslation())
+        || FieldConstants.allianceFlip(FieldConstants.kLeftOpposingSide)
+            .contains(turretPose.get().getTranslation())) { // On Left Side
+      return FieldConstants.allianceFlip(FieldConstants.kLeftCorner).plus(offset);
 
-    } else if (FieldConstants.kRightNeutralSide.contains(turretPose.get().getTranslation())
-        || FieldConstants.kRightOpposingSide.contains(
-            turretPose.get().getTranslation())) { // On Right Side
-      return FieldConstants.kRightCorner.plus(offset);
+    } else if (FieldConstants.allianceFlip(FieldConstants.kRightNeutralSide)
+            .contains(turretPose.get().getTranslation())
+        || FieldConstants.allianceFlip(FieldConstants.kRightOpposingSide)
+            .contains(turretPose.get().getTranslation())) { // On Right Side
+      return FieldConstants.allianceFlip(FieldConstants.kRightCorner).plus(offset);
 
     } else { // Ok, the turret pose is outside the field, yay! // TODO: do a better check
-      return FieldConstants.kHubPosition.plus(offset);
+      return FieldConstants.allianceFlip(FieldConstants.kHubPosition).plus(offset);
     }
   }
 
@@ -391,19 +393,23 @@ public class Turret extends SubsystemBase {
    * @return Which targetType
    */
   private TargetType checkTrans(Translation2d trans) {
-    if (FieldConstants.kHomeAllianceZone.contains(trans)) { // In Alliance Zone
+    if (FieldConstants.allianceFlip(FieldConstants.kHomeAllianceZone)
+        .contains(trans)) { // In Alliance Zone
       return TargetType.HUB;
 
-    } else if (FieldConstants.kLeftNeutralSide.contains(trans)
-        || FieldConstants.kLeftOpposingSide.contains(trans)) { // On Left Side
+    } else if (FieldConstants.allianceFlip(FieldConstants.kLeftNeutralSide).contains(trans)
+        || FieldConstants.allianceFlip(FieldConstants.kLeftOpposingSide)
+            .contains(trans)) { // On Left Side
       return TargetType.GROUND;
 
-    } else if (FieldConstants.kRightNeutralSide.contains(trans)
-        || FieldConstants.kRightOpposingSide.contains(trans)) { // On Right Side
+    } else if (FieldConstants.allianceFlip(FieldConstants.kRightNeutralSide).contains(trans)
+        || FieldConstants.allianceFlip(FieldConstants.kRightOpposingSide)
+            .contains(trans)) { // On Right Side
       return TargetType.GROUND;
 
-    } else if (FieldConstants.kAllianceTrenchBumpZone.contains(trans)
-        || FieldConstants.kOpposingTrenchBumpZone.contains(trans)) { // In the trench/On the bump
+    } else if (FieldConstants.allianceFlip(FieldConstants.kAllianceTrenchBumpZone).contains(trans)
+        || FieldConstants.allianceFlip(FieldConstants.kOpposingTrenchBumpZone)
+            .contains(trans)) { // In the trench/On the bump
       return TargetType.IN_TRENCH;
 
     } else { // Out of the field
@@ -421,7 +427,7 @@ public class Turret extends SubsystemBase {
   public Translation2d forceInField(Translation2d trans) {
 
     // Already in the field, no need to move.
-    if (FieldConstants.kWholeField.contains(trans)) return trans;
+    if (FieldConstants.allianceFlip(FieldConstants.kWholeField).contains(trans)) return trans;
 
     Distance xDistance;
     Distance yDistance;
