@@ -56,8 +56,8 @@ public final class Constants {
 
   public static class FieldConstants {
 
-    public static final Distance fieldLength = Inches.of(651.22);
-    public static final Distance fieldWidth = Inches.of(317.69);
+    public static final Distance fieldLength = Inches.of(650.12);
+    public static final Distance fieldWidth = Inches.of(316.64);
 
     // #################### RECTANGLE ZONES ####################
 
@@ -79,27 +79,27 @@ public final class Constants {
     public static final Rectangle2d kLeftNeutralSide =
         new Rectangle2d(
             new Translation2d(Inches.of(206.06), Inches.of(158.32)),
-            new Translation2d(Inches.of(464.06), fieldWidth));
+            new Translation2d(Inches.of(445.06), fieldWidth));
 
     public static final Rectangle2d kRightNeutralSide =
         new Rectangle2d(
             new Translation2d(Inches.of(206.06), Inches.of(0.0)),
-            new Translation2d(Inches.of(464.06), Inches.of(158.8)));
+            new Translation2d(Inches.of(445.06), Inches.of(158.32)));
 
     public static final Rectangle2d kOpposingTrenchBumpZone =
         new Rectangle2d(
-            new Translation2d(Inches.of(464.06), Inches.of(0.0)),
-            new Translation2d(Inches.of(513.06), fieldWidth));
+            new Translation2d(Inches.of(445.06), Inches.of(0.0)),
+            new Translation2d(Inches.of(492.06), fieldWidth));
 
     public static final Rectangle2d kLeftOpposingSide =
         new Rectangle2d(
-            new Translation2d(Inches.of(513.06), Inches.of(158.32)),
+            new Translation2d(Inches.of(492.06), Inches.of(158.32)),
             new Translation2d(fieldLength, fieldWidth));
 
     public static final Rectangle2d kRightOpposingSide =
         new Rectangle2d(
-            new Translation2d(Inches.of(513.06), Inches.of(0.0)),
-            new Translation2d(fieldLength, Inches.of(158.8)));
+            new Translation2d(Inches.of(492.06), Inches.of(0.0)),
+            new Translation2d(fieldLength, Inches.of(158.32)));
 
     // #################### TRANSLATIONS POINTS ####################
 

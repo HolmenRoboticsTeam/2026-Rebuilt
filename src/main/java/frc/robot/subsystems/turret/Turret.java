@@ -85,7 +85,7 @@ public class Turret extends SubsystemBase {
     this.fedFuel = fedFuel;
     this.changeHeldFuelBy = changeHeldFuelBy;
 
-    //Prime the loggable
+    // Prime the loggable
     Logger.recordOutput("Turret/Distance", 0.0);
     Logger.recordOutput("Turret/Target", new Translation2d());
     Logger.recordOutput("Turret/Type", TargetType.INVALID);
