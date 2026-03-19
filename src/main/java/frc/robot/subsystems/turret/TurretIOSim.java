@@ -16,9 +16,7 @@ import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
-import frc.robot.Constants;
 import frc.robot.util.FuelSim;
-import java.util.function.Supplier;
 
 /** The sim implementation of the turret. */
 public class TurretIOSim implements TurretIO {
@@ -27,7 +25,7 @@ public class TurretIOSim implements TurretIO {
   private PIDController rotationController;
   private Rotation2d targetRotation = new Rotation2d();
   private double rotationAppliedVolts;
-  private Supplier<Double> getRotationOffset = () -> Constants.isBlueAlliance.get() ? 0.0 : Math.PI;
+  private boolean isLocked = false;
 
   private DCMotorSim angleMotorSim;
   private PIDController angleController;
@@ -143,7 +141,10 @@ public class TurretIOSim implements TurretIO {
 
   @Override
   public void setTargetRotation(Rotation2d rot) {
-    targetRotation = rot.plus(Rotation2d.fromRadians(getRotationOffset.get()));
+    // If turret is locked, then take no new action.
+    if (isLocked) return;
+
+    targetRotation = rot;
   }
 
   @Override
@@ -154,6 +155,19 @@ public class TurretIOSim implements TurretIO {
   @Override
   public void setFlyWheelRPM(double RPM) {
     targetRPM = RPM;
+  }
+
+  @Override
+  public void lockRotation(boolean lockRotation) {
+    // Rotation is locked, so updated the value and return;
+    if (isLocked) {
+      isLocked = lockRotation;
+      return;
+    }
+
+    // Rotation is not locked. First, set the rotation target to zero, then lock the rotation motor.
+    setTargetRotation(new Rotation2d());
+    isLocked = lockRotation;
   }
 
   @Override

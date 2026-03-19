@@ -66,6 +66,14 @@ public interface TurretIO {
   public default void setFlyWheelRPM(double RPM) {}
 
   /**
+   * Sets the target rotation of the turret's rotation motor to ZERO. This does not need to be
+   * called every cycle, as it runs on the controller.
+   *
+   * @param lockRotation Whether to lock or unlock the turret's rotation
+   */
+  public default void lockRotation(boolean lockRotation) {}
+
+  /**
    * Shoots fuel based on the robot current state (Only used for sim).
    *
    * @param robotRotation the rotation of the drive base.

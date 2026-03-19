@@ -16,9 +16,9 @@ import edu.wpi.first.math.util.Units;
 
 public class DriveConstants {
   public static final double maxSpeedMetersPerSec = 4.0;
-  public static final double odometryFrequency = 100.0; // Hz TODO: tune this (400Hz?)
-  public static final double trackWidth = Units.inchesToMeters(25.6692913); // TODO: update this
-  public static final double wheelBase = Units.inchesToMeters(22.677165);
+  public static final double odometryFrequency = 100.0;
+  public static final double trackWidth = Units.inchesToMeters(22.677165);
+  public static final double wheelBase = Units.inchesToMeters(25.6692913);
   public static final double driveBaseRadius = Math.hypot(trackWidth / 2.0, wheelBase / 2.0);
   public static final Translation2d[] moduleTranslations =
       new Translation2d[] {
@@ -48,7 +48,7 @@ public class DriveConstants {
   public static final int backRightTurnCanId = 17;
 
   // Drive motor configuration
-  public static final int driveMotorCurrentLimit = 60;
+  public static final int driveMotorCurrentLimit = 40;
   public static final double wheelRadiusMeters = Units.inchesToMeters(1.461);
   public static final double driveMotorReduction =
       (45.0 * 22.0) / (14.0 * 15.0); // MAXSwerve with 14 pinion teeth
@@ -93,8 +93,8 @@ public class DriveConstants {
   public static final double turnPIDMaxInput = 2 * Math.PI; // Radians
 
   // PathPlanner configuration
-  public static final double robotMassKg = 49.785; // TODO: Update these
-  public static final double robotMOI = 3.14;
+  public static final double robotMassKg = 43.0913;
+  public static final double robotMOI = 5.37161782033;
   public static final double wheelCOF = 1.19;
   public static final RobotConfig ppConfig =
       new RobotConfig(

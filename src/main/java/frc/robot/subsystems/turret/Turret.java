@@ -84,6 +84,14 @@ public class Turret extends SubsystemBase {
     this.robotVelocity = robotVelocity;
     this.fedFuel = fedFuel;
     this.changeHeldFuelBy = changeHeldFuelBy;
+
+    //Prime the loggable
+    Logger.recordOutput("Turret/Distance", 0.0);
+    Logger.recordOutput("Turret/Target", new Translation2d());
+    Logger.recordOutput("Turret/Type", TargetType.INVALID);
+    Logger.recordOutput("Turret/RPM", 0.0);
+    Logger.recordOutput("Turret/Angle", new Rotation2d());
+    Logger.recordOutput("Turret/Rotation", new Rotation2d());
   }
 
   private double fuelHz = 0.2;
@@ -183,6 +191,17 @@ public class Turret extends SubsystemBase {
             },
             this)
         .withName("Turret_FullFieldAim");
+  }
+
+  public Command lockRotationToZero() {
+    return Commands.startEnd(
+        () -> {
+          io.lockRotation(true);
+        },
+        () -> {
+          io.lockRotation(false);
+        },
+        this);
   }
 
   /**

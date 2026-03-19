@@ -14,7 +14,9 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.commands.PathfindingCommand;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.measure.Distance;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
@@ -26,7 +28,6 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.AutoCommands;
-import frc.robot.commands.AutoDriveCommands;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.StateLoggingCommands;
 import frc.robot.subsystems.drive.Drive;
@@ -301,24 +302,46 @@ public class RobotContainer {
     buttonBoardController
         .get(1, 1)
         .whileTrue(
-            AutoDriveCommands.driveToPoseThenPath(
-                drive, "Left Trench Pass Through To Launch", false));
+            DriveCommands.joystickDriveAtAngle(
+                drive,
+                () -> controller.getRightTriggerAxis(),
+                () -> -controller.getLeftY(),
+                () -> -controller.getLeftX(),
+                () -> -Rotation2d.fromDegrees(90.0).getCos(),
+                () -> -Rotation2d.fromDegrees(90.0).getSin()));
 
     buttonBoardController
         .get(1, 2)
         .whileTrue(
-            AutoDriveCommands.driveToPoseThenPath(drive, "Left Bump Pass Over To Launch", false));
+            DriveCommands.joystickDriveAtAngle(
+                drive,
+                () -> controller.getRightTriggerAxis(),
+                () -> -controller.getLeftY(),
+                () -> -controller.getLeftX(),
+                () -> -Rotation2d.fromDegrees(135.0).getCos(),
+                () -> -Rotation2d.fromDegrees(135.0).getSin()));
 
     buttonBoardController
         .get(1, 3)
         .whileTrue(
-            AutoDriveCommands.driveToPoseThenPath(drive, "Right Bump Pass Over To Launch", false));
+            DriveCommands.joystickDriveAtAngle(
+                drive,
+                () -> controller.getRightTriggerAxis(),
+                () -> -controller.getLeftY(),
+                () -> -controller.getLeftX(),
+                () -> -Rotation2d.fromDegrees(-135.0).getCos(),
+                () -> -Rotation2d.fromDegrees(-135.0).getSin()));
 
     buttonBoardController
         .get(1, 4)
         .whileTrue(
-            AutoDriveCommands.driveToPoseThenPath(
-                drive, "Right Trench Pass Through To Launch", false));
+            DriveCommands.joystickDriveAtAngle(
+                drive,
+                () -> controller.getRightTriggerAxis(),
+                () -> -controller.getLeftY(),
+                () -> -controller.getLeftX(),
+                () -> -Rotation2d.fromDegrees(-90.0).getCos(),
+                () -> -Rotation2d.fromDegrees(-90.0).getSin()));
 
     // ###### ROW TWO ######
     Logger.recordOutput("Tuning/BadMeasurement", false);
@@ -326,8 +349,9 @@ public class RobotContainer {
         .get(2, 2)
         .onTrue(
             Commands.sequence(
-                    Commands.run(() -> Logger.recordOutput("Tuning/BadMeasurement", true)),
-                    Commands.run(() -> Logger.recordOutput("Tuning/BadMeasurement", false)))
+                    Commands.runOnce(() -> Logger.recordOutput("Tuning/BadMeasurement", true)),
+                    Commands.waitSeconds(0.1), // Time for the log to show
+                    Commands.runOnce(() -> Logger.recordOutput("Tuning/BadMeasurement", false)))
                 .ignoringDisable(true)
                 .withName("BadMeasurement"));
 
@@ -343,7 +367,14 @@ public class RobotContainer {
 
     buttonBoardController.get(3, 3).whileTrue(feeder.start()).onFalse(feeder.stop());
 
-    buttonBoardController.get(3, 4).whileTrue(turret.fullFieldAim()).onFalse(turret.calibrate());
+    buttonBoardController
+        .get(3, 4)
+        .whileTrue(
+            Commands.either(
+                turret.lockRotationToZero(),
+                turret.calibrate(),
+                () -> DriverStation.isFMSAttached()))
+        .onFalse(turret.fullFieldAim());
 
     // Shift Overriding
 
@@ -352,9 +383,7 @@ public class RobotContainer {
         .onTrue(
             Commands.runOnce(
                     () -> HubShiftUtil.setAllianceWinOverride(() -> Optional.of(Alliance.Blue)))
-                .ignoringDisable(true));
-    buttonBoardController
-        .axisLessThan(3, -0.5)
+                .ignoringDisable(true))
         .onFalse(
             Commands.runOnce(() -> HubShiftUtil.setAllianceWinOverride(() -> Optional.empty()))
                 .ignoringDisable(true));
@@ -363,9 +392,7 @@ public class RobotContainer {
         .onTrue(
             Commands.runOnce(
                     () -> HubShiftUtil.setAllianceWinOverride(() -> Optional.of(Alliance.Red)))
-                .ignoringDisable(true));
-    buttonBoardController
-        .axisLessThan(3, 0.5)
+                .ignoringDisable(true))
         .onFalse(
             Commands.runOnce(() -> HubShiftUtil.setAllianceWinOverride(() -> Optional.empty()))
                 .ignoringDisable(true));

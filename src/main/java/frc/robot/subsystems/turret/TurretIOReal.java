@@ -19,6 +19,7 @@ public class TurretIOReal implements TurretIO {
 
   private SparkFlex rotationMotor;
   private RelativeEncoder rotationEncoder;
+  private boolean isLocked;
 
   private SparkMax angleMotor;
   private RelativeEncoder angleEncoder;
@@ -40,6 +41,8 @@ public class TurretIOReal implements TurretIO {
         TurretConstants.Real.rotationMotorConfig,
         ResetMode.kResetSafeParameters,
         PersistMode.kPersistParameters);
+
+    isLocked = false;
 
     // Angle Motor setup
 
@@ -106,6 +109,9 @@ public class TurretIOReal implements TurretIO {
 
   @Override
   public void setTargetRotation(Rotation2d rot) {
+    // If turret is locked, then take no new action.
+    if (isLocked) return;
+
     rotationMotor.getClosedLoopController().setSetpoint(rot.getRadians(), ControlType.kPosition);
   }
 
@@ -117,5 +123,18 @@ public class TurretIOReal implements TurretIO {
   @Override
   public void setFlyWheelRPM(double RPM) {
     flyWheelMotorLeft.getClosedLoopController().setSetpoint(RPM, ControlType.kVelocity);
+  }
+
+  @Override
+  public void lockRotation(boolean lockRotation) {
+    // Rotation is locked, so updated the value and return;
+    if (isLocked) {
+      isLocked = lockRotation;
+      return;
+    }
+
+    // Rotation is not locked. First, set the rotation target to zero, then lock the rotation motor.
+    setTargetRotation(new Rotation2d());
+    isLocked = lockRotation;
   }
 }

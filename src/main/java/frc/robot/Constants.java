@@ -108,11 +108,9 @@ public final class Constants {
 
     public static final Translation2d kLeftCorner =
         new Translation2d(
-            Inches.of(15.50),
-            Inches.of(
-                fieldWidth.minus(Inches.of(75.0))
-                /** Left Wall Minus Inches */
-                ));
+            Inches.of(15.50), fieldWidth.minus(Inches.of(75.0))
+            /** Left Wall Minus Inches */
+            );
 
     public static final Translation2d kRightCorner =
         new Translation2d(Inches.of(15.50), Inches.of(75.0));
