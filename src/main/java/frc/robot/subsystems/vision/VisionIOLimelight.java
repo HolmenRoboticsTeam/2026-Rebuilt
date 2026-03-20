@@ -16,7 +16,6 @@ import edu.wpi.first.networktables.DoubleArraySubscriber;
 import edu.wpi.first.networktables.DoubleSubscriber;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.networktables.TimestampedDouble;
 import edu.wpi.first.wpilibj.RobotController;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -31,8 +30,6 @@ public class VisionIOLimelight implements VisionIO {
 
   private final DoubleSubscriber latencySubscriber;
   private final DoubleArraySubscriber megatag2Subscriber;
-
-  private final List<TimestampedDouble> queue = new LinkedList<>();
 
   private final NetworkTableEntry whiteList;
   private final NetworkTableEntry IMUMode;
