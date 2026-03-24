@@ -137,4 +137,9 @@ public class TurretIOReal implements TurretIO {
     setTargetRotation(new Rotation2d());
     isLocked = lockRotation;
   }
+
+  @Override
+  public void zeroRotationOffEncoder() {
+    rotationEncoder.setPosition(rotationMotor.getAbsoluteEncoder().getPosition());
+  }
 }

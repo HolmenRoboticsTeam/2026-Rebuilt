@@ -78,7 +78,7 @@ public class DriveCommands {
             0.0,
             ANGLE_KD,
             new TrapezoidProfile.Constraints(ANGLE_MAX_VELOCITY, ANGLE_MAX_ACCELERATION));
-    angleController.enableContinuousInput(-Math.PI, Math.PI);
+    angleController.enableContinuousInput(0.0, 2.0 * Math.PI);
     angleController.setTolerance(Math.toRadians(1.0));
 
     // Construct command
@@ -100,8 +100,10 @@ public class DriveCommands {
               }
 
               // Calculate angular speed
-              double goalRad = Rotation2d.fromRadians(Math.atan2(xAngle, yAngle)).getRadians();
-              double omega = angleController.calculate(drive.getRotation().getRadians(), goalRad);
+              double goalRad =
+                  Rotation2d.fromRadians(Math.atan2(xAngle, yAngle)).getRadians() + Math.PI;
+              double omega =
+                  angleController.calculate(drive.getRotation().getRadians() + Math.PI, goalRad);
 
               if (MathUtil.isNear(0.0, xAngle, DEADBAND)
                   && MathUtil.isNear(0.0, yAngle, DEADBAND)) {

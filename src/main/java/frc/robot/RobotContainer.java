@@ -358,7 +358,10 @@ public class RobotContainer {
     buttonBoardController
         .get(2, 3)
         .onTrue(
-            Commands.runOnce(() -> drive.resetGyro()).ignoringDisable(true).withName("Zero Gyro"));
+            turret
+                .zeroRotationOffEncoder()
+                .ignoringDisable(true)
+                .withName("Zero Turret Rotation Off Encoder"));
 
     // ###### ROW THREE ######
     buttonBoardController.get(3, 1).whileTrue(intake.start()).onFalse(intake.stop());
@@ -374,7 +377,7 @@ public class RobotContainer {
                 turret.lockRotationToZero(),
                 turret.calibrate(),
                 () -> DriverStation.isFMSAttached()))
-        .onFalse(turret.fullFieldAim());
+        .whileFalse(turret.fullFieldAim());
 
     // Shift Overriding
 

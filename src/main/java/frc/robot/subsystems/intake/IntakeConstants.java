@@ -11,34 +11,28 @@ import edu.wpi.first.math.system.plant.DCMotor;
 /** Constants for the intake subsystem. */
 public class IntakeConstants {
 
-  public static final double maxVolts = 5.0;
+  public static final double maxVolts = 10.0;
 
-  public static final double gearRatio = (2.0 * Math.PI) * (1.0);
+  public static final double gearRatio = (2.0 * Math.PI) * (5.0);
 
   /** The constants only for the real version of the intake. */
   public static class Real {
 
-    public static final int leftMotorID = 18;
-    public static final int rightMotorID = 30;
+    public static final int motorID = 18;
 
-    public static final SparkMaxConfig leftMotorConfig;
-    public static final SparkMaxConfig rightMotorConfig;
+    public static final SparkMaxConfig motorConfig;
 
     static {
-      leftMotorConfig = new SparkMaxConfig();
+      motorConfig = new SparkMaxConfig();
 
-      leftMotorConfig.smartCurrentLimit(40).idleMode(IdleMode.kCoast).inverted(true);
+      motorConfig.smartCurrentLimit(40).idleMode(IdleMode.kCoast).inverted(false);
 
-      leftMotorConfig
+      motorConfig
           .encoder
           .positionConversionFactor(gearRatio)
           .velocityConversionFactor(gearRatio / 60.0);
 
-      leftMotorConfig.closedLoop.pid(1.0, 0.0, 0.0);
-
-      rightMotorConfig = new SparkMaxConfig();
-
-      rightMotorConfig.follow(leftMotorID, true);
+      motorConfig.closedLoop.pid(1.0, 0.0, 0.0);
     }
   }
 

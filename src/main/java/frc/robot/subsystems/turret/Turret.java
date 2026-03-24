@@ -160,15 +160,18 @@ public class Turret extends SubsystemBase {
                           robotVelocity.get().vyMetersPerSecond));
 
               // Calculate results
+              Rotation2d turretRotationRelative =
+                  (shotVelocity.equals(Translation2d.kZero)
+                      ? Rotation2d.kZero
+                      : shotVelocity.getAngle());
               Rotation2d turretRotation =
-                  shotVelocity
-                      .getAngle()
-                      .minus(robotPose.get().getRotation())
-                      .plus(Rotation2d.k180deg);
+                  turretRotationRelative
+                      .plus(Rotation2d.k180deg)
+                      .minus(robotPose.get().getRotation());
 
               double requiredVelocity = shotVelocity.getNorm();
 
-              // Loop up RPM from required velocity[\]
+              // Loop up RPM from required velocity
               double effectiveDistance =
                   TurretDistanceCalc.velocityToEffectiveDistance(requiredVelocity, targetType);
               TurretShotData requiredShotData =
@@ -263,6 +266,14 @@ public class Turret extends SubsystemBase {
             },
             this)
         .withName("Turret_Stop");
+  }
+
+  public Command zeroRotationOffEncoder() {
+    return Commands.runOnce(
+        () -> {
+          io.zeroRotationOffEncoder();
+        },
+        this);
   }
 
   public double getRotation() {

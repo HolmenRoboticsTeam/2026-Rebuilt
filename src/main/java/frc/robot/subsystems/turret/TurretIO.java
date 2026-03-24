@@ -73,6 +73,8 @@ public interface TurretIO {
    */
   public default void lockRotation(boolean lockRotation) {}
 
+  public default void zeroRotationOffEncoder() {}
+
   /**
    * Shoots fuel based on the robot current state (Only used for sim).
    *

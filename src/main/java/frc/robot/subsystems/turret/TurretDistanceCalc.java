@@ -4,7 +4,9 @@
 
 package frc.robot.subsystems.turret;
 
+import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.Meter;
+import static edu.wpi.first.units.Units.Meters;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
@@ -20,13 +22,22 @@ import java.util.List;
 /** Add your docs here. */
 public class TurretDistanceCalc {
 
-  // The key must be in meters!!!
-  private static InterpolatingTreeMap<Double, TurretShotData> hubMap =
-      new InterpolatingTreeMap<Double, TurretShotData>(
-          InverseInterpolator.forDouble(), TurretDistanceCalc::interpolate);
-  private static InterpolatingTreeMap<Double, TurretShotData> groundMap =
-      new InterpolatingTreeMap<Double, TurretShotData>(
-          InverseInterpolator.forDouble(), TurretDistanceCalc::interpolate);
+  private static InverseInterpolator<Distance> inverseInterpolator =
+      new InverseInterpolator<Distance>() {
+
+        @Override
+        public double inverseInterpolate(Distance startValue, Distance endValue, Distance q) {
+          return MathUtil.inverseInterpolate(
+              startValue.in(Meters), endValue.in(Meters), q.in(Meters));
+        }
+      };
+
+  private static InterpolatingTreeMap<Distance, TurretShotData> hubMap =
+      new InterpolatingTreeMap<Distance, TurretShotData>(
+          inverseInterpolator, TurretDistanceCalc::interpolate);
+  private static InterpolatingTreeMap<Distance, TurretShotData> groundMap =
+      new InterpolatingTreeMap<Distance, TurretShotData>(
+          inverseInterpolator, TurretDistanceCalc::interpolate);
 
   private static InterpolatingDoubleTreeMap velocityToEffectiveDistanceHubMap =
       new InterpolatingDoubleTreeMap();
@@ -50,20 +61,20 @@ public class TurretDistanceCalc {
 
     switch (type) {
       case HUB:
-        return hubMap.get(distance.in(Meter));
+        return hubMap.get(distance);
       case GROUND:
-        return groundMap.get(distance.in(Meter));
+        return groundMap.get(distance);
       case IN_TRENCH:
         // So that when the robot is under the trench the flywheel stays up to speed.
-        TurretShotData unchangedValue = hubMap.get(distance.in(Meter));
+        TurretShotData unchangedValue = hubMap.get(distance);
         return new TurretShotData(
-            unchangedValue.meters, unchangedValue.RPM, 0.0, unchangedValue.timeOfFlightSec);
+            unchangedValue.distance, unchangedValue.RPM, 0.0, unchangedValue.timeOfFlightSec);
       case INVALID:
         // Look at the hub to try to fix pose estimation
-        return hubMap.get(distance.in(Meter));
+        return hubMap.get(distance);
     }
 
-    return new TurretShotData(0, 0, 0, 0); // How?
+    return new TurretShotData(Meters.of(0.0), 0, 0, 0); // How?
   }
 
   /**
@@ -117,11 +128,11 @@ public class TurretDistanceCalc {
   }
 
   public record TurretShotData(
-      double meters, double RPM, double angleRad, double timeOfFlightSec) {}
+      Distance distance, double RPM, double angleRad, double timeOfFlightSec) {}
 
   private static TurretShotData interpolate(TurretShotData start, TurretShotData end, double t) {
     return new TurretShotData(
-        MathUtil.interpolate(start.meters, end.meters, t),
+        Meters.of(MathUtil.interpolate(start.distance.in(Meter), end.distance.in(Meter), t)),
         MathUtil.interpolate(start.RPM, end.RPM, t),
         MathUtil.interpolate(start.angleRad, end.angleRad, t),
         MathUtil.interpolate(start.timeOfFlightSec, end.timeOfFlightSec, t));
@@ -133,20 +144,27 @@ public class TurretDistanceCalc {
     hubDataPoints =
         new ArrayList<>(
             Arrays.asList(
-                new TurretShotData(2.01, 1600.0, 0.0, 0.53),
-                new TurretShotData(2.60, 1700.0, 0.0, 0.63),
+                // new TurretShotData(Meters.of(2.01), 1600.0, 0.0, 0.53),
+                // new TurretShotData(Meters.of(2.60), 1700.0, 0.0, 0.63),
                 // new TurretShotData(2.17, 1650.0, 0.0, 0.42),
                 // new TurretShotData(2.78, 1750.0, 0.0, 0.41),
-                new TurretShotData(3.4, 1900.0, 0.0, 0.63),
-                new TurretShotData(3.65, 1900.0, 0.0, 0.57),
-                new TurretShotData(4.05, 2050.0, 0.0, 0.0),
-                new TurretShotData(4.36, 2100.0, 0.0, 1.0),
-                new TurretShotData(4.46, 2150.0, 0.0, 1.08)));
+                // new TurretShotData(Meters.of(3.4), 1900.0, 0.0, 0.63),
+                // new TurretShotData(Meters.of(3.65), 1900.0, 0.0, 0.57),
+                // new TurretShotData(Meters.of(4.05), 2050.0, 0.0, 0.0),
+                // new TurretShotData(Meters.of(4.36), 2100.0, 0.0, 1.0),
+                // new TurretShotData(Meters.of(4.46), 2150.0, 0.0, 1.08)
+                new TurretShotData(Inches.of(76.5), 1640.0, 0.0, 0.1),
+                new TurretShotData(Inches.of(88.5), 1700.0, 0.0, 0.1),
+                new TurretShotData(Inches.of(100.5), 1750.0, 0.0, 0.1),
+                new TurretShotData(Inches.of(112.5), 1810.0, 0.0, 0.1),
+                new TurretShotData(Inches.of(124.5), 1880.0, 0.0, 0.1),
+                new TurretShotData(Inches.of(133.5), 1920.0, 0.0, 0.1)));
 
     for (TurretShotData dataPoint : hubDataPoints) {
-      hubMap.put(dataPoint.meters, dataPoint);
+      hubMap.put(dataPoint.distance, dataPoint);
       velocityToEffectiveDistanceHubMap.put(
-          dataPoint.meters / dataPoint.timeOfFlightSec, dataPoint.meters);
+          dataPoint.distance.div(dataPoint.timeOfFlightSec).in(Meters),
+          dataPoint.distance.in(Meters));
 
       if (dataPoint.timeOfFlightSec < minHubTimeOfFlight)
         minHubTimeOfFlight = dataPoint.timeOfFlightSec;
@@ -154,12 +172,14 @@ public class TurretDistanceCalc {
         maxHubTimeOfFlight = dataPoint.timeOfFlightSec;
     }
 
-    groundDataPoints = new ArrayList<>(Arrays.asList(new TurretShotData(0.0, 0.0, 0.0, 0.0)));
+    groundDataPoints =
+        new ArrayList<>(Arrays.asList(new TurretShotData(Meters.of(0.0), 0.0, 0.0, 0.0)));
 
     for (TurretShotData dataPoint : groundDataPoints) {
-      groundMap.put(dataPoint.meters, dataPoint);
+      groundMap.put(dataPoint.distance, dataPoint);
       velocityToEffectiveDistanceGroundMap.put(
-          dataPoint.meters / dataPoint.timeOfFlightSec, dataPoint.meters);
+          dataPoint.distance.div(dataPoint.timeOfFlightSec).in(Meters),
+          dataPoint.distance.in(Meters));
     }
   }
 
@@ -168,14 +188,15 @@ public class TurretDistanceCalc {
     hubDataPoints =
         new ArrayList<>(
             Arrays.asList(
-                new TurretShotData(2.54, 3050.0, 1.309, 0.0),
-                new TurretShotData(5.08, 3100.0, 0.698, 0.0),
-                new TurretShotData(5.17, 4100.0, 0.785, 0.0)));
+                new TurretShotData(Meters.of(2.54), 3050.0, 1.309, 0.0),
+                new TurretShotData(Meters.of(5.08), 3100.0, 0.698, 0.0),
+                new TurretShotData(Meters.of(5.17), 4100.0, 0.785, 0.0)));
 
     for (TurretShotData dataPoint : hubDataPoints) {
-      hubMap.put(dataPoint.meters, dataPoint);
+      hubMap.put(dataPoint.distance, dataPoint);
       velocityToEffectiveDistanceHubMap.put(
-          dataPoint.meters / dataPoint.timeOfFlightSec, dataPoint.meters);
+          dataPoint.distance.div(dataPoint.timeOfFlightSec).in(Meters),
+          dataPoint.distance.in(Meters));
 
       if (dataPoint.timeOfFlightSec < minHubTimeOfFlight)
         minHubTimeOfFlight = dataPoint.timeOfFlightSec;
@@ -183,12 +204,14 @@ public class TurretDistanceCalc {
         maxHubTimeOfFlight = dataPoint.timeOfFlightSec;
     }
 
-    groundDataPoints = new ArrayList<>(Arrays.asList(new TurretShotData(0.0, 4000.0, 0.5, 0.0)));
+    groundDataPoints =
+        new ArrayList<>(Arrays.asList(new TurretShotData(Meters.of(0.0), 4000.0, 0.5, 0.0)));
 
     for (TurretShotData dataPoint : groundDataPoints) {
-      groundMap.put(dataPoint.meters, dataPoint);
+      groundMap.put(dataPoint.distance, dataPoint);
       velocityToEffectiveDistanceGroundMap.put(
-          dataPoint.meters / dataPoint.timeOfFlightSec, dataPoint.meters);
+          dataPoint.distance.div(dataPoint.timeOfFlightSec).in(Meters),
+          dataPoint.distance.in(Meters));
     }
   }
 

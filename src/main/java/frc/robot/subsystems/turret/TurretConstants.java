@@ -77,7 +77,7 @@ public class TurretConstants {
       rotationMotorConfig
           .absoluteEncoder
           .zeroCentered(true)
-          .zeroOffset(0.74925095)
+          .zeroOffset(0.8536492)
           .positionConversionFactor(rotationGearing * 3.0);
 
       rotationMotorConfig
