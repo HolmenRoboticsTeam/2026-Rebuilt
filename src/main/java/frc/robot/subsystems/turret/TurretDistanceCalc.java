@@ -155,11 +155,11 @@ public class TurretDistanceCalc {
                 new TurretShotData(Inches.of(112.5), 1810.0, 0.0, 0.989),
                 new TurretShotData(Inches.of(124.5), 1880.0, 0.0, 1.045),
                 new TurretShotData(Inches.of(133.5), 1920.0, 0.0, 1.054),
-                new TurretShotData(Meters.of(3.65), 1960.0, 0.0, 1.098), // predicted time of flight (recheck)
+                new TurretShotData(
+                    Meters.of(3.65), 1960.0, 0.0, 1.098), // predicted time of flight (recheck)
                 new TurretShotData(Meters.of(4.05), 2050.0, 0.0, 1.153),
                 new TurretShotData(Meters.of(4.36), 2100.0, 0.0, 1.196),
-                new TurretShotData(Meters.of(4.46), 2150.0, 0.0, 1.210),
-                ));
+                new TurretShotData(Meters.of(4.46), 2150.0, 0.0, 1.210)));
 
     for (TurretShotData dataPoint : hubDataPoints) {
       hubMap.put(dataPoint.distance, dataPoint);

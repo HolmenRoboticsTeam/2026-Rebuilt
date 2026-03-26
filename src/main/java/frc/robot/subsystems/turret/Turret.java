@@ -8,8 +8,6 @@ import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.Meters;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.filter.Debouncer;
-import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -44,9 +42,6 @@ public class Turret extends SubsystemBase {
 
   private Supplier<Boolean> fedFuel;
   private Consumer<Integer> changeHeldFuelBy;
-
-  private Debouncer currentControlDebouncer =
-      new Debouncer(TurretConstants.currentControlDebounce, DebounceType.kFalling);
 
   /**
    * Creates a new turret.

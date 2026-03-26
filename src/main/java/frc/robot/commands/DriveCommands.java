@@ -92,7 +92,8 @@ public class DriveCommands {
               double xAngle = xAngleSupplier.getAsDouble();
               double yAngle = yAngleSupplier.getAsDouble();
 
-              // if (MathUtil.isNear(0.0, xAngle, DEADBAND) // Stick is a neural, so snake drive (No snake drive :( )
+              // if (MathUtil.isNear(0.0, xAngle, DEADBAND) // Stick is a neural, so snake drive (No
+              // snake drive :( )
               //     && MathUtil.isNear(0.0, yAngle, DEADBAND)) {
               //   xAngle = ySupplier.getAsDouble();
               //   yAngle = xSupplier.getAsDouble();
