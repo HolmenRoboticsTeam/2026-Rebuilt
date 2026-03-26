@@ -102,6 +102,7 @@ public class StateLoggingCommands {
                   "Auto Winner",
                   HubShiftUtil.getFirstActiveAlliance() == Alliance.Blue ? "Red" : "Blue");
             })
+        .ignoringDisable(true)
         .withName("updateDashboard");
   }
 }

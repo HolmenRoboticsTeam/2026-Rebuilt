@@ -40,7 +40,7 @@ public class IndexerIOReal implements IndexerIO {
     inputs.velocityRPM = encoder.getVelocity();
     inputs.appliedVolts = indexerMotor.getBusVoltage() * indexerMotor.getAppliedOutput();
     inputs.currentAmps = indexerMotor.getOutputCurrent();
-    inputs.hasFuel = lineBreak.get();
+    inputs.hasFuel = !lineBreak.get();
   }
 
   @Override

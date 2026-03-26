@@ -18,14 +18,16 @@ public class FeederIOReal implements FeederIO {
   private SparkMax feederMotor;
   private RelativeEncoder encoder;
 
-  private DigitalInput lineBreak;
+  private DigitalInput enterLineBreak;
+  private DigitalInput exitLineBreak;
 
   /** Creates a new real climber. */
   public FeederIOReal() {
 
     feederMotor = new SparkMax(FeederConstants.Real.motorID, MotorType.kBrushless);
     encoder = feederMotor.getEncoder();
-    lineBreak = new DigitalInput(FeederConstants.Real.secondLineBreak);
+    enterLineBreak = new DigitalInput(FeederConstants.Real.enterLineBreakID);
+    exitLineBreak = new DigitalInput(FeederConstants.Real.exitLineBreakID);
 
     feederMotor.configure(
         FeederConstants.Real.motorConfig,
@@ -39,7 +41,8 @@ public class FeederIOReal implements FeederIO {
     inputs.velocityRPM = encoder.getVelocity();
     inputs.appliedVolts = feederMotor.getBusVoltage() * feederMotor.getAppliedOutput();
     inputs.currentAmps = feederMotor.getOutputCurrent();
-    inputs.hasFuel = !lineBreak.get();
+    inputs.hasEnterFuel = !enterLineBreak.get();
+    inputs.hasExitFuel = !exitLineBreak.get();
     inputs.releasingFuel = encoder.getVelocity() > 0.0;
   }
 

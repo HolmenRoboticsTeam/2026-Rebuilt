@@ -15,7 +15,8 @@ public interface FeederIO {
     public double velocityRPM = 0.0;
     public double appliedVolts = 0.0;
     public double currentAmps = 0.0;
-    public boolean hasFuel = true;
+    public boolean hasEnterFuel = true;
+    public boolean hasExitFuel = true;
     public boolean releasingFuel = false;
   }
 

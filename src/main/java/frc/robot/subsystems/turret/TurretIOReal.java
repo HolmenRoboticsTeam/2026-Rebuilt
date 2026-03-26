@@ -105,6 +105,9 @@ public class TurretIOReal implements TurretIO {
             flyWheelMotorLeft.getClosedLoopController().getSetpoint(),
             flyWheelMotorLeft.getEncoder().getVelocity(),
             TurretConstants.flyWheelTolerance);
+
+    inputs.isTurretAtTarget =
+        inputs.rotationIsAtTarget && inputs.angleIsAtTarget && inputs.flyWheelIsTarget;
   }
 
   @Override

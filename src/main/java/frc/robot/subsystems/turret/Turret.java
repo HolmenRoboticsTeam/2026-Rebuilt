@@ -294,7 +294,7 @@ public class Turret extends SubsystemBase {
    * @return Whether all three are at their target.
    */
   public boolean isReadyForFuel() {
-    return inputs.rotationIsAtTarget && inputs.angleIsAtTarget && inputs.flyWheelIsTarget;
+    return inputs.isTurretAtTarget;
   }
 
   /**

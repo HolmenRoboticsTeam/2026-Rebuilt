@@ -23,7 +23,7 @@ public class TurretConstants {
 
   public static final double rotationTolerance = Math.toRadians(3.0);
   public static final double angleTolerance = Math.toRadians(5.0);
-  public static final double flyWheelTolerance = 15.0; // RPM
+  public static final double flyWheelTolerance = 25.0; // RPM
 
   public static final double rotationGearing = (2.0 * Math.PI) * (1.0 / 3.0) * (10.0 / 88.0);
   public static final double angleGearing = (2.0 * Math.PI) * (15.0 / 36.0) * (10.0 / 192.0);

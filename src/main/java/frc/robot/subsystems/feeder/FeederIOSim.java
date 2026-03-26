@@ -36,7 +36,8 @@ public class FeederIOSim implements FeederIO {
     inputs.velocityRPM = feederMotor.getAngularVelocityRPM();
     inputs.appliedVolts = appliedVolts;
     inputs.currentAmps = feederMotor.getCurrentDrawAmps();
-    inputs.hasFuel = true; // Always has fuel
+    inputs.hasEnterFuel = true; // Always has fuel
+    inputs.hasExitFuel = true;
     inputs.releasingFuel = appliedVolts > 0.0;
   }
 

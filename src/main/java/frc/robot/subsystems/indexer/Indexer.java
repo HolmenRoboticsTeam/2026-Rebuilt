@@ -1,7 +1,5 @@
 package frc.robot.subsystems.indexer;
 
-import edu.wpi.first.math.filter.Debouncer;
-import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -17,8 +15,7 @@ public class Indexer extends SubsystemBase {
   private final IndexerIOInputsAutoLogged inputs = new IndexerIOInputsAutoLogged();
 
   private Supplier<Boolean> feederHasFuel;
-  private Debouncer hasFuelDebouncer =
-      new Debouncer(IndexerConstants.hasFuelDebouncerTime, DebounceType.kFalling);
+  private Supplier<Boolean> turretIsReadyForFuel;
   private int fuelHeldCount = 8;
 
   /**
@@ -26,9 +23,11 @@ public class Indexer extends SubsystemBase {
    *
    * @param io the implementation of the indexer.
    */
-  public Indexer(IndexerIO io, Supplier<Boolean> feederHasFuel) {
+  public Indexer(
+      IndexerIO io, Supplier<Boolean> feederHasFuel, Supplier<Boolean> turretIsReadyForFuel) {
     this.io = io;
     this.feederHasFuel = feederHasFuel;
+    this.turretIsReadyForFuel = turretIsReadyForFuel;
   }
 
   @Override
@@ -45,10 +44,11 @@ public class Indexer extends SubsystemBase {
   public Command autoIndex() {
     return Commands.repeatingSequence(
             stop(),
-            Commands.waitUntil(() -> !feederHasFuel.get()),
+            Commands.waitUntil(() -> (!feederHasFuel.get()) || turretIsReadyForFuel.get()),
             start(),
-            Commands.waitUntil(() -> feederHasFuel.get()))
-        .finallyDo(() -> io.setVolts(0.0));
+            Commands.waitUntil(() -> feederHasFuel.get() && (!turretIsReadyForFuel.get())))
+        .finallyDo(() -> io.setVolts(0.0))
+        .withName("Indexer_Auto");
   }
 
   /**
@@ -85,7 +85,7 @@ public class Indexer extends SubsystemBase {
               io.setVolts(-IndexerConstants.maxVolts);
             },
             this)
-        .withName("Indexer_Start");
+        .withName("Indexer_Reverse");
   }
 
   /**
@@ -98,7 +98,7 @@ public class Indexer extends SubsystemBase {
   }
 
   public boolean hasFuel() {
-    return hasFuelDebouncer.calculate(inputs.hasFuel);
+    return inputs.hasFuel;
   }
 
   public void changeHeldFuelBy(int delta) {

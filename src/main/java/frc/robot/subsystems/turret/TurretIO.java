@@ -12,6 +12,7 @@ public interface TurretIO {
 
   @AutoLog
   public static class TurretIOInputs {
+
     // Rotation motor
     public double rotationPositionRad = 0.0;
     public double rotationVelocityRadPerSec = 0.0;
@@ -32,6 +33,9 @@ public interface TurretIO {
     public double flyWheelAppliedVolts = 0.0;
     public double flyWheelCurrentAmps = 0.0;
     public boolean flyWheelIsTarget = false;
+
+    // All
+    public boolean isTurretAtTarget = false;
   }
 
   /**

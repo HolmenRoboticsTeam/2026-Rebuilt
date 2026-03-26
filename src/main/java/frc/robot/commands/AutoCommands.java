@@ -56,7 +56,13 @@ public class AutoCommands {
         .withName("displayAutoField");
   }
 
+  private static List<Pose2d> lastPoses;
+  private static String lastAutoName;
+
   private static List<Pose2d> getAutoPoses(Supplier<String> autoName) {
+
+    if (autoName.get().equals(lastAutoName)) return lastPoses;
+
     // Initialize a list of poses
     List<Pose2d> autoPoses = new ArrayList<>();
 
@@ -103,6 +109,8 @@ public class AutoCommands {
 
       autoPoses.set(index, new Pose2d(autoPoses.get(index).getTranslation(), rot));
     }
+
+    lastPoses = autoPoses;
 
     return autoPoses;
   }

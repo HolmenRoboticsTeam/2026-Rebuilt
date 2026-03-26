@@ -173,7 +173,7 @@ public class TurretDistanceCalc {
     }
 
     groundDataPoints =
-        new ArrayList<>(Arrays.asList(new TurretShotData(Meters.of(0.0), 0.0, 0.0, 0.0)));
+        new ArrayList<>(Arrays.asList(new TurretShotData(Meters.of(0.0), 1000.0, 0.35, 0.1)));
 
     for (TurretShotData dataPoint : groundDataPoints) {
       groundMap.put(dataPoint.distance, dataPoint);

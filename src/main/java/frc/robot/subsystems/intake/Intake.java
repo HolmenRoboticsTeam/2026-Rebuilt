@@ -54,6 +54,15 @@ public class Intake extends SubsystemBase {
         .withName("Intake_Stop");
   }
 
+  public Command reverse() {
+    return Commands.runOnce(
+            () -> {
+              io.setVolts(-IntakeConstants.maxVolts);
+            },
+            this)
+        .withName("Intake_Start");
+  }
+
   /**
    * Get the current position of the intake
    *

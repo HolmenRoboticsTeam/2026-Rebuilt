@@ -19,8 +19,8 @@ public class FeederConstants {
   public static class Real {
 
     public static final int motorID = 21;
-    public static final int firstLineBreakID = 0;
-    public static final int secondLineBreak = 1;
+    public static final int exitLineBreakID = 0;
+    public static final int enterLineBreakID = 1;
 
     public static final SparkMaxConfig motorConfig;
 

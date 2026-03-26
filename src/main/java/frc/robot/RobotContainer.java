@@ -105,11 +105,10 @@ public class RobotContainer {
                 (p, t, sd) -> drive.addVisionPoseMeasurement(p, t, sd),
                 new VisionIOLimelight("limelight", () -> drive.getRotation()));
         intake = new Intake(new IntakeIOReal());
-        indexer = new Indexer(new IndexerIOReal(), () -> true);
+        indexer =
+            new Indexer(
+                new IndexerIOReal(), () -> feeder.hasExitFuel(), () -> turret.isReadyForFuel());
         feeder = new Feeder(new FeederIOReal(), () -> turret.isReadyForFuel());
-        // intake = new Intake(new IntakeIO() {});
-        // indexer = new Indexer(new IndexerIO() {}, () -> true);
-        // feeder = new Feeder(new FeederIO() {}, () -> turret.isReadyForFuel());
         turret =
             new Turret(
                 new TurretIOReal(),
@@ -117,13 +116,6 @@ public class RobotContainer {
                 () -> drive.getChassisSpeeds(),
                 () -> feeder.feedingFuel(),
                 (d) -> indexer.changeHeldFuelBy(d));
-        // turret =
-        //     new Turret(
-        //         new TurretIO() {},
-        //         () -> drive.getPose(),
-        //         () -> drive.getChassisSpeeds(),
-        //         () -> feeder.feedingFuel(),
-        //         (d) -> indexer.changeHeldFuelBy(d));
         break;
 
       case SIM:
@@ -147,7 +139,9 @@ public class RobotContainer {
                 new VisionIO() {},
                 new VisionIO() {});
         intake = new Intake(new IntakeIOSim());
-        indexer = new Indexer(new IndexerIOSim(), () -> true);
+        indexer =
+            new Indexer(
+                new IndexerIOSim(), () -> feeder.hasExitFuel(), () -> turret.isReadyForFuel());
         feeder = new Feeder(new FeederIOSim(), () -> turret.isReadyForFuel());
         turret =
             new Turret(
@@ -171,8 +165,8 @@ public class RobotContainer {
             .registerIntake(
                 Distance.ofRelativeUnits(13.0, Inches).in(Meters),
                 Distance.ofRelativeUnits(16.0, Inches).in(Meters),
-                Distance.ofRelativeUnits(-8.5, Inches).in(Meters),
-                Distance.ofRelativeUnits(8.5, Inches)
+                Distance.ofRelativeUnits(-8.0, Inches).in(Meters),
+                Distance.ofRelativeUnits(8.0, Inches)
                     .in(Meters), // robot-centric coordinates for bounding box
                 () -> {
                   return intake.isRunning()
@@ -199,7 +193,9 @@ public class RobotContainer {
                 new VisionIO() {},
                 new VisionIO() {});
         intake = new Intake(new IntakeIO() {});
-        indexer = new Indexer(new IndexerIO() {}, () -> true);
+        indexer =
+            new Indexer(
+                new IndexerIO() {}, () -> feeder.hasExitFuel(), () -> turret.isReadyForFuel());
         feeder = new Feeder(new FeederIO() {}, () -> turret.isReadyForFuel());
         turret =
             new Turret(
@@ -242,13 +238,13 @@ public class RobotContainer {
             () -> controller.getRightTriggerAxis(),
             () -> -controller.getLeftY(),
             () -> -controller.getLeftX(),
-            () -> -controller.getRightX(),
-            () -> -controller.getRightY()));
+            () -> -controller.getRightY(),
+            () -> -controller.getRightX()));
 
     turret.setDefaultCommand(turret.fullFieldAim());
     // turret.setDefaultCommand(turret.calibrate());
 
-    // indexer.setDefaultCommand(indexer.autoIndex());
+    // indexer.setDefaultCommand(indexer.auwtoIndex());
     // feeder.setDefaultCommand(feeder.autoFeed());
 
     // Auto Field
@@ -293,7 +289,7 @@ public class RobotContainer {
 
     controller.a().onTrue(indexer.start()).onFalse(indexer.stop());
     controller.b().onTrue(feeder.start()).onFalse(feeder.stop());
-    controller.y().onTrue(indexer.reverse()).onFalse(indexer.stop());
+    controller.y().onTrue(intake.reverse()).onFalse(intake.stop());
 
     // #################### BUTTON BOARD ####################
 

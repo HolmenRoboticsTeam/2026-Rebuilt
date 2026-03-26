@@ -37,9 +37,10 @@ public class Feeder extends SubsystemBase {
   public Command autoFeed() {
     return Commands.repeatingSequence(
             stop(),
-            Commands.waitUntil(() -> turretIsReady.get()),
+            Commands.waitUntil(() -> turretIsReady.get() || !hasExitFuel()),
             start(),
-            Commands.waitUntil(() -> !turretIsReady.get()).finallyDo(() -> io.setVolts(0.0)))
+            Commands.waitUntil(() -> !turretIsReady.get() && hasExitFuel()))
+        .finallyDo(() -> io.setVolts(0.0))
         .withName("Feeder_Auto");
   }
 
@@ -88,17 +89,30 @@ public class Feeder extends SubsystemBase {
     return inputs.positionRotations;
   }
 
-  // public boolean hasFuel() {
-  //   return inputs.hasFuel;
-  // }
-
   /**
-   * Checks the motor to see if the feeder to releasing fuel to the turret and if the feeder has
-   * fuel.
+   * Checks the motor to see if the feeder to releasing fuel to the turret
    *
-   * @return Whether the feeder has and is releasing fuel.
+   * @return Whether the feeder is releasing fuel.
    */
   public boolean feedingFuel() {
-    return inputs.releasingFuel && inputs.hasFuel;
+    return inputs.releasingFuel;
+  }
+
+  /**
+   * Checks if the feeder has fuel at the enter linebreak
+   *
+   * @return Whether the feeder has fuel inside.
+   */
+  public boolean hasEnterFuel() {
+    return inputs.hasEnterFuel;
+  }
+
+  /**
+   * Checks if the feeder has fuel at the enter linebreak
+   *
+   * @return Whether the feeder has fuel inside.
+   */
+  public boolean hasExitFuel() {
+    return inputs.hasExitFuel;
   }
 }

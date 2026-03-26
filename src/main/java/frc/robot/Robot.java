@@ -95,12 +95,12 @@ public class Robot extends LoggedRobot {
   /** This function is called periodically during all modes. */
   @Override
   public void robotPeriodic() {
-    // Optionally switch the thread to high priority to improve loop
+    // Optionally switch the thread to high priority to improve loop[\]
     // timing (see the template project documentation for details)
     // Threads.setCurrentThreadPriority(true, 99);
 
     Logger.recordOutput(
-        "Active Commands",
+        "Command Stats/Active Commands",
         runningCommands.stream().map((c) -> c.getName()).toList().toArray(new String[0]));
 
     // Runs the Scheduler. This is responsible for polling buttons, adding
