@@ -71,6 +71,7 @@
     "editor.defaultFormatter": "richardwillis.vscode-spotless-gradle"
   },
   "cSpell.words": [
+    "DEADBAND",
     "Debouncer"
   ]
 }

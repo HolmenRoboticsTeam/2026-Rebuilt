@@ -92,11 +92,11 @@ public class DriveCommands {
               double xAngle = xAngleSupplier.getAsDouble();
               double yAngle = yAngleSupplier.getAsDouble();
 
-              if (MathUtil.isNear(0.0, xAngle, DEADBAND) // Stick is a neural, so snake drive
-                  && MathUtil.isNear(0.0, yAngle, DEADBAND)) {
-                xAngle = ySupplier.getAsDouble();
-                yAngle = xSupplier.getAsDouble();
-              }
+              // if (MathUtil.isNear(0.0, xAngle, DEADBAND) // Stick is a neural, so snake drive (No snake drive :( )
+              //     && MathUtil.isNear(0.0, yAngle, DEADBAND)) {
+              //   xAngle = ySupplier.getAsDouble();
+              //   yAngle = xSupplier.getAsDouble();
+              // }
 
               // Calculate angular speed
               double goalRad = Rotation2d.fromRadians(Math.atan2(yAngle, xAngle)).getRadians();
