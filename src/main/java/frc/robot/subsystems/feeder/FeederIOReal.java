@@ -10,6 +10,8 @@ import com.revrobotics.ResetMode;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
+import edu.wpi.first.math.filter.Debouncer;
+import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.wpilibj.DigitalInput;
 
 /** The real implementation of the climber. */
@@ -19,7 +21,9 @@ public class FeederIOReal implements FeederIO {
   private RelativeEncoder encoder;
 
   private DigitalInput enterLineBreak;
+  private Debouncer enterDebouncer;
   private DigitalInput exitLineBreak;
+  private Debouncer exitDebouncer;
 
   /** Creates a new real climber. */
   public FeederIOReal() {
@@ -27,7 +31,9 @@ public class FeederIOReal implements FeederIO {
     feederMotor = new SparkMax(FeederConstants.Real.motorID, MotorType.kBrushless);
     encoder = feederMotor.getEncoder();
     enterLineBreak = new DigitalInput(FeederConstants.Real.enterLineBreakID);
+    enterDebouncer = new Debouncer(FeederConstants.Real.debounceTime, DebounceType.kFalling);
     exitLineBreak = new DigitalInput(FeederConstants.Real.exitLineBreakID);
+    exitDebouncer = new Debouncer(FeederConstants.Real.debounceTime, DebounceType.kFalling);
 
     feederMotor.configure(
         FeederConstants.Real.motorConfig,
@@ -41,8 +47,8 @@ public class FeederIOReal implements FeederIO {
     inputs.velocityRPM = encoder.getVelocity();
     inputs.appliedVolts = feederMotor.getBusVoltage() * feederMotor.getAppliedOutput();
     inputs.currentAmps = feederMotor.getOutputCurrent();
-    inputs.hasEnterFuel = !enterLineBreak.get();
-    inputs.hasExitFuel = !exitLineBreak.get();
+    inputs.hasEnterFuel = enterDebouncer.calculate(!enterLineBreak.get());
+    inputs.hasExitFuel = exitDebouncer.calculate(!exitLineBreak.get());
     inputs.releasingFuel = encoder.getVelocity() > 0.0;
   }
 

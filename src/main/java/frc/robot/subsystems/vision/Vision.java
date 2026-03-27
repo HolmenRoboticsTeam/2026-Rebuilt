@@ -66,6 +66,11 @@ public class Vision extends SubsystemBase {
           new Alert(
               "Vision camera " + Integer.toString(i) + " is disconnected.", AlertType.kWarning);
     }
+
+    // Pre load all field info to prevent freeze on first tag.
+    for (int i = 1; i < 33; i++) {
+      aprilTagLayout.getTagPose(i).get();
+    }
   }
 
   @Override
@@ -82,6 +87,7 @@ public class Vision extends SubsystemBase {
 
     // Loop over cameras
     for (int cameraIndex = 0; cameraIndex < io.length; cameraIndex++) {
+
       // Update disconnected alert
       disconnectedAlerts[cameraIndex].set(!inputs[cameraIndex].connected);
 
@@ -100,6 +106,7 @@ public class Vision extends SubsystemBase {
 
       // Loop over pose observations
       for (var poseObservation : inputs[cameraIndex].poseObservations) {
+
         // Check whether to reject pose
         boolean rejectPose =
             poseObservation.tagCount() == 0 // Must have at least one tag

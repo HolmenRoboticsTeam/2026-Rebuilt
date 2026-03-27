@@ -164,28 +164,28 @@ public class Turret extends SubsystemBase {
                       .plus(Rotation2d.k180deg)
                       .minus(robotPose.get().getRotation());
 
-              double requiredVelocity = shotVelocity.getNorm();
-
+              // double requiredVelocity = shotVelocity.getNorm();
+              //
               // Loop up RPM from required velocity
-              double effectiveDistance =
-                  TurretDistanceCalc.velocityToEffectiveDistance(requiredVelocity, targetType);
-              TurretShotData requiredShotData =
-                  TurretDistanceCalc.getShotData(targetType, Meters.of(effectiveDistance));
-              double requiredRPM = requiredShotData.RPM();
-              Rotation2d requiredAngle = Rotation2d.fromRadians(requiredShotData.angleRad());
+              // double effectiveDistance =
+              //     TurretDistanceCalc.velocityToEffectiveDistance(requiredVelocity, targetType);
+              // TurretShotData requiredShotData =
+              //     TurretDistanceCalc.getShotData(targetType, Meters.of(effectiveDistance));
+              // double requiredRPM = requiredShotData.RPM();
+              // Rotation2d requiredAngle = Rotation2d.fromRadians(requiredShotData.angleRad());
 
               // Log the outputs
               Logger.recordOutput("Turret/Distance", distance);
               Logger.recordOutput("Turret/Target", targetTranslation);
               Logger.recordOutput("Turret/Type", targetType);
-              Logger.recordOutput("Turret/RPM", requiredRPM);
-              Logger.recordOutput("Turret/Angle", requiredAngle);
+              Logger.recordOutput("Turret/RPM", baselineData.RPM());
+              Logger.recordOutput("Turret/Angle", baselineData.angleRad());
               Logger.recordOutput("Turret/Rotation", turretRotation);
 
               // Set the outputs
               io.setTargetRotation(turretRotation);
-              io.setTargetAngle(requiredAngle);
-              io.setFlyWheelRPM(requiredRPM);
+              io.setTargetAngle(Rotation2d.fromRadians(baselineData.angleRad()));
+              io.setFlyWheelRPM(baselineData.RPM());
             },
             this)
         .withName("Turret_FullFieldAim");
@@ -245,6 +245,14 @@ public class Turret extends SubsystemBase {
             },
             this)
         .withName("Turret_Calibrate");
+  }
+
+  public Command maxFlyWheel() {
+    return Commands.run(
+        () -> {
+          io.setFlyWheelRPM(4000.0);
+        },
+        this);
   }
 
   /**

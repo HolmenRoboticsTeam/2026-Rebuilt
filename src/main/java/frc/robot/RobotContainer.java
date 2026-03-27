@@ -14,6 +14,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.commands.PathfindingCommand;
+import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -59,6 +60,7 @@ import frc.robot.subsystems.vision.VisionIOLimelight;
 import frc.robot.util.ButtonBoardController;
 import frc.robot.util.FuelSim;
 import frc.robot.util.HubShiftUtil;
+import java.util.List;
 import java.util.Optional;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
@@ -208,8 +210,11 @@ public class RobotContainer {
     }
 
     // Auto setup
-    NamedCommands.registerCommands(
-        Constants.getNamedCommand(drive, vision, intake, indexer, feeder, turret));
+    List<Pair<String, Command>> commands =
+        Constants.getNamedCommand(drive, vision, intake, indexer, feeder, turret);
+    for (Pair<String, Command> command : commands) {
+      NamedCommands.registerCommand(command.getFirst(), command.getSecond());
+    }
     autoSelectorType = new LoggedDashboardChooser<>("Auto Selector Type");
     autoSelectorType.addDefaultOption("Use Button Box", true);
     autoSelectorType.addOption("Use Dashboard Chooser", false);
@@ -244,7 +249,6 @@ public class RobotContainer {
     turret.setDefaultCommand(turret.fullFieldAim());
     // turret.setDefaultCommand(turret.calibrate());
 
-    // indexer.setDefaultCommand(indexer.auwtoIndex());
     // feeder.setDefaultCommand(feeder.autoFeed());
 
     // Auto Field
@@ -261,7 +265,12 @@ public class RobotContainer {
         .schedule(
             PathfindingCommand.warmupCommand().withName("Pathplanner_Warmup"),
             StateLoggingCommands.logMechanisms(intake, indexer, feeder, turret),
-            StateLoggingCommands.updateDashboard());
+            StateLoggingCommands.updateDashboard(),
+            StateLoggingCommands.rumbleOnShiftChange(controller),
+            intake.start(),
+            turret.zeroRotationOffEncoder() // Call this here, so that the motor is ready to be set
+            // before setting it.
+            );
   }
 
   /**
@@ -282,10 +291,6 @@ public class RobotContainer {
         .start()
         .onTrue(
             Commands.runOnce(() -> drive.resetGyro()).ignoringDisable(true).withName("Zero Gyro"));
-
-    controller.leftTrigger(0.1).onTrue(intake.start());
-
-    controller.leftTrigger(0.1).onFalse(intake.stop());
 
     controller.a().onTrue(indexer.start()).onFalse(indexer.stop());
     controller.b().onTrue(feeder.start()).onFalse(feeder.stop());
@@ -351,20 +356,20 @@ public class RobotContainer {
                 .ignoringDisable(true)
                 .withName("BadMeasurement"));
 
-    buttonBoardController
-        .get(2, 3)
-        .onTrue(
-            turret
-                .zeroRotationOffEncoder()
-                .ignoringDisable(true)
-                .withName("Zero Turret Rotation Off Encoder"));
+    buttonBoardController.get(2, 3).onTrue(turret.maxFlyWheel());
 
     // ###### ROW THREE ######
-    buttonBoardController.get(3, 1).whileTrue(intake.start()).onFalse(intake.stop());
+    buttonBoardController.get(3, 1).onTrue(intake.reverse()).onFalse(intake.start());
 
-    buttonBoardController.get(3, 2).whileTrue(indexer.start()).onFalse(indexer.stop());
+    buttonBoardController
+        .get(3, 2)
+        .onTrue(indexer.start().alongWith(feeder.start()))
+        .onFalse(indexer.stop().alongWith(feeder.stop()));
 
-    buttonBoardController.get(3, 3).whileTrue(feeder.start()).onFalse(feeder.stop());
+    buttonBoardController
+        .get(3, 3)
+        .onTrue(indexer.reverse().alongWith(feeder.reverse()))
+        .onFalse(indexer.stop().alongWith(feeder.stop()));
 
     buttonBoardController
         .get(3, 4)

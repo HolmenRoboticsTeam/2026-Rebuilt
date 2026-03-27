@@ -10,6 +10,8 @@ import com.revrobotics.ResetMode;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
+import edu.wpi.first.math.filter.Debouncer;
+import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.wpilibj.DigitalInput;
 
 /** The real implementation of the indexer. */
@@ -19,6 +21,7 @@ public class IndexerIOReal implements IndexerIO {
   private RelativeEncoder encoder;
 
   private DigitalInput lineBreak;
+  private Debouncer debouncer;
 
   /** Creates a new real indexer. */
   public IndexerIOReal() {
@@ -32,6 +35,7 @@ public class IndexerIOReal implements IndexerIO {
         PersistMode.kPersistParameters);
 
     lineBreak = new DigitalInput(IndexerConstants.Real.lineBreakID);
+    debouncer = new Debouncer(IndexerConstants.Real.debounceTime, DebounceType.kFalling);
   }
 
   public void updateInputs(IndexerIOInputs inputs) {
@@ -40,7 +44,7 @@ public class IndexerIOReal implements IndexerIO {
     inputs.velocityRPM = encoder.getVelocity();
     inputs.appliedVolts = indexerMotor.getBusVoltage() * indexerMotor.getAppliedOutput();
     inputs.currentAmps = indexerMotor.getOutputCurrent();
-    inputs.hasFuel = !lineBreak.get();
+    inputs.hasFuel = debouncer.calculate(!lineBreak.get());
   }
 
   @Override

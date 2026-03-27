@@ -28,30 +28,24 @@ public class AutoCommands {
   public static Command displayAutoField(
       Field2d field, Supplier<String> autoName, Supplier<Pose2d> robotPose) {
     double[] robotIndex = new double[] {0};
-    return Commands.sequence(
-            Commands.run(
-                    () -> {
+    return Commands.run(
+            () -> {
 
-                      // Get auto poses
-                      List<Pose2d> autoPoses = getAutoPoses(autoName);
+              // Get auto poses
+              List<Pose2d> autoPoses = getAutoPoses(autoName);
 
-                      // Save trajectories.
-                      field.getObject("traj").setPoses(autoPoses);
+              // Save trajectories.
+              field.getObject("traj").setPoses(autoPoses);
 
-                      robotIndex[0] += 1.0 / 3.0;
-                      if (robotIndex[0] > autoPoses.size() - 2) {
-                        robotIndex[0] = 0.0;
-                      }
-                      int index = (int) Math.floor(robotIndex[0]);
+              robotIndex[0] += 1.0 / 3.0;
+              if (robotIndex[0] > autoPoses.size() - 2) {
+                robotIndex[0] = 0.0;
+              }
+              int index = (int) Math.floor(robotIndex[0]);
 
-                      field.setRobotPose(autoPoses.get(index));
-                    })
-                .until(() -> DriverStation.isEnabled()),
-            Commands.run(
-                    () -> {
-                      field.setRobotPose(robotPose.get());
-                    })
-                .until(() -> DriverStation.isDisabled()))
+              field.setRobotPose(autoPoses.get(index));
+            })
+        .until(() -> DriverStation.isEnabled())
         .ignoringDisable(true)
         .withName("displayAutoField");
   }

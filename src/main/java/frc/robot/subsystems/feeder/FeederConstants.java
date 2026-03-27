@@ -21,6 +21,7 @@ public class FeederConstants {
     public static final int motorID = 21;
     public static final int exitLineBreakID = 0;
     public static final int enterLineBreakID = 1;
+    public static final double debounceTime = 0.5;
 
     public static final SparkMaxConfig motorConfig;
 

@@ -32,9 +32,10 @@ import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
 public class DriveCommands {
-  private static final double DEADBAND = 0.1;
+  private static final double TRANSLATION_DEADBAND = 0.1;
+  private static final double ANGLE_DEADBAND = 0.25;
   private static final double ANGLE_KP = 2.0;
-  private static final double ANGLE_KD = 0.4;
+  private static final double ANGLE_KD = 0.6;
   private static final double ANGLE_MAX_VELOCITY = 25.0;
   private static final double ANGLE_MAX_ACCELERATION = 9.0;
   private static final double FF_START_DELAY = 2.0; // Secs
@@ -46,7 +47,7 @@ public class DriveCommands {
 
   private static Translation2d getLinearVelocityFromJoysticks(double x, double y) {
     // Apply deadband
-    double linearMagnitude = MathUtil.applyDeadband(Math.hypot(x, y), DEADBAND);
+    double linearMagnitude = MathUtil.applyDeadband(Math.hypot(x, y), TRANSLATION_DEADBAND);
     Rotation2d linearDirection = new Rotation2d(Math.atan2(y, x));
 
     // Square magnitude for more precise control
@@ -100,11 +101,15 @@ public class DriveCommands {
               // }
 
               // Calculate angular speed
-              double goalRad = Rotation2d.fromRadians(Math.atan2(yAngle, xAngle)).getRadians();
-              double omega = angleController.calculate(drive.getRotation().getRadians(), goalRad);
+              Translation2d goalTranslation = new Translation2d(xAngle, yAngle);
+              double omega = 0.0;
+              if (!goalTranslation.equals(Translation2d.kZero)) {
+                omega =
+                    angleController.calculate(
+                        drive.getRotation().getRadians(), goalTranslation.getAngle().getRadians());
+              }
 
-              if (MathUtil.isNear(0.0, xAngle, DEADBAND)
-                  && MathUtil.isNear(0.0, yAngle, DEADBAND)) {
+              if (goalTranslation.getNorm() < ANGLE_DEADBAND) {
                 omega = 0.0;
               }
 

@@ -15,20 +15,19 @@ public class IndexerConstants {
 
   public static final double gearRatio = 1.0 / 5.0;
 
-  public static final double hasFuelDebouncerTime = 0.25;
-
   /** The constants only for the real version of the indexer. */
   public static class Real {
 
     public static final int motorID = 20;
     public static final int lineBreakID = 2;
+    public static final double debounceTime = 0.5;
 
     public static final SparkMaxConfig motorConfig;
 
     static {
       motorConfig = new SparkMaxConfig();
 
-      motorConfig.smartCurrentLimit(20).idleMode(IdleMode.kCoast).inverted(true);
+      motorConfig.smartCurrentLimit(40).idleMode(IdleMode.kCoast).inverted(true);
 
       motorConfig
           .encoder

@@ -5,7 +5,7 @@
 package frc.robot.util;
 
 import edu.wpi.first.math.Pair;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import java.util.HashMap;
 import java.util.Map;
@@ -13,14 +13,14 @@ import java.util.Map;
 /** Add your docs here. */
 public class ButtonBoardController {
 
-  private CommandXboxController leftControls;
-  private CommandXboxController rightControls;
+  private CommandGenericHID leftControls;
+  private CommandGenericHID rightControls;
 
   private Map<Pair<Integer, Integer>, Trigger> buttonMap = new HashMap<>();
 
   public ButtonBoardController(int leftPort, int rightPort) {
-    leftControls = new CommandXboxController(leftPort);
-    rightControls = new CommandXboxController(rightPort);
+    leftControls = new CommandGenericHID(leftPort);
+    rightControls = new CommandGenericHID(rightPort);
 
     linkButtons();
   }
