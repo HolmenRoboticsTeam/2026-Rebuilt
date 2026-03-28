@@ -150,12 +150,12 @@ public class TurretDistanceCalc {
                 // new TurretShotData(Meters.of(2.78), 1750.0, 0.0, 0.41),
                 // new TurretShotData(Meters.of(3.4), 1900.0, 0.0, 0.63),
                 new TurretShotData(
-                    Inches.of(76.5), 1640.0 + 300.0, 0.0, 0.861), // Time of flight verified
-                new TurretShotData(Inches.of(88.5), 1700.0 + 300.0, 0.0, 0.911),
-                new TurretShotData(Inches.of(100.5), 1750.0 + 350.0, 0.0, 0.931),
-                new TurretShotData(Inches.of(112.5), 1810.0 + 350.0, 0.0, 0.989),
-                new TurretShotData(Inches.of(124.5), 1880.0 + 350.0, 0.0, 1.045),
-                new TurretShotData(Inches.of(133.5), 1920.0 + 350.0, 0.0, 1.054),
+                    Inches.of(76.5), 1640.0 + 250.0, 0.0, 0.861), // Time of flight verified
+                new TurretShotData(Inches.of(88.5), 1700.0 + 200.0, 0.0, 0.911),
+                new TurretShotData(Inches.of(100.5), 1750.0 + 200.0, 0.0, 0.931),
+                new TurretShotData(Inches.of(112.5), 1810.0 + 200.0, 0.0, 0.989),
+                new TurretShotData(Inches.of(124.5), 1880.0 + 200.0, 0.0, 1.045),
+                new TurretShotData(Inches.of(133.5), 1920.0 + 200.0, 0.0, 1.054),
                 new TurretShotData(
                     Meters.of(3.65),
                     1960.0 + 200.0,
