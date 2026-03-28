@@ -292,9 +292,9 @@ public class RobotContainer {
         .onTrue(
             Commands.runOnce(() -> drive.resetGyro()).ignoringDisable(true).withName("Zero Gyro"));
 
-    controller.a().onTrue(intake.start()).onFalse(indexer.stop());
-    controller.b().onTrue(indexer.start()).onFalse(feeder.stop());
-    controller.y().onTrue(feeder.start()).onFalse(intake.stop());
+    controller.a().onTrue(intake.start()).onFalse(intake.stop());
+    controller.b().onTrue(indexer.start()).onFalse(indexer.stop());
+    controller.y().onTrue(feeder.start()).onFalse(feeder.stop());
 
     // #################### BUTTON BOARD ####################
 
