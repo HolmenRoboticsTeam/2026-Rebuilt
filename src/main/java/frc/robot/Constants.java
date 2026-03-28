@@ -194,7 +194,7 @@ public final class Constants {
                 "Indexer Wait Until Out Of Fuel", Commands.waitUntil(() -> !indexer.hasFuel())),
 
             // Feeder Commands
-            new Pair<String, Command>("Feeder Auto", feeder.autoFeed()),
+            new Pair<String, Command>("Feeder Auto", feeder.autoFeed().alongWith(intake.reverse().withTimeout(0.5))),
 
             // Turret Commands
             new Pair<String, Command>("Turret Full Field Aim", turret.fullFieldAim())));
