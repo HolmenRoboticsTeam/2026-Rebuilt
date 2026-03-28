@@ -237,7 +237,7 @@ public class Vision extends SubsystemBase {
           for (int cameraIndex = 0; cameraIndex < io.length; cameraIndex++) {
             io[cameraIndex].recordLastSeconds(seconds);
           }
-        });
+        }).ignoringDisable(true).withName("Vision_Record");
   }
 
   public void setRotationConsumer(VisionRotationConsumer consumer) {
