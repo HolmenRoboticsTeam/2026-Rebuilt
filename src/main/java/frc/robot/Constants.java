@@ -195,7 +195,7 @@ public final class Constants {
 
             // Feeder Commands
             new Pair<String, Command>(
-                "Feeder Auto", feeder.autoFeed().alongWith(intake.reverse().withTimeout(0.5))),
+                "Feeder Auto", feeder.autoFeed().alongWith(intake.reverse().withTimeout(1.0).andThen(intake.start()))),
 
             // Turret Commands
             new Pair<String, Command>("Turret Full Field Aim", turret.fullFieldAim())));
