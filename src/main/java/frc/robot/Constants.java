@@ -198,7 +198,9 @@ public final class Constants {
                 "Feeder Auto",
                 feeder
                     .autoFeed()
-                    .alongWith(Commands.sequence(indexer.reverse(), Commands.waitSeconds(2.0), indexer.start()))),
+                    .alongWith(
+                        Commands.sequence(
+                            intake.reverse(), Commands.waitSeconds(2.0), intake.start()))),
 
             // Turret Commands
             new Pair<String, Command>("Turret Full Field Aim", turret.fullFieldAim())));
