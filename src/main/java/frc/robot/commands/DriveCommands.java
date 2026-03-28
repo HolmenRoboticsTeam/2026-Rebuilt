@@ -132,7 +132,7 @@ public class DriveCommands {
                   ChassisSpeeds.fromFieldRelativeSpeeds(
                       speeds,
                       isFlipped
-                          ? drive.getRotation().plus(new Rotation2d(Math.PI))
+                          ? drive.getRotation().plus(new Rotation2d(0.0))
                           : drive.getRotation()));
             },
             drive)
