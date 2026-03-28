@@ -121,7 +121,7 @@ public class Robot extends LoggedRobot {
   @Override
   public void disabledInit() {
     robotContainer.disabledInit();
-    if(hasAutoStarted) {
+    if (hasAutoStarted) {
       robotContainer.endMatch();
     }
   }
@@ -153,7 +153,7 @@ public class Robot extends LoggedRobot {
     robotContainer.enabledInit();
     HubShiftUtil.initialize();
 
-    if(hasAutoStarted) {
+    if (hasAutoStarted) {
       robotContainer.endAuto();
     }
 

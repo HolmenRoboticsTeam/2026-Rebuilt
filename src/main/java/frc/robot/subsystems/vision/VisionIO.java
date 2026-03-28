@@ -44,6 +44,6 @@ public interface VisionIO {
   public default void clearWhiteList() {}
 
   public default void setIMUMode(int mode) {}
-  
+
   public default void recordLastSeconds(double seconds) {}
 }

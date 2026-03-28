@@ -232,11 +232,12 @@ public class Vision extends SubsystemBase {
   }
 
   public Command recordLastSecond(double seconds) {
-    return Commands.runOnce(() -> {
-      for (int cameraIndex = 0; cameraIndex < io.length; cameraIndex++) {
-                io[cameraIndex].recordLastSeconds(seconds);
-              }
-    });
+    return Commands.runOnce(
+        () -> {
+          for (int cameraIndex = 0; cameraIndex < io.length; cameraIndex++) {
+            io[cameraIndex].recordLastSeconds(seconds);
+          }
+        });
   }
 
   public void setRotationConsumer(VisionRotationConsumer consumer) {
