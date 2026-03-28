@@ -333,18 +333,18 @@ public class RobotContainer {
                 () -> -Rotation2d.fromDegrees(-135.0).getCos(),
                 () -> -Rotation2d.fromDegrees(-135.0).getSin()));
 
-    // buttonBoardController
-    //     .get(1, 4)
-    //     .whileTrue(
-    //         DriveCommands.joystickDriveAtAngle(
-    //             drive,
-    //             () -> controller.getRightTriggerAxis(),
-    //             () -> -controller.getLeftY(),
-    //             () -> -controller.getLeftX(),
-    //             () -> -Rotation2d.fromDegrees(-90.0).getCos(),
-    //             () -> -Rotation2d.fromDegrees(-90.0).getSin()));
+    buttonBoardController
+        .get(1, 4)
+        .whileTrue(
+            DriveCommands.joystickDriveAtAngle(
+                drive,
+                () -> controller.getRightTriggerAxis(),
+                () -> -controller.getLeftY(),
+                () -> -controller.getLeftX(),
+                () -> -Rotation2d.fromDegrees(-90.0).getCos(),
+                () -> -Rotation2d.fromDegrees(-90.0).getSin()));
 
-    buttonBoardController.get(1, 4).onTrue(vision.recordLastSecond(120));
+    // buttonBoardController.get(1, 4).onTrue(vision.recordLastSecond(120));
 
     // ###### ROW TWO ######
     buttonBoardController

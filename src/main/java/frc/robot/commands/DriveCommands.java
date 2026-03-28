@@ -118,11 +118,11 @@ public class DriveCommands {
                   new ChassisSpeeds(
                       linearVelocity.getX()
                           * drive.getMaxLinearSpeedMetersPerSec()
-                          * 0.25
+                          * 0.5
                           * (throttleSupplier.getAsDouble() * 3.0 + 1.0),
                       linearVelocity.getY()
                           * drive.getMaxLinearSpeedMetersPerSec()
-                          * 0.25
+                          * 0.5
                           * (throttleSupplier.getAsDouble() * 3.0 + 1.0),
                       omega);
               boolean isFlipped =
