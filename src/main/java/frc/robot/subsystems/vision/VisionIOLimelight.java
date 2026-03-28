@@ -135,7 +135,9 @@ public class VisionIOLimelight implements VisionIO {
 
   @Override
   public void recordLastSeconds(double seconds) {
+    System.out.println("Started recording!");
     LimelightHelpers.triggerRewindCapture("", seconds);
+    System.out.println("Finished recording!");
   }
 
   /** Parses the 3D pose from a Limelight botpose array. */
