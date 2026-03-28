@@ -180,7 +180,7 @@ public class Turret extends SubsystemBase {
                 Logger.recordOutput("Turret/Target", targetTranslation);
                 Logger.recordOutput("Turret/Type", targetType);
                 Logger.recordOutput("Turret/RPM", baselineData.RPM());
-                Logger.recordOutput("Turret/Angle", baselineData.angleRad());
+                Logger.recordOutput("Turret/Angle", new Rotation2d(baselineData.angleRad()));
                 Logger.recordOutput("Turret/Rotation", turretRotation);
               } catch (Exception e) {
                 // TODO: handle exception
