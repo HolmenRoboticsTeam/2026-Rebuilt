@@ -231,6 +231,14 @@ public class Vision extends SubsystemBase {
         .withName("Vision_ignoreVision");
   }
 
+  public Command recordLastSecond(double seconds) {
+    return Commands.runOnce(() -> {
+      for (int cameraIndex = 0; cameraIndex < io.length; cameraIndex++) {
+                io[cameraIndex].recordLastSeconds(seconds);
+              }
+    });
+  }
+
   public void setRotationConsumer(VisionRotationConsumer consumer) {
     this.rotationConsumer = consumer;
   }

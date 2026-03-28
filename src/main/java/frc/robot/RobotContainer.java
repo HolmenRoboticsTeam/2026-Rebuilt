@@ -444,4 +444,12 @@ public class RobotContainer {
   public void disabledInit() {
     CommandScheduler.getInstance().schedule(vision.setIMUMode(1));
   }
+
+  public void endAuto() {
+    vision.recordLastSecond(30.0);
+  }
+
+  public void endMatch() {
+    vision.recordLastSecond(145.0);
+  }
 }
