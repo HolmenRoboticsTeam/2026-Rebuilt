@@ -239,8 +239,7 @@ public class Vision extends SubsystemBase {
               }
             })
         .ignoringDisable(true)
-        .withName("Vision_Record")
-        .withTimeout(1.0);
+        .withName("Vision_Record");
   }
 
   public void setRotationConsumer(VisionRotationConsumer consumer) {
