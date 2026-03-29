@@ -91,7 +91,7 @@ public class TurretConstants {
 
       angleMotorConfig = new SparkMaxConfig();
 
-      angleMotorConfig.smartCurrentLimit(40).idleMode(IdleMode.kBrake).inverted(true);
+      angleMotorConfig.smartCurrentLimit(20).idleMode(IdleMode.kBrake).inverted(true);
 
       angleMotorConfig
           .encoder
