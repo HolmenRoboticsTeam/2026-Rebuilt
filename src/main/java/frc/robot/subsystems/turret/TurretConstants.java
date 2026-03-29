@@ -95,6 +95,7 @@ public class TurretConstants {
 
       angleMotorConfig
           .encoder
+          .inverted(true)
           .positionConversionFactor(angleGearing)
           .velocityConversionFactor(angleGearing / 60.0);
 
