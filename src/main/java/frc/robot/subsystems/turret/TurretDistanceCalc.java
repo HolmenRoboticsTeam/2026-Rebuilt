@@ -181,7 +181,8 @@ public class TurretDistanceCalc {
                 new TurretShotData(Meters.of(7.0), 1900.0, 0.4, 1.0),
                 new TurretShotData(Meters.of(8.0), 2000.0, 0.4, 1.0),
                 new TurretShotData(Meters.of(9.0), 2100.0, 0.4, 1.0),
-                new TurretShotData(Meters.of(10.0), 2500.0, 0.4, 1.0)));
+                new TurretShotData(Meters.of(10.0), 2500.0, 0.4, 1.0),
+                new TurretShotData(Meters.of(14.0), 3000.0, 0.4, 1.0)));
 
     for (TurretShotData dataPoint : groundDataPoints) {
       groundMap.put(dataPoint.distance, dataPoint);

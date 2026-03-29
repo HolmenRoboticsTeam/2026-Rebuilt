@@ -200,7 +200,7 @@ public final class Constants {
                     .autoFeed()
                     .alongWith(
                         Commands.sequence(
-                            intake.reverse(), Commands.waitSeconds(1.0), intake.start()))),
+                            intake.reverse(), Commands.waitSeconds(3.0), intake.start()))),
 
             // Turret Commands
             new Pair<String, Command>("Turret Full Field Aim", turret.fullFieldAim())));
