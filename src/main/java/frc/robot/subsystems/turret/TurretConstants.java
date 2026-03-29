@@ -100,10 +100,10 @@ public class TurretConstants {
 
       angleMotorConfig
           .closedLoop
-          .pid(0.6, 0.0, 0.0)
+          .pid(0.8, 0.0, 0.0)
           .allowedClosedLoopError(0.01, ClosedLoopSlot.kSlot0)
           .feedForward
-          .kS(0.3);
+          .kS(0.25);
       angleMotorConfig.softLimit.forwardSoftLimit(0.0).reverseSoftLimit(0.45);
 
       // Left FlyWheel Motor Config
