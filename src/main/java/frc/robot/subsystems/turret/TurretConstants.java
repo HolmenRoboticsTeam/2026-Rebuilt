@@ -91,7 +91,7 @@ public class TurretConstants {
 
       angleMotorConfig = new SparkMaxConfig();
 
-      angleMotorConfig.smartCurrentLimit(20).idleMode(IdleMode.kBrake).inverted(true);
+      angleMotorConfig.smartCurrentLimit(40).idleMode(IdleMode.kBrake).inverted(true);
 
       angleMotorConfig
           .encoder
@@ -100,7 +100,7 @@ public class TurretConstants {
 
       angleMotorConfig
           .closedLoop
-          .pid(0.8, 0.0, 0.0)
+          .pid(0.6, 0.0, 0.0)
           .allowedClosedLoopError(0.01, ClosedLoopSlot.kSlot0)
           .feedForward
           .kS(0.25);
