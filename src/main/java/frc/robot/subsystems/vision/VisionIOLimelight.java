@@ -13,8 +13,8 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.DoubleArrayPublisher;
 import edu.wpi.first.networktables.DoubleArraySubscriber;
+import edu.wpi.first.networktables.DoublePublisher;
 import edu.wpi.first.networktables.DoubleSubscriber;
-import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.RobotController;
 import java.util.HashSet;
@@ -31,9 +31,12 @@ public class VisionIOLimelight implements VisionIO {
   private final DoubleSubscriber latencySubscriber;
   private final DoubleArraySubscriber megatag2Subscriber;
 
-  private final NetworkTableEntry whiteList;
-  private final NetworkTableEntry IMUMode;
-  private final NetworkTableEntry rewind;
+  private final DoublePublisher rewindEnable;
+  private final DoubleArraySubscriber rewindSubscriber;
+  private final DoubleArrayPublisher rewindPublisher;
+
+  private final DoubleArrayPublisher whiteList;
+  private final DoublePublisher IMUMode;
 
   private boolean valuesNeedSetting = true;
 
@@ -50,9 +53,13 @@ public class VisionIOLimelight implements VisionIO {
     latencySubscriber = table.getDoubleTopic("tl").subscribe(0.0);
     megatag2Subscriber =
         table.getDoubleArrayTopic("botpose_orb_wpiblue").subscribe(new double[] {});
-    whiteList = table.getEntry("fiducial_id_filters_set");
-    IMUMode = table.getEntry("imumode_set");
-    rewind = table.getEntry("capture_rewind");
+
+    rewindEnable = table.getDoubleTopic("rewind_enable_set").publish();
+    rewindSubscriber = table.getDoubleArrayTopic("capture_rewind").subscribe(new double[] {});
+    rewindPublisher = table.getDoubleArrayTopic("capture_rewind").publish();
+
+    whiteList = table.getDoubleArrayTopic("fiducial_id_filters_set").publish();
+    IMUMode = table.getDoubleTopic("imumode_set").publish();
   }
 
   @Override
@@ -63,8 +70,8 @@ public class VisionIOLimelight implements VisionIO {
         ((RobotController.getFPGATime() - latencySubscriber.getLastChange()) / 1000) < 250;
 
     if (valuesNeedSetting && inputs.connected) {
-      IMUMode.setDouble(0.01);
-      rewind.setDouble(1);
+      IMUMode.accept(0.01);
+      rewindEnable.accept(1);
       valuesNeedSetting = false;
     }
 
@@ -123,12 +130,13 @@ public class VisionIOLimelight implements VisionIO {
     for (int i = 0; i < ids.length; i++) {
       doubleIDs[i] = ids[i];
     }
-    whiteList.setDoubleArray(doubleIDs);
+    whiteList.accept(doubleIDs);
+    ;
   }
 
   @Override
   public void clearWhiteList() {
-    whiteList.setDoubleArray(
+    whiteList.accept(
         new double[] {
           1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25,
           26, 27, 28, 29, 30, 31, 32
@@ -137,16 +145,16 @@ public class VisionIOLimelight implements VisionIO {
 
   @Override
   public void setIMUMode(int mode) {
-    IMUMode.setDouble(mode);
+    IMUMode.accept(mode);
   }
 
   @Override
   public void recordLastSeconds(double seconds) {
-    double counter = rewind.getDoubleArray(new double[] {0})[0];
+    double counter = rewindSubscriber.get().length > 0 ? rewindSubscriber.get()[0] : 0;
     double[] entries = new double[2];
     entries[0] = counter + 1;
     entries[1] = Math.min(seconds, 165);
-    rewind.setDoubleArray(entries);
+    rewindPublisher.accept(entries);
   }
 
   /** Parses the 3D pose from a Limelight botpose array. */
