@@ -109,10 +109,11 @@ public class StateLoggingCommands {
   }
 
   public static Command rumbleOnShiftChange(CommandXboxController controller) {
-    return Commands.sequence(
-        Commands.runOnce(() -> controller.setRumble(RumbleType.kBothRumble, 0.0)),
-        Commands.waitUntil(() -> HubShiftUtil.getOfficialShiftInfo().remainingTime() < 5),
-        Commands.runOnce(() -> controller.setRumble(RumbleType.kBothRumble, 0.5)),
-        Commands.waitUntil(() -> HubShiftUtil.getOfficialShiftInfo().remainingTime() > 5));
+    return Commands.repeatingSequence(
+            Commands.runOnce(() -> controller.setRumble(RumbleType.kBothRumble, 0.0)),
+            Commands.waitUntil(() -> HubShiftUtil.getOfficialShiftInfo().remainingTime() < 5),
+            Commands.runOnce(() -> controller.setRumble(RumbleType.kBothRumble, 0.5)),
+            Commands.waitUntil(() -> HubShiftUtil.getOfficialShiftInfo().remainingTime() > 5))
+        .withName("Controller_ShiftRumbleCommand");
   }
 }

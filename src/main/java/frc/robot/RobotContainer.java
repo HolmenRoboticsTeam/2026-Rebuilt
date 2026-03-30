@@ -15,7 +15,6 @@ import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.commands.PathfindingCommand;
 import edu.wpi.first.math.Pair;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -268,10 +267,9 @@ public class RobotContainer {
             StateLoggingCommands.logMechanisms(intake, indexer, feeder, turret),
             StateLoggingCommands.updateDashboard(),
             StateLoggingCommands.rumbleOnShiftChange(controller),
-            intake.start(),
-            turret.zeroRotationOffEncoder() // Call this here, so that the motor is ready to be set
-            // before setting it.
-            );
+            // Call these here, so that the controls is ready
+            intake.start().beforeStarting(Commands.waitSeconds(5.0)),
+            turret.zeroRotationOffEncoder().beforeStarting(Commands.waitSeconds(5.0)));
   }
 
   /**
