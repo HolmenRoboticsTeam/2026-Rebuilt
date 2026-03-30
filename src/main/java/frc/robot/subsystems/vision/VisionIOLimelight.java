@@ -33,6 +33,7 @@ public class VisionIOLimelight implements VisionIO {
 
   private final NetworkTableEntry whiteList;
   private final NetworkTableEntry IMUMode;
+  private final NetworkTableEntry rewind;
 
   /**
    * Creates a new VisionIOLimelight.
@@ -49,6 +50,7 @@ public class VisionIOLimelight implements VisionIO {
         table.getDoubleArrayTopic("botpose_orb_wpiblue").subscribe(new double[] {});
     whiteList = table.getEntry("fiducial_id_filters_set");
     IMUMode = table.getEntry("imumode_set");
+    rewind = table.getEntry("capture_rewind");
 
     table.getEntry("imuassistalpha_set").setDouble(0.01);
     table.getEntry("rewind_enabled_set").setDouble(1);
@@ -135,9 +137,11 @@ public class VisionIOLimelight implements VisionIO {
 
   @Override
   public void recordLastSeconds(double seconds) {
-    System.out.println("Started recording!");
-    LimelightHelpers.triggerRewindCapture("", seconds);
-    System.out.println("Finished recording!");
+    double counter = rewind.getDoubleArray(new double[] {0})[0];
+    double[] entries = new double[2];
+    entries[0] = counter + 1;
+    entries[1] = Math.min(seconds, 165);
+    rewind.setDoubleArray(entries);
   }
 
   /** Parses the 3D pose from a Limelight botpose array. */
