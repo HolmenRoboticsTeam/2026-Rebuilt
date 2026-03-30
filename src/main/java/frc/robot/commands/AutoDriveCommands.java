@@ -16,6 +16,7 @@ import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.Constants;
 import frc.robot.Constants.FieldConstants;
 import frc.robot.subsystems.drive.Drive;
 import java.io.IOException;
@@ -68,10 +69,7 @@ public class AutoDriveCommands {
     if (withPreciseMove) {
       return Commands.sequence(
               pathFindAndFollowPathFixer(path),
-              preciseMove(
-                  drive,
-                  FieldConstants.allianceFlip(
-                      path.getPathPoses().get(path.getPathPoses().size() - 1))))
+              preciseMove(drive, path.getPathPoses().get(path.getPathPoses().size() - 1)))
           .withName("driveToPoseThenPathWithPreciseMove");
     }
 
@@ -88,14 +86,15 @@ public class AutoDriveCommands {
   private static Command pathFindAndFollowPathFixer(PathPlannerPath path) {
 
     Pose2d startOfPathPose =
-        FieldConstants.allianceFlip(
-            new Pose2d(
-                path.getPathPoses().get(0).getTranslation(),
-                path.getRotationTargets() != null
-                    ? path.getRotationTargets().get(0).rotation()
-                    : path.getInitialHeading()));
-    return AutoBuilder.pathfindToPose(
-            startOfPathPose, constraints, path.getIdealStartingState().velocityMPS())
+        new Pose2d(path.getPathPoses().get(0).getTranslation(), path.getInitialHeading());
+    return Commands.either(
+            AutoBuilder.pathfindToPose(
+                startOfPathPose, constraints, path.getIdealStartingState().velocityMPS()),
+            AutoBuilder.pathfindToPose(
+                FieldConstants.forceAllianceFlip(startOfPathPose),
+                constraints,
+                path.getIdealStartingState().velocityMPS()),
+            () -> Constants.isBlueAlliance.get())
         .andThen(AutoBuilder.followPath(path));
   }
 
@@ -131,7 +130,9 @@ public class AutoDriveCommands {
       return PathPlannerPath.fromPathFile(pathName);
     } catch (FileVersionException | IOException | ParseException e) {
       Logger.recordOutput("PathPlannerIOException", true);
-      return (PathPlannerPath) PathPlannerPath.waypointsFromPoses(drive.getPose());
+      System.out.println(
+          "PathPlannerIOException was caught in AutoDriveCommands. Name: " + pathName);
+      return null;
     }
   }
 }

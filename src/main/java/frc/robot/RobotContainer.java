@@ -27,6 +27,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.Constants.FieldConstants;
 import frc.robot.commands.AutoCommands;
 import frc.robot.commands.AutoDriveCommands;
 import frc.robot.commands.DriveCommands;
@@ -278,7 +279,8 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
 
-    // #################### DRIVER CONTROLLER ####################
+    // ######################################## DRIVER CONTROLLER
+    // ########################################
 
     // Switch to X pattern when X button is pressed
     controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
@@ -289,33 +291,95 @@ public class RobotContainer {
         .onTrue(
             Commands.runOnce(() -> drive.resetGyro()).ignoringDisable(true).withName("Zero Gyro"));
 
+    // Testing controls
     controller.a().onTrue(intake.start()).onFalse(intake.stop());
     controller.b().onTrue(indexer.start()).onFalse(indexer.stop());
     controller.y().onTrue(feeder.start()).onFalse(feeder.stop());
 
-    // #################### BUTTON BOARD ####################
+    // ######################################## BUTTON BOARD
+    // ########################################
 
-    // ###### ROW ONE ######
+    // #################### ROW ONE ####################
 
+    // Corralling fuel to the depot (Left side)
     switchBoard
         .get(1, 1)
-        .whileTrue(AutoDriveCommands.driveToPoseThenPath(drive, "Feed Depot Long", false));
+        .whileTrue(
+            Commands.either(
+                Commands.either( // Alliance Side
+                    // This path will be selected when the robot is in our alliance zone or our
+                    // bump/trench
+                    AutoDriveCommands.driveToPoseThenPath(drive, "Feed Depot Extra Short", false),
+                    // This path will be selected when the robot is on the close side of the neutral
+                    // zone.
+                    AutoDriveCommands.driveToPoseThenPath(drive, "Feed Depot Short", false),
+                    () ->
+                        FieldConstants.allianceFlip(FieldConstants.kHomeAllianceZone)
+                                .contains(drive.getPose().getTranslation())
+                            || FieldConstants.allianceFlip(FieldConstants.kAllianceTrenchBumpZone)
+                                .contains(drive.getPose().getTranslation())),
+                Commands.either( // Opposing Side
+                    // This path will be selected when the robot is in the opposing alliance zone or
+                    // the opposing alliance bump/trench
+                    AutoDriveCommands.driveToPoseThenPath(drive, "Feed Depot Long", false),
+                    // This path will be selected when the robot is on the far side of the neutral
+                    // zone.
+                    AutoDriveCommands.driveToPoseThenPath(drive, "Feed Depot Mid", false),
+                    () ->
+                        FieldConstants.allianceFlip(FieldConstants.kOpposingAllianceZone)
+                                .contains(drive.getPose().getTranslation())
+                            || FieldConstants.allianceFlip(FieldConstants.kOpposingTrenchBumpZone)
+                                .contains(drive.getPose().getTranslation())),
+                () ->
+                    FieldConstants.allianceFlip(FieldConstants.kAllianceHalf)
+                        .contains(drive.getPose().getTranslation())));
 
+    // Sweeping behind the hub
     switchBoard
         .get(1, 2)
-        .whileTrue(AutoDriveCommands.driveToPoseThenPath(drive, "Feed Depot Short", false));
+        .whileTrue(
+            AutoDriveCommands.driveToPoseThenPath(drive, "Right To Left Back Of Hub", false));
 
+    // Sweeping behind the hub
     switchBoard
         .get(1, 3)
-        .whileTrue(AutoDriveCommands.driveToPoseThenPath(drive, "Feed Outpost Short", false));
+        .whileTrue(
+            AutoDriveCommands.driveToPoseThenPath(drive, "Left To Right Back Of Hub", false));
 
+    // Corralling fuel into the outpost (Right side)
     switchBoard
         .get(1, 4)
-        .whileTrue(AutoDriveCommands.driveToPoseThenPath(drive, "Feed Outpost Long", false));
+        .whileTrue(
+            Commands.either(
+                Commands.either( // Alliance Side
+                    // This path will be selected when the robot is in our alliance zone or our
+                    // bump/trench
+                    AutoDriveCommands.driveToPoseThenPath(drive, "Feed Outpost Extra Short", false),
+                    // This path will be selected when the robot is on the close side of the neutral
+                    // zone.
+                    AutoDriveCommands.driveToPoseThenPath(drive, "Feed Outpost Short", false),
+                    () ->
+                        FieldConstants.allianceFlip(FieldConstants.kHomeAllianceZone)
+                                .contains(drive.getPose().getTranslation())
+                            || FieldConstants.allianceFlip(FieldConstants.kAllianceTrenchBumpZone)
+                                .contains(drive.getPose().getTranslation())),
+                Commands.either( // Opposing Side
+                    // This path will be selected when the robot is in the opposing alliance zone or
+                    // the opposing alliance bump/trench
+                    AutoDriveCommands.driveToPoseThenPath(drive, "Feed Outpost Long", false),
+                    // This path will be selected when the robot is on the far side of the neutral
+                    // zone.
+                    AutoDriveCommands.driveToPoseThenPath(drive, "Feed Outpost Mid", false),
+                    () ->
+                        FieldConstants.allianceFlip(FieldConstants.kOpposingAllianceZone)
+                                .contains(drive.getPose().getTranslation())
+                            || FieldConstants.allianceFlip(FieldConstants.kOpposingTrenchBumpZone)
+                                .contains(drive.getPose().getTranslation())),
+                () ->
+                    FieldConstants.allianceFlip(FieldConstants.kAllianceHalf)
+                        .contains(drive.getPose().getTranslation())));
 
-    // buttonBoardController.get(1, 4).onTrue(vision.recordLastSecond(120));
-
-    // ###### ROW TWO ######
+    // #################### ROW TWO ####################
     switchBoard
         .get(2, 2)
         .whileTrue(indexer.reverse())
@@ -325,7 +389,7 @@ public class RobotContainer {
 
     switchBoard.get(2, 3).onTrue(turret.maxFlyWheel());
 
-    // ###### ROW THREE ######
+    // #################### ROW THREE ####################
     switchBoard.get(3, 1).onTrue(intake.reverse()).onFalse(intake.start());
 
     switchBoard.get(3, 2).onTrue(indexer.start()).onFalse(indexer.stop());

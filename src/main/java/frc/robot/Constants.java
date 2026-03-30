@@ -66,8 +66,18 @@ public final class Constants {
             new Translation2d(Inches.of(0.0), Inches.of(0.0)),
             new Translation2d(fieldLength, fieldWidth));
 
+    public static final Rectangle2d kAllianceHalf =
+        new Rectangle2d(
+            new Translation2d(Inches.of(0.0), Inches.of(0.0)),
+            new Translation2d(fieldLength.div(2.0), fieldWidth));
+
+    public static final Rectangle2d kOpposingHalf =
+        new Rectangle2d(
+            new Translation2d(fieldLength.div(2.0), Inches.of(0.0)),
+            new Translation2d(fieldLength, fieldWidth));
+
     public static final Rectangle2d kHomeAllianceZone =
-        new Rectangle2d( // Blue Alliance Zone
+        new Rectangle2d(
             new Translation2d(Inches.of(0.0), Inches.of(0.0)),
             new Translation2d(Inches.of(157.06), fieldWidth));
 
@@ -90,6 +100,11 @@ public final class Constants {
         new Rectangle2d(
             new Translation2d(Inches.of(445.06), Inches.of(0.0)),
             new Translation2d(Inches.of(492.06), fieldWidth));
+
+    public static final Rectangle2d kOpposingAllianceZone =
+        new Rectangle2d(
+            new Translation2d(Inches.of(492.06), Inches.of(0.0)),
+            new Translation2d(fieldLength, fieldWidth));
 
     public static final Rectangle2d kLeftOpposingSide =
         new Rectangle2d(
@@ -159,12 +174,21 @@ public final class Constants {
 
     // #################### HELPER METHOD ####################
 
+    // Translations
+
     public static Translation2d allianceFlip(Translation2d trans) {
       if (isBlueAlliance.get()) return trans;
 
       return new Translation2d(
           fieldLength.minus(trans.getMeasureX()), fieldWidth.minus(trans.getMeasureY()));
     }
+
+    public static Translation2d forceAllianceFlip(Translation2d trans) {
+      return new Translation2d(
+          fieldLength.minus(trans.getMeasureX()), fieldWidth.minus(trans.getMeasureY()));
+    }
+
+    // Poses
 
     public static Pose2d allianceFlip(Pose2d pose) {
       if (isBlueAlliance.get()) return pose;
@@ -173,10 +197,22 @@ public final class Constants {
           allianceFlip(pose.getTranslation()), pose.getRotation().minus(Rotation2d.k180deg));
     }
 
+    public static Pose2d forceAllianceFlip(Pose2d pose) {
+      return new Pose2d(
+          forceAllianceFlip(pose.getTranslation()), pose.getRotation().minus(Rotation2d.k180deg));
+    }
+
+    // Rect
+
     public static Rectangle2d allianceFlip(Rectangle2d rect) {
       if (isBlueAlliance.get()) return rect;
 
       return new Rectangle2d(allianceFlip(rect.getCenter()), rect.getXWidth(), rect.getYWidth());
+    }
+
+    public static Rectangle2d forceAllianceFlip(Rectangle2d rect) {
+      return new Rectangle2d(
+          forceAllianceFlip(rect.getCenter()), rect.getXWidth(), rect.getYWidth());
     }
   }
 
