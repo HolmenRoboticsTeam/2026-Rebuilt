@@ -246,10 +246,8 @@ public class RobotContainer {
             () -> -controller.getRightY(),
             () -> -controller.getRightX()));
 
+    feeder.setDefaultCommand(feeder.autoFeed());
     turret.setDefaultCommand(turret.fullFieldAim());
-    // turret.setDefaultCommand(turret.calibrate());
-
-    // feeder.setDefaultCommand(feeder.autoFeed());
 
     // Auto Field
     SmartDashboard.putData("AutoField", autoField);
@@ -320,11 +318,11 @@ public class RobotContainer {
     // ###### ROW TWO ######
     buttonBoardController
         .get(2, 2)
-        .whileTrue(indexer.reverse().alongWith(feeder.reverse()))
+        .whileTrue(indexer.reverse())
         .onFalse(
             Commands.either(
-                indexer.start().alongWith(feeder.start()),
-                indexer.stop().alongWith(feeder.stop()),
+                indexer.start(),
+                indexer.stop(),
                 () -> buttonBoardController.get(3, 2).getAsBoolean()));
 
     buttonBoardController.get(2, 3).onTrue(turret.maxFlyWheel());
@@ -334,8 +332,8 @@ public class RobotContainer {
 
     buttonBoardController
         .get(3, 2)
-        .onTrue(indexer.start().alongWith(feeder.start()))
-        .onFalse(indexer.stop().alongWith(feeder.stop()));
+        .onTrue(indexer.start())
+        .onFalse(indexer.stop());
 
     Logger.recordOutput("Tuning/BadMeasurement", false);
     buttonBoardController

@@ -106,8 +106,11 @@ public class TurretIOReal implements TurretIO {
             flyWheelMotorLeft.getEncoder().getVelocity(),
             TurretConstants.flyWheelTolerance);
 
-    inputs.isTurretAtTarget =
-        inputs.rotationIsAtTarget && inputs.angleIsAtTarget && inputs.flyWheelIsTarget;
+    // inputs.isTurretAtTarget =
+    //     inputs.rotationIsAtTarget && inputs.angleIsAtTarget && inputs.flyWheelIsTarget;
+
+    // This drops the flywheel requirement because the PID for the flyWheel does not reach target, but still hits the shots.
+    inputs.isTurretAtTarget = inputs.rotationIsAtTarget && inputs.angleIsAtTarget;
   }
 
   @Override
