@@ -29,6 +29,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.AutoCommands;
+import frc.robot.commands.AutoDriveCommands;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.StateLoggingCommands;
 import frc.robot.subsystems.drive.Drive;
@@ -302,47 +303,19 @@ public class RobotContainer {
 
     buttonBoardController
         .get(1, 1)
-        .whileTrue(
-            DriveCommands.joystickDriveAtAngle(
-                drive,
-                () -> controller.getRightTriggerAxis(),
-                () -> -controller.getLeftY(),
-                () -> -controller.getLeftX(),
-                () -> -Rotation2d.fromDegrees(90.0).getCos(),
-                () -> -Rotation2d.fromDegrees(90.0).getSin()));
+        .whileTrue(AutoDriveCommands.driveToPoseThenPath(drive, "Feed Depot Long", false));
 
     buttonBoardController
         .get(1, 2)
-        .whileTrue(
-            DriveCommands.joystickDriveAtAngle(
-                drive,
-                () -> controller.getRightTriggerAxis(),
-                () -> -controller.getLeftY(),
-                () -> -controller.getLeftX(),
-                () -> -Rotation2d.fromDegrees(135.0).getCos(),
-                () -> -Rotation2d.fromDegrees(135.0).getSin()));
+        .whileTrue(AutoDriveCommands.driveToPoseThenPath(drive, "Feed Depot Short", false));
 
     buttonBoardController
         .get(1, 3)
-        .whileTrue(
-            DriveCommands.joystickDriveAtAngle(
-                drive,
-                () -> controller.getRightTriggerAxis(),
-                () -> -controller.getLeftY(),
-                () -> -controller.getLeftX(),
-                () -> -Rotation2d.fromDegrees(-135.0).getCos(),
-                () -> -Rotation2d.fromDegrees(-135.0).getSin()));
+        .whileTrue(AutoDriveCommands.driveToPoseThenPath(drive, "Feed Outpost Short", false));
 
     buttonBoardController
         .get(1, 4)
-        .whileTrue(
-            DriveCommands.joystickDriveAtAngle(
-                drive,
-                () -> controller.getRightTriggerAxis(),
-                () -> -controller.getLeftY(),
-                () -> -controller.getLeftX(),
-                () -> -Rotation2d.fromDegrees(-90.0).getCos(),
-                () -> -Rotation2d.fromDegrees(-90.0).getSin()));
+        .whileTrue(AutoDriveCommands.driveToPoseThenPath(drive, "Feed Outpost Long", false));
 
     // buttonBoardController.get(1, 4).onTrue(vision.recordLastSecond(120));
 

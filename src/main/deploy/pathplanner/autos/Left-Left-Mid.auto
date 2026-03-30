@@ -27,13 +27,13 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "(B) Pre Left Neutral Collect To Post Left Neutral Collect"
+                        "pathName": "(B) Pre Left Neutral Collect To Post Right Neutral Collect ALT"
                       }
                     },
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "(C) Post Left Neutral Collect To Left Trench Launch"
+                        "pathName": "(C) Post Right Neutral Collect ALT TO Right Trench Launch"
                       }
                     },
                     {
