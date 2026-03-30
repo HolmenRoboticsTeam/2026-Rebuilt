@@ -109,7 +109,8 @@ public class TurretIOReal implements TurretIO {
     // inputs.isTurretAtTarget =
     //     inputs.rotationIsAtTarget && inputs.angleIsAtTarget && inputs.flyWheelIsTarget;
 
-    // This drops the flywheel requirement because the PID for the flyWheel does not reach target, but still hits the shots.
+    // This drops the flywheel requirement because the PID for the flyWheel does not reach target,
+    // but still hits the shots.
     inputs.isTurretAtTarget = inputs.rotationIsAtTarget && inputs.angleIsAtTarget;
   }
 

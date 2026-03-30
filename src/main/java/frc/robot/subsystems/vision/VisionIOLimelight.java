@@ -35,6 +35,8 @@ public class VisionIOLimelight implements VisionIO {
   private final NetworkTableEntry IMUMode;
   private final NetworkTableEntry rewind;
 
+  private boolean valuesNeedSetting = true;
+
   /**
    * Creates a new VisionIOLimelight.
    *
@@ -51,9 +53,6 @@ public class VisionIOLimelight implements VisionIO {
     whiteList = table.getEntry("fiducial_id_filters_set");
     IMUMode = table.getEntry("imumode_set");
     rewind = table.getEntry("capture_rewind");
-
-    table.getEntry("imuassistalpha_set").setDouble(0.01);
-    table.getEntry("rewind_enabled_set").setDouble(1);
   }
 
   @Override
@@ -62,6 +61,12 @@ public class VisionIOLimelight implements VisionIO {
     // 250ms
     inputs.connected =
         ((RobotController.getFPGATime() - latencySubscriber.getLastChange()) / 1000) < 250;
+
+    if (valuesNeedSetting && inputs.connected) {
+      IMUMode.setDouble(0.01);
+      rewind.setDouble(1);
+      valuesNeedSetting = false;
+    }
 
     // Update orientation for MegaTag 2
     orientationPublisher.accept(
