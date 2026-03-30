@@ -57,9 +57,9 @@ import frc.robot.subsystems.turret.TurretIOSim;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOLimelight;
-import frc.robot.util.ButtonBoardController;
 import frc.robot.util.FuelSim;
 import frc.robot.util.HubShiftUtil;
+import frc.robot.util.SwitchBoard;
 import java.util.List;
 import java.util.Optional;
 import org.littletonrobotics.junction.Logger;
@@ -88,7 +88,7 @@ public class RobotContainer {
 
   // Controller
   private final CommandXboxController controller = new CommandXboxController(0);
-  private final ButtonBoardController buttonBoardController = new ButtonBoardController(1, 2);
+  private final SwitchBoard switchBoard = new SwitchBoard(1, 2);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -297,46 +297,41 @@ public class RobotContainer {
 
     // ###### ROW ONE ######
 
-    buttonBoardController
+    switchBoard
         .get(1, 1)
         .whileTrue(AutoDriveCommands.driveToPoseThenPath(drive, "Feed Depot Long", false));
 
-    buttonBoardController
+    switchBoard
         .get(1, 2)
         .whileTrue(AutoDriveCommands.driveToPoseThenPath(drive, "Feed Depot Short", false));
 
-    buttonBoardController
+    switchBoard
         .get(1, 3)
         .whileTrue(AutoDriveCommands.driveToPoseThenPath(drive, "Feed Outpost Short", false));
 
-    buttonBoardController
+    switchBoard
         .get(1, 4)
         .whileTrue(AutoDriveCommands.driveToPoseThenPath(drive, "Feed Outpost Long", false));
 
     // buttonBoardController.get(1, 4).onTrue(vision.recordLastSecond(120));
 
     // ###### ROW TWO ######
-    buttonBoardController
+    switchBoard
         .get(2, 2)
         .whileTrue(indexer.reverse())
         .onFalse(
             Commands.either(
-                indexer.start(),
-                indexer.stop(),
-                () -> buttonBoardController.get(3, 2).getAsBoolean()));
+                indexer.start(), indexer.stop(), () -> switchBoard.get(3, 2).getAsBoolean()));
 
-    buttonBoardController.get(2, 3).onTrue(turret.maxFlyWheel());
+    switchBoard.get(2, 3).onTrue(turret.maxFlyWheel());
 
     // ###### ROW THREE ######
-    buttonBoardController.get(3, 1).onTrue(intake.reverse()).onFalse(intake.start());
+    switchBoard.get(3, 1).onTrue(intake.reverse()).onFalse(intake.start());
 
-    buttonBoardController
-        .get(3, 2)
-        .onTrue(indexer.start())
-        .onFalse(indexer.stop());
+    switchBoard.get(3, 2).onTrue(indexer.start()).onFalse(indexer.stop());
 
     Logger.recordOutput("Tuning/BadMeasurement", false);
-    buttonBoardController
+    switchBoard
         .get(3, 3)
         .onTrue(
             Commands.sequence(
@@ -346,7 +341,7 @@ public class RobotContainer {
                 .ignoringDisable(true)
                 .withName("BadMeasurement"));
 
-    buttonBoardController
+    switchBoard
         .get(3, 4)
         .whileTrue(
             Commands.either(
@@ -357,7 +352,7 @@ public class RobotContainer {
 
     // Shift Overriding
 
-    buttonBoardController
+    switchBoard
         .axisLessThan(3, -0.5)
         .onTrue(
             Commands.runOnce(
@@ -366,7 +361,7 @@ public class RobotContainer {
         .onFalse(
             Commands.runOnce(() -> HubShiftUtil.setAllianceWinOverride(() -> Optional.empty()))
                 .ignoringDisable(true));
-    buttonBoardController
+    switchBoard
         .axisLessThan(3, 0.5)
         .onTrue(
             Commands.runOnce(
@@ -394,15 +389,15 @@ public class RobotContainer {
   private String getAutoName() {
     String[] autonomousData =
         new String[] {
-          buttonBoardController.getRawAxis(0) < -0.5
+          switchBoard.getRawAxis(0) < -0.5
               ? "Left"
-              : (buttonBoardController.getRawAxis(0) > 0.5 ? "Right" : "Hub"),
-          buttonBoardController.getRawAxis(1) < -0.5
+              : (switchBoard.getRawAxis(0) > 0.5 ? "Right" : "Hub"),
+          switchBoard.getRawAxis(1) < -0.5
               ? "Left"
-              : (buttonBoardController.getRawAxis(1) > 0.5 ? "Right" : "Mid"),
-          buttonBoardController.getRawAxis(2) < -0.5
+              : (switchBoard.getRawAxis(1) > 0.5 ? "Right" : "Mid"),
+          switchBoard.getRawAxis(2) < -0.5
               ? "Left"
-              : (buttonBoardController.getRawAxis(2) > 0.5 ? "Right" : "Mid")
+              : (switchBoard.getRawAxis(2) > 0.5 ? "Right" : "Mid")
         };
 
     return autonomousData[0] + "-" + autonomousData[1] + "-" + autonomousData[2];

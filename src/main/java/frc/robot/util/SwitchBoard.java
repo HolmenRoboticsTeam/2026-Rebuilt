@@ -11,14 +11,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 /** Add your docs here. */
-public class ButtonBoardController {
+public class SwitchBoard {
 
   private CommandGenericHID leftControls;
   private CommandGenericHID rightControls;
 
   private Map<Pair<Integer, Integer>, Trigger> buttonMap = new HashMap<>();
 
-  public ButtonBoardController(int leftPort, int rightPort) {
+  public SwitchBoard(int leftPort, int rightPort) {
     leftControls = new CommandGenericHID(leftPort);
     rightControls = new CommandGenericHID(rightPort);
 
@@ -53,6 +53,10 @@ public class ButtonBoardController {
     }
   }
 
+  /**
+   * This method places all the switches (buttons are the same as switches) in a map with the row
+   * and column as inputs and a trigger as the output.
+   */
   private void linkButtons() {
     // ########## Left Side ##########
 
