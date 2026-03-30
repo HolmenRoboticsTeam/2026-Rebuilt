@@ -51,6 +51,7 @@ public class VisionIOLimelight implements VisionIO {
     IMUMode = table.getEntry("imumode_set");
 
     table.getEntry("imuassistalpha_set").setDouble(0.01);
+    table.getEntry("rewind_enabled_set").setDouble(1);
   }
 
   @Override
@@ -130,6 +131,13 @@ public class VisionIOLimelight implements VisionIO {
   @Override
   public void setIMUMode(int mode) {
     IMUMode.setDouble(mode);
+  }
+
+  @Override
+  public void recordLastSeconds(double seconds) {
+    System.out.println("Started recording!");
+    LimelightHelpers.triggerRewindCapture("", seconds);
+    System.out.println("Finished recording!");
   }
 
   /** Parses the 3D pose from a Limelight botpose array. */

@@ -43,10 +43,8 @@ public class Indexer extends SubsystemBase {
 
   public Command autoIndex() {
     return Commands.repeatingSequence(
-            stop(),
-            Commands.waitUntil(() -> (!feederHasFuel.get()) || turretIsReadyForFuel.get()),
-            start(),
-            Commands.waitUntil(() -> feederHasFuel.get() && (!turretIsReadyForFuel.get())))
+            stop().until(() -> (!feederHasFuel.get()) || turretIsReadyForFuel.get()),
+            start().until(() -> feederHasFuel.get() && (!turretIsReadyForFuel.get())))
         .finallyDo(() -> io.setVolts(0.0))
         .withName("Indexer_Auto");
   }

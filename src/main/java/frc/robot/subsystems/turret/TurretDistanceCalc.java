@@ -149,16 +149,15 @@ public class TurretDistanceCalc {
                 // new TurretShotData(Meters.of(2.17), 1650.0, 0.0, 0.42),
                 // new TurretShotData(Meters.of(2.78), 1750.0, 0.0, 0.41),
                 // new TurretShotData(Meters.of(3.4), 1900.0, 0.0, 0.63),
-                new TurretShotData(
-                    Inches.of(76.5), 1640.0 + 300.0, 0.0, 0.861), // Time of flight verified
-                new TurretShotData(Inches.of(88.5), 1700.0 + 300.0, 0.0, 0.911),
-                new TurretShotData(Inches.of(100.5), 1750.0 + 300.0, 0.0, 0.931),
-                new TurretShotData(Inches.of(112.5), 1810.0 + 300.0, 0.0, 0.989),
-                new TurretShotData(Inches.of(124.5), 1880.0 + 300.0, 0.0, 1.045),
-                new TurretShotData(Inches.of(133.5), 1920.0 + 300.0, 0.0, 1.054),
+                new TurretShotData(Inches.of(76.5), 1640.0, 0.0, 0.861), // Time of flight verified
+                new TurretShotData(Inches.of(88.5), 1700.0, 0.0, 0.911),
+                new TurretShotData(Inches.of(100.5), 1750.0, 0.0, 0.931),
+                new TurretShotData(Inches.of(112.5), 1810.0, 0.0, 0.989),
+                new TurretShotData(Inches.of(124.5), 1880.0, 0.0, 1.045),
+                new TurretShotData(Inches.of(133.5), 1920.0, 0.0, 1.054),
                 new TurretShotData(
                     Meters.of(3.65), 1960.0, 0.0, 1.098), // predicted time of flight (recheck)
-                new TurretShotData(Meters.of(4.05), 2050.0, 0.0, 1.153),
+                new TurretShotData(Meters.of(4.05), 2000.0, 0.0, 1.153),
                 new TurretShotData(Meters.of(4.36), 2100.0, 0.0, 1.196),
                 new TurretShotData(Meters.of(4.46), 2150.0, 0.0, 1.210)));
 
@@ -175,7 +174,14 @@ public class TurretDistanceCalc {
     }
 
     groundDataPoints =
-        new ArrayList<>(Arrays.asList(new TurretShotData(Meters.of(5.0), 2000.0, 0.0, 1.5)));
+        new ArrayList<>(
+            Arrays.asList(
+                new TurretShotData(Meters.of(5.0), 1900.0, 0.4, 1.0),
+                new TurretShotData(Meters.of(6.0), 2100.0, 0.4, 1.0),
+                new TurretShotData(Meters.of(7.0), 2200.0, 0.4, 1.0),
+                new TurretShotData(Meters.of(8.0), 2400.0, 0.4, 1.0),
+                new TurretShotData(Meters.of(9.0), 2500.0, 0.4, 1.0),
+                new TurretShotData(Meters.of(10.0), 3000.0, 0.4, 1.0)));
 
     for (TurretShotData dataPoint : groundDataPoints) {
       groundMap.put(dataPoint.distance, dataPoint);

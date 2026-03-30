@@ -175,12 +175,16 @@ public class Turret extends SubsystemBase {
               // Rotation2d requiredAngle = Rotation2d.fromRadians(requiredShotData.angleRad());
 
               // Log the outputs
-              Logger.recordOutput("Turret/Distance", distance);
-              Logger.recordOutput("Turret/Target", targetTranslation);
-              Logger.recordOutput("Turret/Type", targetType);
-              Logger.recordOutput("Turret/RPM", baselineData.RPM());
-              Logger.recordOutput("Turret/Angle", baselineData.angleRad());
-              Logger.recordOutput("Turret/Rotation", turretRotation);
+              try {
+                Logger.recordOutput("Turret/Distance", distance);
+                Logger.recordOutput("Turret/Target", targetTranslation);
+                Logger.recordOutput("Turret/Type", targetType);
+                Logger.recordOutput("Turret/RPM", baselineData.RPM());
+                Logger.recordOutput("Turret/Angle", new Rotation2d(baselineData.angleRad()));
+                Logger.recordOutput("Turret/Rotation", turretRotation);
+              } catch (Exception e) {
+                // TODO: handle exception
+              }
 
               // Set the outputs
               io.setTargetRotation(turretRotation);

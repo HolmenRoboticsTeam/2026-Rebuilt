@@ -292,9 +292,9 @@ public class RobotContainer {
         .onTrue(
             Commands.runOnce(() -> drive.resetGyro()).ignoringDisable(true).withName("Zero Gyro"));
 
-    controller.a().onTrue(indexer.start()).onFalse(indexer.stop());
-    controller.b().onTrue(feeder.start()).onFalse(feeder.stop());
-    controller.y().onTrue(intake.reverse()).onFalse(intake.stop());
+    controller.a().onTrue(intake.start()).onFalse(intake.stop());
+    controller.b().onTrue(indexer.start()).onFalse(indexer.stop());
+    controller.y().onTrue(feeder.start()).onFalse(feeder.stop());
 
     // #################### BUTTON BOARD ####################
 
@@ -344,17 +344,17 @@ public class RobotContainer {
                 () -> -Rotation2d.fromDegrees(-90.0).getCos(),
                 () -> -Rotation2d.fromDegrees(-90.0).getSin()));
 
+    // buttonBoardController.get(1, 4).onTrue(vision.recordLastSecond(120));
+
     // ###### ROW TWO ######
-    Logger.recordOutput("Tuning/BadMeasurement", false);
     buttonBoardController
         .get(2, 2)
-        .onTrue(
-            Commands.sequence(
-                    Commands.runOnce(() -> Logger.recordOutput("Tuning/BadMeasurement", true)),
-                    Commands.waitSeconds(0.1), // Time for the log to show
-                    Commands.runOnce(() -> Logger.recordOutput("Tuning/BadMeasurement", false)))
-                .ignoringDisable(true)
-                .withName("BadMeasurement"));
+        .whileTrue(indexer.reverse().alongWith(feeder.reverse()))
+        .onFalse(
+            Commands.either(
+                indexer.start().alongWith(feeder.start()),
+                indexer.stop().alongWith(feeder.stop()),
+                () -> buttonBoardController.get(3, 2).getAsBoolean()));
 
     buttonBoardController.get(2, 3).onTrue(turret.maxFlyWheel());
 
@@ -366,10 +366,16 @@ public class RobotContainer {
         .onTrue(indexer.start().alongWith(feeder.start()))
         .onFalse(indexer.stop().alongWith(feeder.stop()));
 
+    Logger.recordOutput("Tuning/BadMeasurement", false);
     buttonBoardController
         .get(3, 3)
-        .onTrue(indexer.reverse().alongWith(feeder.reverse()))
-        .onFalse(indexer.stop().alongWith(feeder.stop()));
+        .onTrue(
+            Commands.sequence(
+                    Commands.runOnce(() -> Logger.recordOutput("Tuning/BadMeasurement", true)),
+                    Commands.waitSeconds(0.1), // Time for the log to show
+                    Commands.runOnce(() -> Logger.recordOutput("Tuning/BadMeasurement", false)))
+                .ignoringDisable(true)
+                .withName("BadMeasurement"));
 
     buttonBoardController
         .get(3, 4)
@@ -439,5 +445,13 @@ public class RobotContainer {
 
   public void disabledInit() {
     CommandScheduler.getInstance().schedule(vision.setIMUMode(1));
+  }
+
+  public void endAuto() {
+    vision.recordLastSecond(30.0);
+  }
+
+  public void endMatch() {
+    vision.recordLastSecond(145.0);
   }
 }

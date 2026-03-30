@@ -36,6 +36,8 @@ public class Robot extends LoggedRobot {
 
   private Set<Command> runningCommands;
 
+  private boolean hasAutoStarted = false;
+
   public Robot() {
     // Record metadata
     Logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME);
@@ -119,6 +121,9 @@ public class Robot extends LoggedRobot {
   @Override
   public void disabledInit() {
     robotContainer.disabledInit();
+    if (hasAutoStarted) {
+      robotContainer.endMatch();
+    }
   }
 
   /** This function is called periodically when disabled. */
@@ -130,6 +135,7 @@ public class Robot extends LoggedRobot {
   public void autonomousInit() {
     robotContainer.enabledInit();
     autonomousCommand = robotContainer.getAutonomousCommand();
+    hasAutoStarted = true;
 
     // schedule the autonomous command (example)
     if (autonomousCommand != null) {
@@ -146,6 +152,11 @@ public class Robot extends LoggedRobot {
   public void teleopInit() {
     robotContainer.enabledInit();
     HubShiftUtil.initialize();
+
+    if (hasAutoStarted) {
+      robotContainer.endAuto();
+    }
+
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
