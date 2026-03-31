@@ -401,20 +401,13 @@ public class RobotContainer {
     switchBoard.get(2, 3).onTrue(turret.maxFlyWheel());
 
     // #################### ROW THREE ####################
-    switchBoard.get(3, 1).onTrue(intake.reverse()).onFalse(intake.start());
+    switchBoard.get(3, 1).onTrue(intake.start()).onFalse(intake.reverse());
 
     switchBoard.get(3, 2).onTrue(indexer.start()).onFalse(indexer.stop());
 
-    Logger.recordOutput("Tuning/BadMeasurement", false);
     switchBoard
         .get(3, 3)
-        .onTrue(
-            Commands.sequence(
-                    Commands.runOnce(() -> Logger.recordOutput("Tuning/BadMeasurement", true)),
-                    Commands.waitSeconds(0.1), // Time for the log to show
-                    Commands.runOnce(() -> Logger.recordOutput("Tuning/BadMeasurement", false)))
-                .ignoringDisable(true)
-                .withName("BadMeasurement"));
+        .onTrue(intake.extend()).onFalse(intake.retract());
 
     switchBoard
         .get(3, 4)
