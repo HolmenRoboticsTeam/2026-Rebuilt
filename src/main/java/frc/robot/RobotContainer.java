@@ -42,6 +42,10 @@ import frc.robot.subsystems.feeder.Feeder;
 import frc.robot.subsystems.feeder.FeederIO;
 import frc.robot.subsystems.feeder.FeederIOReal;
 import frc.robot.subsystems.feeder.FeederIOSim;
+import frc.robot.subsystems.hopper.Hopper;
+import frc.robot.subsystems.hopper.HopperIO;
+import frc.robot.subsystems.hopper.HopperIOReal;
+import frc.robot.subsystems.hopper.HopperIOSim;
 import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.indexer.IndexerConstants;
 import frc.robot.subsystems.indexer.IndexerIO;
@@ -78,6 +82,7 @@ public class RobotContainer {
   private Vision vision;
 
   private Intake intake;
+  private Hopper hopper;
   private Indexer indexer;
   private Feeder feeder;
   private Turret turret;
@@ -108,6 +113,7 @@ public class RobotContainer {
                 (p, t, sd) -> drive.addVisionPoseMeasurement(p, t, sd),
                 new VisionIOLimelight("limelight", () -> drive.getRotation()));
         intake = new Intake(new IntakeIOReal());
+        hopper = new Hopper(new HopperIOReal());
         indexer =
             new Indexer(
                 new IndexerIOReal(), () -> feeder.hasExitFuel(), () -> turret.isReadyForFuel());
@@ -142,6 +148,7 @@ public class RobotContainer {
                 new VisionIO() {},
                 new VisionIO() {});
         intake = new Intake(new IntakeIOSim());
+        hopper = new Hopper(new HopperIOSim());
         indexer =
             new Indexer(
                 new IndexerIOSim(), () -> feeder.hasExitFuel(), () -> turret.isReadyForFuel());
@@ -196,6 +203,7 @@ public class RobotContainer {
                 new VisionIO() {},
                 new VisionIO() {});
         intake = new Intake(new IntakeIO() {});
+        hopper = new Hopper(new HopperIO() {});
         indexer =
             new Indexer(
                 new IndexerIO() {}, () -> feeder.hasExitFuel(), () -> turret.isReadyForFuel());
@@ -268,6 +276,7 @@ public class RobotContainer {
             StateLoggingCommands.rumbleOnShiftChange(controller),
             // Call these here, so that the controls is ready
             intake.start().beforeStarting(Commands.waitSeconds(5.0)),
+            hopper.start().beforeStarting(Commands.waitSeconds(5.0)),
             turret.zeroRotationOffEncoder().beforeStarting(Commands.waitSeconds(5.0)));
   }
 
@@ -279,8 +288,9 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
 
+    // ######################################## #################
     // ######################################## DRIVER CONTROLLER
-    // ########################################
+    // ######################################## #################
 
     // Switch to X pattern when X button is pressed
     controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
@@ -296,8 +306,9 @@ public class RobotContainer {
     controller.b().onTrue(indexer.start()).onFalse(indexer.stop());
     controller.y().onTrue(feeder.start()).onFalse(feeder.stop());
 
+    // ######################################## ############
     // ######################################## BUTTON BOARD
-    // ########################################
+    // ######################################## ############
 
     // #################### ROW ONE ####################
 

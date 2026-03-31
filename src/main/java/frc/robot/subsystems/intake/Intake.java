@@ -27,6 +27,32 @@ public class Intake extends SubsystemBase {
   }
 
   /**
+   * Creates and returns a command that extends the intake.
+   *
+   * @return A command with the given logic.
+   */
+  public Command extend() {
+    return Commands.runOnce(
+        () -> {
+          io.setPivotPosition(IntakeConstants.extendedAngle);
+        },
+        this);
+  }
+
+  /**
+   * Creates and returns a command that retracts the intake.
+   *
+   * @return A command with the given logic.
+   */
+  public Command retract() {
+    return Commands.runOnce(
+        () -> {
+          io.setPivotPosition(IntakeConstants.retractedAngle);
+        },
+        this);
+  }
+
+  /**
    * Creates and returns a command that runs the intake.
    *
    * @return A command with the given logic.
@@ -34,7 +60,7 @@ public class Intake extends SubsystemBase {
   public Command start() {
     return Commands.runOnce(
             () -> {
-              io.setVolts(IntakeConstants.maxVolts);
+              io.setRollerVolts(IntakeConstants.rollerMaxVolts);
             },
             this)
         .withName("Intake_Start");
@@ -48,7 +74,7 @@ public class Intake extends SubsystemBase {
   public Command stop() {
     return Commands.runOnce(
             () -> {
-              io.setVolts(0.0);
+              io.setRollerVolts(0.0);
             },
             this)
         .withName("Intake_Stop");
@@ -56,11 +82,10 @@ public class Intake extends SubsystemBase {
 
   public Command reverse() {
     return Commands.runOnce(
-            () -> {
-              io.setVolts(-IntakeConstants.maxVolts);
-            },
-            this)
-        .withName("Intake_Start");
+        () -> {
+          io.setRollerVolts(-IntakeConstants.rollerMaxVolts);
+        },
+        this);
   }
 
   /**
@@ -68,8 +93,8 @@ public class Intake extends SubsystemBase {
    *
    * @return the position in radians
    */
-  public double getPosition() {
-    return inputs.positionRotations;
+  public double getPivotPosition() {
+    return inputs.pivotPositionRad;
   }
 
   /**
@@ -78,6 +103,6 @@ public class Intake extends SubsystemBase {
    * @return Whether the intake is running.
    */
   public boolean isRunning() {
-    return inputs.isRunning;
+    return inputs.rollerAppliedVolts > 0.0;
   }
 }

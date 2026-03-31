@@ -22,7 +22,7 @@ public class IntakeIOSim implements IntakeIO {
             LinearSystemId.createDCMotorSystem(
                 IntakeConstants.Sim.motorGearBox,
                 IntakeConstants.Sim.JKgMetersSquared,
-                IntakeConstants.gearRatio),
+                IntakeConstants.rollerGearRatio),
             IntakeConstants.Sim.motorGearBox);
 
     appliedVolts = 0.0;
@@ -32,16 +32,16 @@ public class IntakeIOSim implements IntakeIO {
     intakeMotor.setInputVoltage(appliedVolts);
     intakeMotor.update(0.02);
 
-    inputs.positionRotations = intakeMotor.getAngularPositionRotations();
-    inputs.velocityRadPerSec = intakeMotor.getAngularVelocityRPM();
-    inputs.appliedVolts = appliedVolts;
-    inputs.currentAmps = intakeMotor.getCurrentDrawAmps();
+    // inputs.positionRotations = intakeMotor.getAngularPositionRotations();
+    // inputs.velocityRadPerSec = intakeMotor.getAngularVelocityRPM();
+    // inputs.appliedVolts = appliedVolts;
+    // inputs.currentAmps = intakeMotor.getCurrentDrawAmps();
 
-    inputs.isRunning = appliedVolts != 0.0;
+    // inputs.isRunning = appliedVolts != 0.0;
   }
 
   @Override
-  public void setVolts(double volts) {
+  public void setRollerVolts(double volts) {
     appliedVolts = volts;
   }
 }

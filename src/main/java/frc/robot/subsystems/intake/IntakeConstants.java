@@ -6,33 +6,50 @@ package frc.robot.subsystems.intake;
 
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
 
 /** Constants for the intake subsystem. */
 public class IntakeConstants {
 
-  public static final double maxVolts = 10.0;
+  public static final double rollerMaxVolts = 2.0;
+  public static final Rotation2d extendedAngle = Rotation2d.fromDegrees(10.0);
+  public static final Rotation2d retractedAngle = Rotation2d.fromDegrees(0.0);
 
-  public static final double gearRatio = (2.0 * Math.PI) * (5.0);
+  public static final double rollerGearRatio = (1.0 / 5.0);
+  public static final double pivotGearRatio = (2.0 * Math.PI) * (1.0 / 3.37);
 
   /** The constants only for the real version of the intake. */
   public static class Real {
 
-    public static final int motorID = 18;
+    public static final int rollerMotorID = 18;
+    public static final int pivotMotorID = 40;
 
-    public static final SparkMaxConfig motorConfig;
+    public static final SparkMaxConfig rollerConfig;
+    public static final SparkMaxConfig pivotConfig;
 
     static {
-      motorConfig = new SparkMaxConfig();
+      rollerConfig = new SparkMaxConfig();
 
-      motorConfig.smartCurrentLimit(40).idleMode(IdleMode.kCoast).inverted(false);
+      rollerConfig.smartCurrentLimit(40).idleMode(IdleMode.kCoast).inverted(false);
 
-      motorConfig
+      rollerConfig
           .encoder
-          .positionConversionFactor(gearRatio)
-          .velocityConversionFactor(gearRatio / 60.0);
+          .positionConversionFactor(rollerGearRatio)
+          .velocityConversionFactor(rollerGearRatio);
 
-      motorConfig.closedLoop.pid(1.0, 0.0, 0.0);
+      rollerConfig.closedLoop.pid(1.0, 0.0, 0.0);
+
+      pivotConfig = new SparkMaxConfig();
+
+      pivotConfig.smartCurrentLimit(20).idleMode(IdleMode.kCoast).inverted(false);
+
+      pivotConfig
+          .encoder
+          .positionConversionFactor(pivotGearRatio)
+          .velocityConversionFactor(pivotGearRatio / 60.0);
+
+      pivotConfig.closedLoop.pid(0.01, 0.0, 0.0);
     }
   }
 
