@@ -73,7 +73,7 @@ public class StateLoggingCommands {
       Intake intake, Indexer indexer, Feeder feeder, Turret turret) {
     return Commands.run(
             () -> {
-              intakeLigament.setAngle(Rotation2d.fromRotations(intake.getPosition()));
+              intakeLigament.setAngle(Rotation2d.fromRotations(intake.getPivotPosition()));
               indexerLigament.setAngle(Rotation2d.fromRotations(indexer.getPosition()));
               feederLigament.setAngle(Rotation2d.fromRotations(feeder.getPosition()));
 
@@ -110,10 +110,10 @@ public class StateLoggingCommands {
 
   public static Command rumbleOnShiftChange(CommandXboxController controller) {
     return Commands.repeatingSequence(
-            Commands.runOnce(() -> controller.setRumble(RumbleType.kBothRumble, 0.0)),
-            Commands.waitUntil(() -> HubShiftUtil.getOfficialShiftInfo().remainingTime() < 5),
-            Commands.runOnce(() -> controller.setRumble(RumbleType.kBothRumble, 0.5)),
-            Commands.waitUntil(() -> HubShiftUtil.getOfficialShiftInfo().remainingTime() > 5))
+            Commands.run(() -> controller.setRumble(RumbleType.kBothRumble, 0.0))
+                .until(() -> HubShiftUtil.getOfficialShiftInfo().remainingTime() < 5),
+            Commands.run(() -> controller.setRumble(RumbleType.kBothRumble, 0.5))
+                .until(() -> HubShiftUtil.getOfficialShiftInfo().remainingTime() > 5))
         .withName("Controller_ShiftRumbleCommand");
   }
 }
