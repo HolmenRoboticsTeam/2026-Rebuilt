@@ -86,7 +86,8 @@ public class AutoDriveCommands {
   private static Command pathFindAndFollowPathFixer(PathPlannerPath path) {
 
     Pose2d startOfPathPose =
-        new Pose2d(path.getPathPoses().get(0).getTranslation(), path.getInitialHeading());
+        new Pose2d(
+            path.getPathPoses().get(0).getTranslation(), path.getIdealStartingState().rotation());
     return Commands.either(
             AutoBuilder.pathfindToPose(
                 startOfPathPose, constraints, path.getIdealStartingState().velocityMPS()),
