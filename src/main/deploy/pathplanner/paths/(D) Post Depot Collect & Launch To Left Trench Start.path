@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.6,
-        "y": 4.8
+        "x": 1.0,
+        "y": 5.0
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.4941292462531344,
-        "y": 5.224836941655072
+        "x": 1.7318032352665296,
+        "y": 5.686500730663032
       },
       "isLocked": false,
       "linkedName": "Post Depot Collect & Launch"
@@ -20,12 +20,12 @@
         "y": 7.4
       },
       "prevControl": {
-        "x": 1.9953535259679838,
-        "y": 6.927835172469769
+        "x": 1.8342259186393328,
+        "y": 7.052068034406907
       },
       "nextControl": {
-        "x": 3.4513520543303406,
-        "y": 7.612126922650713
+        "x": 3.4384970090299998,
+        "y": 7.5308719491176435
       },
       "isLocked": false,
       "linkedName": null
@@ -36,8 +36,8 @@
         "y": 7.4
       },
       "prevControl": {
-        "x": 3.841807487910191,
-        "y": 7.510810638386378
+        "x": 3.9635013210039833,
+        "y": 7.398857476367429
       },
       "nextControl": null,
       "isLocked": false,
@@ -47,7 +47,7 @@
   "rotationTargets": [
     {
       "waypointRelativePos": 1.0,
-      "rotationDegrees": -90.0
+      "rotationDegrees": 180.0
     }
   ],
   "constraintZones": [],
@@ -63,13 +63,13 @@
   },
   "goalEndState": {
     "velocity": 4.0,
-    "rotation": -90.0
+    "rotation": 180.0
   },
   "reversed": false,
   "folder": "(Auto Assembled) D 5 launchs -TO- 4 pre-collect, 2 starts (Has Branches)",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -119.99999999999999
+    "rotation": -150.0
   },
   "useDefaultConstraints": true
 }

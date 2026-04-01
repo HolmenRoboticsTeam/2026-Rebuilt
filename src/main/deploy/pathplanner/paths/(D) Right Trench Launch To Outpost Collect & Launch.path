@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.0,
-        "y": 0.7
+        "x": 2.5,
+        "y": 1.1
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.1965341573303983,
-        "y": 1.3243777405041914
+        "x": 2.180551197469562,
+        "y": 1.3224288976362943
       },
       "isLocked": false,
       "linkedName": "Right Trench Launch"
     },
     {
       "anchor": {
-        "x": 0.4,
+        "x": 0.8,
         "y": 0.6
       },
       "prevControl": {
-        "x": 1.4903388452484214,
-        "y": 0.5184860651597911
+        "x": 2.3177766195244054,
+        "y": 0.6688722217587428
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 180.0
   },
   "reversed": false,
   "folder": "(Auto Assembled) D 5 launchs -TO- 4 pre-collect, 2 starts (Has Branches)",

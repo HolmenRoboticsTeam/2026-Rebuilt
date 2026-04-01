@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.151710019449183,
-        "y": 6.990202297024666
+        "x": 6.55568414108909,
+        "y": 7.077450019944609
       },
       "isLocked": false,
       "linkedName": "Post Left Neutral Collect ALT"
@@ -20,24 +20,40 @@
         "y": 7.4
       },
       "prevControl": {
-        "x": 6.179008086143251,
-        "y": 7.414520854644097
+        "x": 6.229911675267019,
+        "y": 7.183299094106661
       },
       "nextControl": {
-        "x": 3.98377568078552,
-        "y": 7.367574947343834
+        "x": 5.054712559064108,
+        "y": 7.532199819654118
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.0,
+        "x": 3.9,
         "y": 7.4
       },
       "prevControl": {
-        "x": 3.6838574550402354,
-        "y": 7.545866625579281
+        "x": 4.13972564221243,
+        "y": 7.329066112006757
+      },
+      "nextControl": {
+        "x": 3.6602743577875696,
+        "y": 7.470933887993243
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.5,
+        "y": 7.0
+      },
+      "prevControl": {
+        "x": 2.66914758036275,
+        "y": 7.1840899129703395
       },
       "nextControl": null,
       "isLocked": false,
@@ -47,11 +63,11 @@
   "rotationTargets": [
     {
       "waypointRelativePos": 1.0,
-      "rotationDegrees": 90.0
+      "rotationDegrees": 180.0
     },
     {
-      "waypointRelativePos": 1.8,
-      "rotationDegrees": 90.0
+      "waypointRelativePos": 2.0,
+      "rotationDegrees": 180.0
     }
   ],
   "constraintZones": [],

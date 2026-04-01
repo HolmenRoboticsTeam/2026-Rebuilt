@@ -16,11 +16,11 @@
     },
     {
       "anchor": {
-        "x": 0.6,
+        "x": 1.0,
         "y": 7.2
       },
       "prevControl": {
-        "x": 1.2557497490014184,
+        "x": 1.6557497490014186,
         "y": 7.236445354620576
       },
       "nextControl": null,
@@ -28,12 +28,7 @@
       "linkedName": "Pre Depot Collect"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.3,
-      "rotationDegrees": -90.0
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -53,7 +48,7 @@
   "folder": "(Auto Assembled) A 3 Starts -TO- 4 pre-collects, 2 launchs (Has branches)",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -90.0
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }

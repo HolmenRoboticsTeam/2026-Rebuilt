@@ -3,57 +3,57 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.6,
-        "y": 4.8
+        "x": 1.0,
+        "y": 5.0
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.807005308112665,
-        "y": 4.940174185972955
+        "x": 1.0426987523895983,
+        "y": 5.276830048890399
       },
       "isLocked": false,
       "linkedName": "Post Depot Collect & Launch"
     },
     {
       "anchor": {
-        "x": 1.7380819227430555,
+        "x": 2.5,
         "y": 4.8
       },
       "prevControl": {
-        "x": 1.3630520263509323,
-        "y": 5.163421968637215
+        "x": 2.1856780743927975,
+        "y": 5.409269377753799
       },
       "nextControl": {
-        "x": 2.3807415119355153,
-        "y": 4.177232014527967
+        "x": 2.768548186733739,
+        "y": 4.279456654790782
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.7380819227430555,
-        "y": 2.1525966435185184
+        "x": 2.0,
+        "y": 0.7
       },
       "prevControl": {
-        "x": 1.8976691582120797,
-        "y": 3.086084538429395
+        "x": 2.6206820627842835,
+        "y": 1.2200456106839521
       },
       "nextControl": {
-        "x": 1.6035685242608748,
-        "y": 1.3657753866842834
+        "x": 1.6530157387807305,
+        "y": 0.4092752427643312
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 0.4,
+        "x": 0.8,
         "y": 0.6
       },
       "prevControl": {
-        "x": 0.5664245779789798,
-        "y": 0.8054527633448394
+        "x": 1.4030532829798874,
+        "y": 0.6480433950331177
       },
       "nextControl": null,
       "isLocked": false,
@@ -61,10 +61,6 @@
     }
   ],
   "rotationTargets": [
-    {
-      "waypointRelativePos": 0.25,
-      "rotationDegrees": 180.0
-    },
     {
       "waypointRelativePos": 1.0,
       "rotationDegrees": 180.0
@@ -83,13 +79,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 180.0
   },
   "reversed": false,
   "folder": "(Auto Assembled) D 5 launchs -TO- 4 pre-collect, 2 starts (Has Branches)",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -119.99999999999999
+    "rotation": -150.0
   },
   "useDefaultConstraints": true
 }

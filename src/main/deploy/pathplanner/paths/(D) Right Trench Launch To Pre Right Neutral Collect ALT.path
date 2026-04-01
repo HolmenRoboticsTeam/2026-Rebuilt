@@ -3,16 +3,32 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.0,
-        "y": 0.7
+        "x": 2.5,
+        "y": 1.1
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.093306492649389,
-        "y": 0.6705716172328542
+        "x": 2.826226535153565,
+        "y": 1.0987286935172356
       },
       "isLocked": false,
       "linkedName": "Right Trench Launch"
+    },
+    {
+      "anchor": {
+        "x": 3.5,
+        "y": 0.7
+      },
+      "prevControl": {
+        "x": 2.7886184683288087,
+        "y": 0.7711743315909162
+      },
+      "nextControl": {
+        "x": 3.7511776949316014,
+        "y": 0.6748694564711205
+      },
+      "isLocked": false,
+      "linkedName": null
     },
     {
       "anchor": {
@@ -20,12 +36,12 @@
         "y": 0.7
       },
       "prevControl": {
-        "x": 5.136582843804515,
-        "y": 0.5392612339244487
+        "x": 5.133893155513502,
+        "y": 0.5249285204433141
       },
       "nextControl": {
-        "x": 5.945349961564059,
-        "y": 0.896977501125717
+        "x": 5.875324908384285,
+        "y": 0.8794795372303881
       },
       "isLocked": false,
       "linkedName": null
@@ -36,8 +52,8 @@
         "y": 2.1
       },
       "prevControl": {
-        "x": 6.359487916888388,
-        "y": 0.6932789757338365
+        "x": 6.125617145816092,
+        "y": 0.9200705257234083
       },
       "nextControl": null,
       "isLocked": false,
@@ -46,12 +62,12 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.1,
-      "rotationDegrees": -90.0
+      "waypointRelativePos": 1.0,
+      "rotationDegrees": 0.0
     },
     {
-      "waypointRelativePos": 1.0,
-      "rotationDegrees": -90.0
+      "waypointRelativePos": 2.0,
+      "rotationDegrees": 0.0
     }
   ],
   "constraintZones": [],

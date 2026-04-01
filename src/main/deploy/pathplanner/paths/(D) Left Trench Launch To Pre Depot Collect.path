@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.0,
-        "y": 7.4
+        "x": 2.5,
+        "y": 7.0
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.275517489881562,
-        "y": 7.124780308639974
+        "x": 2.0073001720802055,
+        "y": 6.908306319463569
       },
       "isLocked": false,
       "linkedName": "Left Trench Launch"
     },
     {
       "anchor": {
-        "x": 0.6,
+        "x": 1.0,
         "y": 7.2
       },
       "prevControl": {
-        "x": 1.2371688188085646,
-        "y": 6.804133987060539
+        "x": 1.070528555724869,
+        "y": 6.960154794028807
       },
       "nextControl": null,
       "isLocked": false,

@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.9541751458162813,
-        "y": 3.528291239054664
+        "x": 1.9660805519022488,
+        "y": 3.191231023302548
       },
       "isLocked": false,
       "linkedName": "Hub Launch"
@@ -17,27 +17,27 @@
     {
       "anchor": {
         "x": 2.0,
-        "y": 2.535903501157408
+        "y": 0.8
       },
       "prevControl": {
-        "x": 2.159711391727779,
-        "y": 2.993953466931592
+        "x": 2.429343309939623,
+        "y": 1.3468994639811647
       },
       "nextControl": {
-        "x": 1.810681978761004,
-        "y": 1.9929421493662727
+        "x": 1.7330151990013334,
+        "y": 0.4599135442967029
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 0.4,
+        "x": 0.8,
         "y": 0.6
       },
       "prevControl": {
-        "x": 0.5770193373191643,
-        "y": 0.8908800787414328
+        "x": 1.3867212632376031,
+        "y": 0.5689762486055477
       },
       "nextControl": null,
       "isLocked": false,
@@ -58,13 +58,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 180.0
   },
   "reversed": false,
   "folder": "(Auto Assembled) D 5 launchs -TO- 4 pre-collect, 2 starts (Has Branches)",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }

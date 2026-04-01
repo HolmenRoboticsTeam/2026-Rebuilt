@@ -8,24 +8,24 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.29962331065206,
-        "y": 0.5650842186972043
+        "x": 6.317861234102699,
+        "y": 0.6183601496936555
       },
       "isLocked": false,
       "linkedName": "Pre Right Nuetral Collect"
     },
     {
       "anchor": {
-        "x": 7.1,
+        "x": 7.5,
         "y": 0.8
       },
       "prevControl": {
-        "x": 6.7040928866998675,
-        "y": 0.5951903901896167
+        "x": 7.286554564276265,
+        "y": 0.669842226629737
       },
       "nextControl": {
-        "x": 8.226177820564672,
-        "y": 1.3825913004803843
+        "x": 8.289943341477446,
+        "y": 1.2817028111505162
       },
       "isLocked": false,
       "linkedName": null
@@ -36,12 +36,12 @@
         "y": 3.4
       },
       "prevControl": {
-        "x": 8.300340087136977,
-        "y": 2.686644458156069
+        "x": 8.241507467867574,
+        "y": 2.8783297303875477
       },
       "nextControl": {
-        "x": 8.09281200945262,
-        "y": 4.162039871180348
+        "x": 8.142482770707733,
+        "y": 4.122882653501891
       },
       "isLocked": false,
       "linkedName": null
@@ -52,8 +52,8 @@
         "y": 6.0
       },
       "prevControl": {
-        "x": 7.801480128937634,
-        "y": 5.361424590410355
+        "x": 7.870789997941595,
+        "y": 5.276190210842499
       },
       "nextControl": null,
       "isLocked": false,
@@ -62,7 +62,7 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 2.0,
+      "waypointRelativePos": 1.0,
       "rotationDegrees": 100.0
     }
   ],
@@ -85,7 +85,7 @@
   "folder": "(Auto Assembled) B 3 pre-collects -TO- 2 post-collects, 1 launch (No Branches)",
   "idealStartingState": {
     "velocity": 4.8,
-    "rotation": 100.0
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }

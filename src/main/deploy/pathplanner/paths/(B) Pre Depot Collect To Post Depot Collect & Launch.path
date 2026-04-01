@@ -3,12 +3,12 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.6,
+        "x": 1.0,
         "y": 7.2
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.6,
+        "x": 1.0,
         "y": 6.95
       },
       "isLocked": false,
@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 0.6,
-        "y": 4.8
+        "x": 1.0,
+        "y": 5.0
       },
       "prevControl": {
-        "x": 0.6,
-        "y": 5.05
+        "x": 1.0,
+        "y": 5.25
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -119.99999999999999
+    "rotation": -150.0
   },
   "reversed": false,
   "folder": "(Auto Assembled) B 3 pre-collects -TO- 2 post-collects, 1 launch (No Branches)",

@@ -8,20 +8,36 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.389024003536921,
-        "y": 7.306263572602005
+        "x": 3.2393746048139924,
+        "y": 7.432426000244042
       },
       "isLocked": false,
       "linkedName": "Left Trench Start"
     },
     {
       "anchor": {
-        "x": 3.0,
+        "x": 3.4,
         "y": 7.4
       },
       "prevControl": {
-        "x": 3.986851184254871,
-        "y": 7.398208389257829
+        "x": 4.14451029122722,
+        "y": 7.376137081603544
+      },
+      "nextControl": {
+        "x": 3.1432627838658407,
+        "y": 7.408228897988562
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.5,
+        "y": 7.0
+      },
+      "prevControl": {
+        "x": 2.8175854914676774,
+        "y": 7.149435446342412
       },
       "nextControl": null,
       "isLocked": false,
@@ -30,8 +46,8 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.5,
-      "rotationDegrees": -90.0
+      "waypointRelativePos": 1.0,
+      "rotationDegrees": 180.0
     }
   ],
   "constraintZones": [],
@@ -53,7 +69,7 @@
   "folder": "(Auto Assembled) A 3 Starts -TO- 4 pre-collects, 2 launchs (Has branches)",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -90.0
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }

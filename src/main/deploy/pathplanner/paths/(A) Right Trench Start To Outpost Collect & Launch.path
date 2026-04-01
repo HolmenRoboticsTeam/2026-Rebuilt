@@ -8,32 +8,27 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.8076983639870985,
-        "y": 0.6974952897074259
+        "x": 2.7302959784274297,
+        "y": 0.6452975086911817
       },
       "isLocked": false,
       "linkedName": "Right Trench Start"
     },
     {
       "anchor": {
-        "x": 0.4,
+        "x": 0.8,
         "y": 0.6
       },
       "prevControl": {
-        "x": 0.649077048107332,
-        "y": 0.6214621552071972
+        "x": 1.5688143991698622,
+        "y": 0.5676199477237496
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": "Outpost Collect & Launch"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.3,
-      "rotationDegrees": 90.0
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -47,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 180.0
   },
   "reversed": false,
   "folder": "(Auto Assembled) A 3 Starts -TO- 4 pre-collects, 2 launchs (Has branches)",
   "idealStartingState": {
-    "velocity": 0,
-    "rotation": 90.0
+    "velocity": 0.0,
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }

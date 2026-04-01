@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.649999133475332,
-        "y": 7.399341773911705
+        "x": 5.005288304497956,
+        "y": 7.399079192139922
       },
       "isLocked": false,
       "linkedName": "Left Trench Start"
@@ -20,8 +20,8 @@
         "y": 7.4
       },
       "prevControl": {
-        "x": 5.7196483916084215,
-        "y": 7.40091230163065
+        "x": 5.489512100078855,
+        "y": 7.411490725797223
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 4.8,
-    "rotation": -100.0
+    "rotation": 180.0
   },
   "reversed": false,
   "folder": "(Auto Assembled) A 3 Starts -TO- 4 pre-collects, 2 launchs (Has branches)",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -90.0
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }

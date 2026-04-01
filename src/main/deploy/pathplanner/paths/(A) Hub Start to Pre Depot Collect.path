@@ -8,36 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.9059474939332692,
-        "y": 4.715064233481765
+        "x": 3.0343948514896852,
+        "y": 4.735737388996682
       },
       "isLocked": false,
       "linkedName": "Hub Start"
     },
     {
       "anchor": {
-        "x": 1.9503534794560187,
-        "y": 6.010502133969908
-      },
-      "prevControl": {
-        "x": 2.231619455341047,
-        "y": 5.563876641424669
-      },
-      "nextControl": {
-        "x": 1.4052500111268018,
-        "y": 6.876078228855167
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 0.6,
+        "x": 1.0,
         "y": 7.2
       },
       "prevControl": {
-        "x": 0.8918261191312217,
-        "y": 7.008248872369518
+        "x": 1.5471440367700402,
+        "y": 6.665977422385564
       },
       "nextControl": null,
       "isLocked": false,
@@ -64,7 +48,7 @@
   "folder": "(Auto Assembled) A 3 Starts -TO- 4 pre-collects, 2 launchs (Has branches)",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }

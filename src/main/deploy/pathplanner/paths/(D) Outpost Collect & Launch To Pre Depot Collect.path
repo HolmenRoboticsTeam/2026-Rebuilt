@@ -3,57 +3,41 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.4,
+        "x": 0.8,
         "y": 0.6
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.1375539728137185,
-        "y": 1.5192882445688438
+        "x": 1.2868795004522116,
+        "y": 1.5504663715874527
       },
       "isLocked": false,
       "linkedName": "Outpost Collect & Launch"
     },
     {
       "anchor": {
-        "x": 2.0,
-        "y": 3.0
+        "x": 2.5,
+        "y": 4.0
       },
       "prevControl": {
-        "x": 1.0699922276024583,
-        "y": 1.1585475373830343
+        "x": 2.4941082105485073,
+        "y": 3.0577035543553666
       },
       "nextControl": {
-        "x": 2.188182731605295,
-        "y": 3.372609310181583
+        "x": 2.5061109939468107,
+        "y": 4.977354659877884
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.0,
-        "y": 6.0
-      },
-      "prevControl": {
-        "x": 2.355648119937347,
-        "y": 5.308029132692104
-      },
-      "nextControl": {
-        "x": 1.755124149841702,
-        "y": 6.476445522744916
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 0.6,
+        "x": 1.0,
         "y": 7.2
       },
       "prevControl": {
-        "x": 0.8051097218678689,
-        "y": 7.057066442025375
+        "x": 1.4809877994579783,
+        "y": 6.081102385564616
       },
       "nextControl": null,
       "isLocked": false,
@@ -80,7 +64,7 @@
   "folder": "(Auto Assembled) D 5 launchs -TO- 4 pre-collect, 2 starts (Has Branches)",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }

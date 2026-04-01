@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.0,
-        "y": 7.4
+        "x": 2.5,
+        "y": 7.0
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.8537275290720325,
-        "y": 6.470921760037495
+        "x": 2.481925325258861,
+        "y": 6.124210988935025
       },
       "isLocked": false,
       "linkedName": "Left Trench Launch"
@@ -17,27 +17,27 @@
     {
       "anchor": {
         "x": 2.0,
-        "y": 3.0
+        "y": 0.7
       },
       "prevControl": {
-        "x": 2.333595524819129,
-        "y": 3.489538109809271
+        "x": 2.5830067226942743,
+        "y": 1.274492316401711
       },
       "nextControl": {
-        "x": 1.4835902773106744,
-        "y": 2.2421893558987995
+        "x": 1.6768129524817277,
+        "y": 0.38153287375184247
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 0.4,
+        "x": 0.8,
         "y": 0.6
       },
       "prevControl": {
-        "x": 1.1360207113017655,
-        "y": 1.7075553702836177
+        "x": 1.513873668428141,
+        "y": 0.557629403993995
       },
       "nextControl": null,
       "isLocked": false,
@@ -58,7 +58,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 180.0
   },
   "reversed": false,
   "folder": "(Auto Assembled) D 5 launchs -TO- 4 pre-collect, 2 starts (Has Branches)",

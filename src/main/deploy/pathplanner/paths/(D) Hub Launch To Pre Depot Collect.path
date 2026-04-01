@@ -8,36 +8,36 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.013016156241841,
-        "y": 5.11205375238597
+        "x": 2.0213139253738905,
+        "y": 5.005817088844904
       },
       "isLocked": false,
       "linkedName": "Hub Launch"
     },
     {
       "anchor": {
-        "x": 1.8931936848958335,
-        "y": 5.816755172164352
+        "x": 1.9,
+        "y": 6.4
       },
       "prevControl": {
-        "x": 1.9694981202726662,
-        "y": 5.528261658848487
+        "x": 2.068220469747171,
+        "y": 6.074031633961495
       },
       "nextControl": {
-        "x": 1.8292686905286022,
-        "y": 6.058444218451413
+        "x": 1.7853507159276727,
+        "y": 6.622161071436251
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 0.6,
+        "x": 1.0,
         "y": 7.2
       },
       "prevControl": {
-        "x": 1.6682168656047747,
-        "y": 6.565663804475622
+        "x": 1.2970109480260623,
+        "y": 7.03774375997899
       },
       "nextControl": null,
       "isLocked": false,
@@ -64,7 +64,7 @@
   "folder": "(Auto Assembled) D 5 launchs -TO- 4 pre-collect, 2 starts (Has Branches)",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }
