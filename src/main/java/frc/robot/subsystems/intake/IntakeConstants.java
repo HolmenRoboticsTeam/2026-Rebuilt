@@ -32,7 +32,7 @@ public class IntakeConstants {
     static {
       rollerConfig = new SparkMaxConfig();
 
-      rollerConfig.smartCurrentLimit(40).idleMode(IdleMode.kCoast).inverted(false);
+      rollerConfig.smartCurrentLimit(40).idleMode(IdleMode.kCoast).inverted(true);
 
       rollerConfig
           .encoder

@@ -258,7 +258,7 @@ public class RobotContainer {
             PathfindingCommand.warmupCommand().withName("Pathplanner_Warmup"),
             StateLoggingCommands.logMechanisms(intake, hopper, feeder, turret),
             StateLoggingCommands.updateDashboard(),
-            StateLoggingCommands.rumbleOnShiftChange(controller),
+            // StateLoggingCommands.rumbleOnShiftChange(controller),
             LightCommands.controlLights(
                 () ->
                     MathUtil.clamp(HubShiftUtil.getShiftedShiftInfo().remainingTime(), 0.0, 25.0)
@@ -299,6 +299,7 @@ public class RobotContainer {
     controller.a().onTrue(intake.start()).onFalse(intake.stop());
     controller.b().onTrue(hopper.start()).onFalse(hopper.stop());
     controller.y().onTrue(feeder.start()).onFalse(feeder.stop());
+    controller.pov(0).onTrue(intake.extend());
 
     // ######################################## ############
     // ######################################## BUTTON BOARD

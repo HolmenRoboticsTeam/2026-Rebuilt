@@ -27,7 +27,7 @@ public class LightCommands {
   }
 
   /**
-   * I don't know what this method does. It's 9:12, the night before comp.
+   * I don't know what this method does. It's 9:12, the night before comp. (We stayed til 12:58 am)
    *
    * @param percentage the current percentage thought the given colors
    * @param colors the given colors
