@@ -7,6 +7,7 @@ package frc.robot.commands;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.LEDPattern;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -17,7 +18,7 @@ import java.util.function.Supplier;
 public class LightCommands {
 
   private static AddressableLED led = new AddressableLED(0);
-  private static AddressableLEDBuffer ledBuffer = new AddressableLEDBuffer(14);
+  private static AddressableLEDBuffer ledBuffer = new AddressableLEDBuffer(20);
 
   static {
     led.setLength(ledBuffer.getLength());
@@ -43,6 +44,13 @@ public class LightCommands {
             () -> {
               double value = MathUtil.clamp(percentage.get(), 0.0, 1.0);
               int index = (int) Math.floor(value * (patterns.length - 1));
+
+              if(DriverStation.isDisabled()) {
+                LEDPattern.solid(Color.kBlack).applyTo(ledBuffer);
+                led.setData(ledBuffer);
+                return;
+              }
+
               patterns[index].applyTo(ledBuffer);
               led.setData(ledBuffer);
             })
