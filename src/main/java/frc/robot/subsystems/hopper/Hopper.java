@@ -26,6 +26,15 @@ public class Hopper extends SubsystemBase {
     Logger.processInputs("Hopper", inputs);
   }
 
+  public Command autoHop() {
+    return Commands.repeatingSequence(
+      reverse(),
+      Commands.waitSeconds(0.5),
+      start(),
+      Commands.waitSeconds(3.0)
+    ).withName("Hopper_Auto");
+  }
+
   /**
    * Creates and returns a command that runs the hopper.
    *

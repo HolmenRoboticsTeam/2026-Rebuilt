@@ -49,11 +49,6 @@ import frc.robot.subsystems.hopper.Hopper;
 import frc.robot.subsystems.hopper.HopperIO;
 import frc.robot.subsystems.hopper.HopperIOReal;
 import frc.robot.subsystems.hopper.HopperIOSim;
-import frc.robot.subsystems.indexer.Indexer;
-import frc.robot.subsystems.indexer.IndexerConstants;
-import frc.robot.subsystems.indexer.IndexerIO;
-import frc.robot.subsystems.indexer.IndexerIOReal;
-import frc.robot.subsystems.indexer.IndexerIOSim;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeIO;
 import frc.robot.subsystems.intake.IntakeIOReal;
@@ -85,7 +80,6 @@ public class RobotContainer {
 
   private Intake intake;
   private Hopper hopper;
-  private Indexer indexer;
   private Feeder feeder;
   private Turret turret;
 
@@ -113,12 +107,10 @@ public class RobotContainer {
         vision =
             new Vision(
                 (p, t, sd) -> drive.addVisionPoseMeasurement(p, t, sd),
-                new VisionIOLimelight("limelight", () -> drive.getRotation()));
+                new VisionIOLimelight("limelight-left", () -> drive.getRotation()),
+                new VisionIOLimelight("limelight-right", () -> drive.getRotation()));
         intake = new Intake(new IntakeIOReal());
         hopper = new Hopper(new HopperIOReal());
-        indexer =
-            new Indexer(
-                new IndexerIOReal(), () -> feeder.hasExitFuel(), () -> turret.isReadyForFuel());
         feeder = new Feeder(new FeederIOReal(), () -> turret.isReadyForFuel());
         turret =
             new Turret(
@@ -126,7 +118,7 @@ public class RobotContainer {
                 () -> drive.getPose(),
                 () -> drive.getChassisSpeeds(),
                 () -> feeder.feedingFuel(),
-                (d) -> indexer.changeHeldFuelBy(d));
+                (d) -> {});
         break;
 
       case SIM:
@@ -151,9 +143,6 @@ public class RobotContainer {
                 new VisionIO() {});
         intake = new Intake(new IntakeIOSim());
         hopper = new Hopper(new HopperIOSim());
-        indexer =
-            new Indexer(
-                new IndexerIOSim(), () -> feeder.hasExitFuel(), () -> turret.isReadyForFuel());
         feeder = new Feeder(new FeederIOSim(), () -> turret.isReadyForFuel());
         turret =
             new Turret(
@@ -161,7 +150,7 @@ public class RobotContainer {
                 () -> drive.getPose(),
                 () -> drive.getChassisSpeeds(),
                 () -> feeder.feedingFuel(),
-                (d) -> indexer.changeHeldFuelBy(d));
+                (d) -> {});
 
         // Register a robot for collision with fuel
         FuelSim.getInstance()
@@ -181,13 +170,10 @@ public class RobotContainer {
                 Distance.ofRelativeUnits(8.0, Inches)
                     .in(Meters), // robot-centric coordinates for bounding box
                 () -> {
-                  return intake.isRunning()
-                      && indexer.getHeldFuel() < IndexerConstants.Sim.maxHopperCapacity;
+                  return intake.isRunning();
                 }, // (optional) BooleanSupplier for whether the intake should be active at a given
                 // moment
-                () -> {
-                  indexer.changeHeldFuelBy(1);
-                }); // (optional) Runnable called whenever a fuel is in-took
+                () -> {}); // (optional) Runnable called whenever a fuel is in-took
         break;
 
       default:
@@ -206,9 +192,6 @@ public class RobotContainer {
                 new VisionIO() {});
         intake = new Intake(new IntakeIO() {});
         hopper = new Hopper(new HopperIO() {});
-        indexer =
-            new Indexer(
-                new IndexerIO() {}, () -> feeder.hasExitFuel(), () -> turret.isReadyForFuel());
         feeder = new Feeder(new FeederIO() {}, () -> turret.isReadyForFuel());
         turret =
             new Turret(
@@ -216,13 +199,13 @@ public class RobotContainer {
                 () -> drive.getPose(),
                 () -> drive.getChassisSpeeds(),
                 () -> feeder.feedingFuel(),
-                (d) -> indexer.changeHeldFuelBy(d));
+                (d) -> {});
         break;
     }
 
     // Auto setup
     List<Pair<String, Command>> commands =
-        Constants.getNamedCommand(drive, vision, intake, indexer, feeder, turret);
+        Constants.getNamedCommand(drive, vision, intake, hopper, feeder, turret);
     for (Pair<String, Command> command : commands) {
       NamedCommands.registerCommand(command.getFirst(), command.getSecond());
     }
@@ -273,7 +256,7 @@ public class RobotContainer {
     CommandScheduler.getInstance()
         .schedule(
             PathfindingCommand.warmupCommand().withName("Pathplanner_Warmup"),
-            StateLoggingCommands.logMechanisms(intake, indexer, feeder, turret),
+            StateLoggingCommands.logMechanisms(intake, hopper, feeder, turret),
             StateLoggingCommands.updateDashboard(),
             StateLoggingCommands.rumbleOnShiftChange(controller),
             LightCommands.controlLights(
@@ -314,7 +297,7 @@ public class RobotContainer {
 
     // Testing controls
     controller.a().onTrue(intake.start()).onFalse(intake.stop());
-    controller.b().onTrue(indexer.start()).onFalse(indexer.stop());
+    controller.b().onTrue(hopper.start()).onFalse(hopper.stop());
     controller.y().onTrue(feeder.start()).onFalse(feeder.stop());
 
     // ######################################## ############
@@ -404,17 +387,17 @@ public class RobotContainer {
     // #################### ROW TWO ####################
     switchBoard
         .get(2, 2)
-        .whileTrue(indexer.reverse())
+        .whileTrue(hopper.reverse())
         .onFalse(
             Commands.either(
-                indexer.start(), indexer.stop(), () -> switchBoard.get(3, 2).getAsBoolean()));
+                hopper.start(), hopper.stop(), () -> switchBoard.get(3, 2).getAsBoolean()));
 
     switchBoard.get(2, 3).onTrue(turret.maxFlyWheel());
 
     // #################### ROW THREE ####################
     switchBoard.get(3, 1).onTrue(intake.start()).onFalse(intake.reverse());
 
-    switchBoard.get(3, 2).onTrue(indexer.start()).onFalse(indexer.stop());
+    switchBoard.get(3, 2).onTrue(hopper.start()).onFalse(hopper.stop());
 
     switchBoard.get(3, 3).onTrue(intake.extend()).onFalse(intake.retract());
 

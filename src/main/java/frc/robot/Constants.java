@@ -11,6 +11,8 @@ import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.Meters;
 
 import edu.wpi.first.math.Pair;
+import edu.wpi.first.math.filter.Debouncer;
+import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rectangle2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -23,7 +25,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.feeder.Feeder;
-import frc.robot.subsystems.indexer.Indexer;
+import frc.robot.subsystems.hopper.Hopper;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.turret.Turret;
 import frc.robot.subsystems.vision.Vision;
@@ -216,8 +218,10 @@ public final class Constants {
     }
   }
 
+  private static Debouncer hasFuelDebouncer = new Debouncer(2.0, DebounceType.kFalling);
+
   public static List<Pair<String, Command>> getNamedCommand(
-      Drive drive, Vision vision, Intake intake, Indexer indexer, Feeder feeder, Turret turret) {
+      Drive drive, Vision vision, Intake intake, Hopper hopper, Feeder feeder, Turret turret) {
     return new ArrayList<Pair<String, Command>>(
         Arrays.asList(
             // Intake Commands
@@ -225,18 +229,15 @@ public final class Constants {
             new Pair<String, Command>("Intake Stop", intake.stop()),
 
             // Indexer Commands
-            new Pair<String, Command>("Indexer Auto", indexer.autoIndex()),
+            new Pair<String, Command>("Indexer Auto", hopper.autoHop()),
             new Pair<String, Command>(
-                "Indexer Wait Until Out Of Fuel", Commands.waitUntil(() -> !indexer.hasFuel())),
+                "Indexer Wait Until Out Of Fuel", Commands.waitUntil(() -> !hasFuelDebouncer.calculate(feeder.hasEnterFuel()))),
 
             // Feeder Commands
             new Pair<String, Command>(
                 "Feeder Auto",
                 feeder
-                    .autoFeed()
-                    .alongWith(
-                        Commands.sequence(
-                            intake.reverse(), Commands.waitSeconds(3.0), intake.start()))),
+                    .autoFeed()),
 
             // Turret Commands
             new Pair<String, Command>("Turret Full Field Aim", turret.fullFieldAim())));

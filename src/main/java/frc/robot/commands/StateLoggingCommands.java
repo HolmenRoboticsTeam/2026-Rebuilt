@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.feeder.Feeder;
-import frc.robot.subsystems.indexer.Indexer;
+import frc.robot.subsystems.hopper.Hopper;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.turret.Turret;
 import frc.robot.util.HubShiftUtil;
@@ -32,10 +32,10 @@ public class StateLoggingCommands {
   private static LoggedMechanismLigament2d intakeLigament =
       new LoggedMechanismLigament2d("Intake", 0.1, 0.0);
 
-  private static LoggedMechanism2d indexerMechanism =
+  private static LoggedMechanism2d hopperMechanism =
       new LoggedMechanism2d(canvasWidth, canvasHeight);
-  private static LoggedMechanismLigament2d indexerLigament =
-      new LoggedMechanismLigament2d("indexer", 0.1, 0.0);
+  private static LoggedMechanismLigament2d hopperLigament =
+      new LoggedMechanismLigament2d("hopper", 0.1, 0.0);
 
   private static LoggedMechanism2d feederMechanism =
       new LoggedMechanism2d(canvasWidth, canvasHeight);
@@ -54,9 +54,9 @@ public class StateLoggingCommands {
     intakeLigament.setColor(new Color8Bit(0, 0, 255));
     intakeLigament.setLineWeight(1.0);
 
-    indexerMechanism.getRoot("root", 0.4, 0.4).append(indexerLigament);
-    indexerLigament.setColor(new Color8Bit(255, 0, 0));
-    indexerLigament.setLineWeight(1.0);
+    hopperMechanism.getRoot("root", 0.4, 0.4).append(hopperLigament);
+    hopperLigament.setColor(new Color8Bit(255, 0, 0));
+    hopperLigament.setLineWeight(1.0);
 
     feederMechanism.getRoot("root", 0.2, 0.3).append(feederLigament);
     feederLigament.setColor(new Color8Bit(0, 255, 0));
@@ -69,19 +69,18 @@ public class StateLoggingCommands {
     flyWheelLigament.setLineWeight(1.0);
   }
 
-  public static Command logMechanisms(
-      Intake intake, Indexer indexer, Feeder feeder, Turret turret) {
+  public static Command logMechanisms(Intake intake, Hopper hopper, Feeder feeder, Turret turret) {
     return Commands.run(
             () -> {
               intakeLigament.setAngle(Rotation2d.fromRotations(intake.getPivotPosition()));
-              indexerLigament.setAngle(Rotation2d.fromRotations(indexer.getPosition()));
+              hopperLigament.setAngle(Rotation2d.fromRotations(hopper.getPosition()));
               feederLigament.setAngle(Rotation2d.fromRotations(feeder.getPosition()));
 
               angleLigament.setAngle(Rotation2d.fromRadians(turret.getAngle()));
               flyWheelLigament.setAngle(Rotation2d.fromRotations(turret.getFlyWheelPosition()));
 
               Logger.recordOutput("Mechanism/Intake", intakeMechanism);
-              Logger.recordOutput("Mechanism/Indexer", indexerMechanism);
+              Logger.recordOutput("Mechanism/Hopper", hopperMechanism);
               Logger.recordOutput("Mechanism/Feeder", feederMechanism);
 
               Logger.recordOutput("Mechanism/Turret", turretMechanism);
