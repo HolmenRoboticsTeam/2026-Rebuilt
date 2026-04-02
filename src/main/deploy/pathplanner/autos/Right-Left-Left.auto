@@ -13,6 +13,12 @@
                 "data": {
                   "commands": [
                     {
+                      "type": "named",
+                      "data": {
+                        "name": "Intake Extend"
+                      }
+                    },
+                    {
                       "type": "path",
                       "data": {
                         "pathName": "(A) Right Trench Start To Outpost Collect & Launch"
