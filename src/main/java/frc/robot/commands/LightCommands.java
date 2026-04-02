@@ -18,7 +18,7 @@ import java.util.function.Supplier;
 public class LightCommands {
 
   private static AddressableLED led = new AddressableLED(0);
-  private static AddressableLEDBuffer ledBuffer = new AddressableLEDBuffer(20);
+  private static AddressableLEDBuffer ledBuffer = new AddressableLEDBuffer(18);
 
   static {
     led.setLength(ledBuffer.getLength());
@@ -45,7 +45,7 @@ public class LightCommands {
               double value = MathUtil.clamp(percentage.get(), 0.0, 1.0);
               int index = (int) Math.floor(value * (patterns.length - 1));
 
-              if(DriverStation.isDisabled()) {
+              if (DriverStation.isDisabled()) {
                 LEDPattern.solid(Color.kBlack).applyTo(ledBuffer);
                 led.setData(ledBuffer);
                 return;
