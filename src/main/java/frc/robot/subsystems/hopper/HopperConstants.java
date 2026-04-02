@@ -11,7 +11,7 @@ import edu.wpi.first.math.system.plant.DCMotor;
 /** Constants for the indexer subsystem. */
 public class HopperConstants {
 
-  public static final double maxVolts = 2.0;
+  public static final double maxVolts = 4.0;
 
   public static final double gearRatio = 1.0;
 
@@ -24,7 +24,7 @@ public class HopperConstants {
     static {
       motorConfig = new SparkMaxConfig();
 
-      motorConfig.smartCurrentLimit(10).idleMode(IdleMode.kCoast).inverted(false);
+      motorConfig.smartCurrentLimit(20).idleMode(IdleMode.kCoast).inverted(true);
 
       motorConfig
           .encoder

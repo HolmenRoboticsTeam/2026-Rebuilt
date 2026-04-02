@@ -227,20 +227,17 @@ public final class Constants {
             // Intake Commands
             new Pair<String, Command>("Intake Start", intake.start()),
             new Pair<String, Command>("Intake Stop", intake.stop()),
-
             new Pair<String, Command>("Intake Extend", intake.extend()),
             new Pair<String, Command>("Intake Retract", intake.retract()),
 
             // Indexer Commands
             new Pair<String, Command>("Indexer Auto", hopper.autoHop()),
             new Pair<String, Command>(
-                "Indexer Wait Until Out Of Fuel", Commands.waitUntil(() -> !hasFuelDebouncer.calculate(feeder.hasEnterFuel()))),
+                "Indexer Wait Until Out Of Fuel",
+                Commands.waitUntil(() -> !hasFuelDebouncer.calculate(feeder.hasEnterFuel()))),
 
             // Feeder Commands
-            new Pair<String, Command>(
-                "Feeder Auto",
-                feeder
-                    .autoFeed()),
+            new Pair<String, Command>("Feeder Auto", feeder.autoFeed()),
 
             // Turret Commands
             new Pair<String, Command>("Turret Full Field Aim", turret.fullFieldAim())));

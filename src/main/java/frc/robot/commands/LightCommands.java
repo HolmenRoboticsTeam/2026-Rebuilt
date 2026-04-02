@@ -46,6 +46,7 @@ public class LightCommands {
               patterns[index].applyTo(ledBuffer);
               led.setData(ledBuffer);
             })
-        .ignoringDisable(true);
+        .ignoringDisable(true)
+        .withName("LightControlCommand");
   }
 }

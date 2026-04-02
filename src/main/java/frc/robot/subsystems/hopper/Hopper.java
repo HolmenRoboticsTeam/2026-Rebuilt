@@ -28,11 +28,8 @@ public class Hopper extends SubsystemBase {
 
   public Command autoHop() {
     return Commands.repeatingSequence(
-      reverse(),
-      Commands.waitSeconds(0.5),
-      start(),
-      Commands.waitSeconds(3.0)
-    ).withName("Hopper_Auto");
+            reverse(), Commands.waitSeconds(0.5), start(), Commands.waitSeconds(3.0))
+        .withName("Hopper_Auto");
   }
 
   /**

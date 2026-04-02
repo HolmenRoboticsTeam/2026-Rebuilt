@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems.intake;
 
+import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -12,8 +13,8 @@ import edu.wpi.first.math.system.plant.DCMotor;
 /** Constants for the intake subsystem. */
 public class IntakeConstants {
 
-  public static final double rollerMaxVolts = 2.0;
-  public static final Rotation2d extendedAngle = Rotation2d.fromDegrees(10.0);
+  public static final double rollerMaxVolts = 8.0;
+  public static final Rotation2d extendedAngle = Rotation2d.fromDegrees(120.0);
   public static final Rotation2d retractedAngle = Rotation2d.fromDegrees(0.0);
 
   public static final double rollerGearRatio = (1.0 / 5.0);
@@ -42,14 +43,14 @@ public class IntakeConstants {
 
       pivotConfig = new SparkMaxConfig();
 
-      pivotConfig.smartCurrentLimit(10).idleMode(IdleMode.kCoast).inverted(false);
+      pivotConfig.smartCurrentLimit(40).idleMode(IdleMode.kCoast).inverted(false);
 
       pivotConfig
           .encoder
           .positionConversionFactor(pivotGearRatio)
           .velocityConversionFactor(pivotGearRatio / 60.0);
 
-      pivotConfig.closedLoop.pid(0.01, 0.0, 0.0);
+      pivotConfig.closedLoop.pid(1.0, 0.0, 0.0).allowedClosedLoopError(1.05, ClosedLoopSlot.kSlot0);
 
       pivotConfig
           .softLimit
