@@ -17,7 +17,7 @@ public class IntakeConstants {
   public static final Rotation2d retractedAngle = Rotation2d.fromDegrees(0.0);
 
   public static final double rollerGearRatio = (1.0 / 5.0);
-  public static final double pivotGearRatio = (2.0 * Math.PI) * (1.0 / 3.37);
+  public static final double pivotGearRatio = (2.0 * Math.PI) * (1.0 / 3.37) * (1.0 / 5.0);
 
   /** The constants only for the real version of the intake. */
   public static class Real {
@@ -42,7 +42,7 @@ public class IntakeConstants {
 
       pivotConfig = new SparkMaxConfig();
 
-      pivotConfig.smartCurrentLimit(20).idleMode(IdleMode.kCoast).inverted(false);
+      pivotConfig.smartCurrentLimit(10).idleMode(IdleMode.kCoast).inverted(false);
 
       pivotConfig
           .encoder
@@ -50,6 +50,13 @@ public class IntakeConstants {
           .velocityConversionFactor(pivotGearRatio / 60.0);
 
       pivotConfig.closedLoop.pid(0.01, 0.0, 0.0);
+
+      pivotConfig
+          .softLimit
+          .forwardSoftLimitEnabled(true)
+          .reverseSoftLimitEnabled(true)
+          .forwardSoftLimit(1.5)
+          .reverseSoftLimit(0.0);
     }
   }
 

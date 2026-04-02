@@ -14,6 +14,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.commands.PathfindingCommand;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Pair;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -22,6 +23,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -31,6 +33,7 @@ import frc.robot.Constants.FieldConstants;
 import frc.robot.commands.AutoCommands;
 import frc.robot.commands.AutoDriveCommands;
 import frc.robot.commands.DriveCommands;
+import frc.robot.commands.LightCommands;
 import frc.robot.commands.StateLoggingCommands;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
@@ -67,7 +70,6 @@ import frc.robot.util.HubShiftUtil;
 import frc.robot.util.SwitchBoard;
 import java.util.List;
 import java.util.Optional;
-import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
@@ -274,6 +276,15 @@ public class RobotContainer {
             StateLoggingCommands.logMechanisms(intake, indexer, feeder, turret),
             StateLoggingCommands.updateDashboard(),
             StateLoggingCommands.rumbleOnShiftChange(controller),
+            LightCommands.controlLights(
+                () ->
+                    MathUtil.clamp(HubShiftUtil.getShiftedShiftInfo().remainingTime(), 0.0, 25.0)
+                        / 25.0,
+                Color.kRed,
+                Color.kYellow,
+                Color.kBlack,
+                Color.kBlack,
+                Color.kBlack),
             // Call these here, so that the controls is ready
             intake.start().beforeStarting(Commands.waitSeconds(5.0)),
             hopper.start().beforeStarting(Commands.waitSeconds(5.0)),
@@ -405,9 +416,7 @@ public class RobotContainer {
 
     switchBoard.get(3, 2).onTrue(indexer.start()).onFalse(indexer.stop());
 
-    switchBoard
-        .get(3, 3)
-        .onTrue(intake.extend()).onFalse(intake.retract());
+    switchBoard.get(3, 3).onTrue(intake.extend()).onFalse(intake.retract());
 
     switchBoard
         .get(3, 4)
