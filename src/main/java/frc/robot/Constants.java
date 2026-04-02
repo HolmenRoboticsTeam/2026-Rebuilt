@@ -224,6 +224,9 @@ public final class Constants {
             new Pair<String, Command>("Intake Start", intake.start()),
             new Pair<String, Command>("Intake Stop", intake.stop()),
 
+            new Pair<String, Command>("Intake Extend", intake.extend()),
+            new Pair<String, Command>("Intake Retract", intake.retract()),
+
             // Indexer Commands
             new Pair<String, Command>("Indexer Auto", indexer.autoIndex()),
             new Pair<String, Command>(
