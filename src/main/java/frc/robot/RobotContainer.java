@@ -267,35 +267,8 @@ public class RobotContainer {
             StateLoggingCommands.logMechanisms(intake, hopper, feeder, turret),
             StateLoggingCommands.updateDashboard(),
             // StateLoggingCommands.rumbleOnShiftChange(controller),
-            Commands.either(
-
-                    // Is active shift, about to be inactive
-                    LightCommands.controlLights(
-                        () ->
-                            MathUtil.clamp(
-                                    HubShiftUtil.getOfficialShiftInfo().remainingTime(), 0.0, 25.0)
-                                / 25.0,
-                        true,
-                        Color.kRed,
-                        Color.kPaleVioletRed,
-                        Color.kBlack,
-                        Color.kBlack,
-                        Color.kBlack),
-
-                    // Is inactive shift, about to be active
-                    LightCommands.controlLights(
-                        () ->
-                            MathUtil.clamp(
-                                    HubShiftUtil.getOfficialShiftInfo().remainingTime(), 0.0, 25.0)
-                                / 25.0,
-                        true,
-                        Color.kGreen,
-                        Color.kPaleGreen,
-                        Color.kBlack,
-                        Color.kBlack,
-                        Color.kBlack),
-                    () -> HubShiftUtil.getOfficialShiftInfo().active())
-                .withName("Lights_Controller"),
+            LightCommands.standard()
+            ,
             // Call these here, so that the controls is ready
             intake.start().beforeStarting(Commands.waitSeconds(5.0)),
             hopper.start().beforeStarting(Commands.waitSeconds(5.0)),
@@ -368,7 +341,7 @@ public class RobotContainer {
                                 .contains(drive.getPose().getTranslation())),
                 () ->
                     FieldConstants.allianceFlip(FieldConstants.kAllianceHalf)
-                        .contains(drive.getPose().getTranslation())));
+                        .contains(drive.getPose().getTranslation())).deadlineFor(LightCommands.controlLights(() -> 0.0, false, Color.kOlive, Color.kOlive, Color.kOlive))).onFalse(LightCommands.standard());
 
     // Sweeping behind the hub
     switchBoard
@@ -413,7 +386,7 @@ public class RobotContainer {
                                 .contains(drive.getPose().getTranslation())),
                 () ->
                     FieldConstants.allianceFlip(FieldConstants.kAllianceHalf)
-                        .contains(drive.getPose().getTranslation())));
+                        .contains(drive.getPose().getTranslation())).deadlineFor(LightCommands.controlLights(() -> 0.0, false, Color.kOlive, Color.kOlive, Color.kOlive))).onFalse(LightCommands.standard());
 
     // #################### ROW TWO ####################
 
