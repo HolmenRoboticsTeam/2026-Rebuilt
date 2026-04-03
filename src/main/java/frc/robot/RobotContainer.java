@@ -240,7 +240,7 @@ public class RobotContainer {
             () -> -controller.getRightY(),
             () -> -controller.getRightX()));
 
-    feeder.setDefaultCommand(feeder.autoFeed());
+    // feeder.setDefaultCommand(feeder.autoFeed());
     turret.setDefaultCommand(turret.fullFieldAim());
 
     // Auto Field
@@ -271,6 +271,7 @@ public class RobotContainer {
             // Call these here, so that the controls is ready
             intake.start().beforeStarting(Commands.waitSeconds(5.0)),
             hopper.start().beforeStarting(Commands.waitSeconds(5.0)),
+            feeder.autoFeed().beforeStarting(Commands.waitSeconds(5.0)),
             turret.zeroRotationOffEncoder().beforeStarting(Commands.waitSeconds(5.0)));
   }
 
