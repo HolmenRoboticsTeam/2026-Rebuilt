@@ -143,7 +143,8 @@ public class ModuleIOSpark implements ModuleIO {
         .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
         .positionWrappingEnabled(true)
         .positionWrappingInputRange(turnPIDMinInput, turnPIDMaxInput)
-        .pid(turnKp, 0.0, turnKd);
+        .pid(turnKp, 0.0, turnKd)
+        .allowedClosedLoopError(Math.toRadians(1.0), ClosedLoopSlot.kSlot0);
     turnConfig
         .signals
         .absoluteEncoderPositionAlwaysOn(true)
