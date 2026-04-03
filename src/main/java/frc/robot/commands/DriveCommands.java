@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.Constants;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.DriveConstants;
 import java.text.DecimalFormat;
@@ -93,8 +94,8 @@ public class DriveCommands {
               double xAngle = xAngleSupplier.getAsDouble();
               double yAngle = yAngleSupplier.getAsDouble();
 
-              // if (MathUtil.isNear(0.0, xAngle, DEADBAND) // Stick is a neural, so snake drive (No
-              // snake drive :( )
+              // if (MathUtil.isNear(0.0, xAngle, DEADBAND) // Stick is a neural, so snake drive. No
+              // snake drive :(
               //     && MathUtil.isNear(0.0, yAngle, DEADBAND)) {
               //   xAngle = ySupplier.getAsDouble();
               //   yAngle = xSupplier.getAsDouble();
@@ -118,16 +119,14 @@ public class DriveCommands {
                   new ChassisSpeeds(
                       linearVelocity.getX()
                           * drive.getMaxLinearSpeedMetersPerSec()
-                          * 0.5
+                          * 0.75
                           * (throttleSupplier.getAsDouble() * 3.0 + 1.0),
                       linearVelocity.getY()
                           * drive.getMaxLinearSpeedMetersPerSec()
-                          * 0.5
+                          * 0.75
                           * (throttleSupplier.getAsDouble() * 3.0 + 1.0),
                       omega);
-              boolean isFlipped =
-                  DriverStation.getAlliance().isPresent()
-                      && DriverStation.getAlliance().get() == Alliance.Red;
+              boolean isFlipped = !Constants.isBlueAlliance.get();
               drive.runVelocity(
                   ChassisSpeeds.fromFieldRelativeSpeeds(
                       speeds,

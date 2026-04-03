@@ -16,6 +16,8 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.util.HubShiftUtil;
 import java.util.function.Supplier;
 
+import org.littletonrobotics.junction.Logger;
+
 /** Add your docs here. */
 public class LightCommands {
 
@@ -45,6 +47,8 @@ public class LightCommands {
       patterns[i] = LEDPattern.solid(colors[i]);
     }
 
+    timer.start();
+
     return Commands.run(
             () -> {
               double value = MathUtil.clamp(percentage.get(), 0.0, 1.0);
@@ -61,9 +65,11 @@ public class LightCommands {
 
                 // Reset the timer
                 timer.reset();
+                timer.start();
 
                 // Color is not black, so set black and return
                 if (!ledBuffer.getLED(0).equals(Color.kBlack)) {
+                  Logger.recordOutput("Lights/Color", Color.kBlack);
                   LEDPattern.solid(Color.kBlack).applyTo(ledBuffer);
                   led.setData(ledBuffer);
                   return;
@@ -71,6 +77,7 @@ public class LightCommands {
               }
 
               // Apply index color
+              Logger.recordOutput("Lights/Color", colors[index]);
               patterns[index].applyTo(ledBuffer);
               led.setData(ledBuffer);
             })

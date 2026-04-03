@@ -127,7 +127,7 @@ public class Turret extends SubsystemBase {
                   turretPose
                       .get()
                       .getTranslation()
-                      .plus(
+                      .minus(
                           new Translation2d(
                                   robotVelocity.get().vxMetersPerSecond,
                                   robotVelocity.get().vyMetersPerSecond)
