@@ -73,7 +73,7 @@ public class LightCommands {
                   led.setData(ledBuffer);
                   return;
                 }
-              } else if(flashLastColor && index == 0) {
+              } else if (flashLastColor && index == 0) {
                 return;
               }
 
