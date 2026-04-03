@@ -91,28 +91,33 @@ public class LightCommands {
 
             // Is active shift, about to be inactive
             LightCommands.controlLights(
-                () ->
-                    MathUtil.clamp(HubShiftUtil.getOfficialShiftInfo().remainingTime(), 0.0, 25.0)
-                        / 25.0,
-                true,
-                Color.kRed,
-                Color.kPaleVioletRed,
-                Color.kBlack,
-                Color.kBlack,
-                Color.kBlack).until(() -> HubShiftUtil.getOfficialShiftInfo().remainingTime() < 0.1),
+                    () ->
+                        MathUtil.clamp(
+                                HubShiftUtil.getOfficialShiftInfo().remainingTime(), 0.0, 25.0)
+                            / 25.0,
+                    true,
+                    Color.kRed,
+                    Color.kPaleVioletRed,
+                    Color.kBlack,
+                    Color.kBlack,
+                    Color.kBlack)
+                .until(() -> HubShiftUtil.getOfficialShiftInfo().remainingTime() < 0.1),
 
             // Is inactive shift, about to be active
             LightCommands.controlLights(
-                () ->
-                    MathUtil.clamp(HubShiftUtil.getOfficialShiftInfo().remainingTime(), 0.0, 25.0)
-                        / 25.0,
-                true,
-                Color.kGreen,
-                Color.kPaleGreen,
-                Color.kBlack,
-                Color.kBlack,
-                Color.kBlack).until(() -> HubShiftUtil.getOfficialShiftInfo().remainingTime() < 0.1),
-            () -> HubShiftUtil.getOfficialShiftInfo().active()).repeatedly()
+                    () ->
+                        MathUtil.clamp(
+                                HubShiftUtil.getOfficialShiftInfo().remainingTime(), 0.0, 25.0)
+                            / 25.0,
+                    true,
+                    Color.kGreen,
+                    Color.kPaleGreen,
+                    Color.kBlack,
+                    Color.kBlack,
+                    Color.kBlack)
+                .until(() -> HubShiftUtil.getOfficialShiftInfo().remainingTime() < 0.1),
+            () -> HubShiftUtil.getOfficialShiftInfo().active())
+        .repeatedly()
         .withName("Lights_Controller");
   }
 }
