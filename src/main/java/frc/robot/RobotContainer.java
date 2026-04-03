@@ -21,7 +21,6 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -313,39 +312,36 @@ public class RobotContainer {
         .get(1, 1)
         .whileTrue(
             Commands.either(
-                    Commands.either( // Alliance Side
-                        // This path will be selected when the robot is in our alliance zone or our
-                        // bump/trench
-                        AutoDriveCommands.driveToPoseThenPath(
-                            drive, "Feed Depot Extra Short", false),
-                        // This path will be selected when the robot is on the close side of the
-                        // neutral
-                        // zone.
-                        AutoDriveCommands.driveToPoseThenPath(drive, "Feed Depot Short", false),
-                        () ->
-                            FieldConstants.allianceFlip(FieldConstants.kHomeAllianceZone)
-                                    .contains(drive.getPose().getTranslation())
-                                || FieldConstants.allianceFlip(
-                                        FieldConstants.kAllianceTrenchBumpZone)
-                                    .contains(drive.getPose().getTranslation())),
-                    Commands.either( // Opposing Side
-                        // This path will be selected when the robot is in the opposing alliance
-                        // zone or
-                        // the opposing alliance bump/trench
-                        AutoDriveCommands.driveToPoseThenPath(drive, "Feed Depot Long", false),
-                        // This path will be selected when the robot is on the far side of the
-                        // neutral
-                        // zone.
-                        AutoDriveCommands.driveToPoseThenPath(drive, "Feed Depot Mid", false),
-                        () ->
-                            FieldConstants.allianceFlip(FieldConstants.kOpposingAllianceZone)
-                                    .contains(drive.getPose().getTranslation())
-                                || FieldConstants.allianceFlip(
-                                        FieldConstants.kOpposingTrenchBumpZone)
-                                    .contains(drive.getPose().getTranslation())),
+                Commands.either( // Alliance Side
+                    // This path will be selected when the robot is in our alliance zone or our
+                    // bump/trench
+                    AutoDriveCommands.driveToPoseThenPath(drive, "Feed Depot Extra Short", false),
+                    // This path will be selected when the robot is on the close side of the
+                    // neutral
+                    // zone.
+                    AutoDriveCommands.driveToPoseThenPath(drive, "Feed Depot Short", false),
                     () ->
-                        FieldConstants.allianceFlip(FieldConstants.kAllianceHalf)
-                            .contains(drive.getPose().getTranslation())));
+                        FieldConstants.allianceFlip(FieldConstants.kHomeAllianceZone)
+                                .contains(drive.getPose().getTranslation())
+                            || FieldConstants.allianceFlip(FieldConstants.kAllianceTrenchBumpZone)
+                                .contains(drive.getPose().getTranslation())),
+                Commands.either( // Opposing Side
+                    // This path will be selected when the robot is in the opposing alliance
+                    // zone or
+                    // the opposing alliance bump/trench
+                    AutoDriveCommands.driveToPoseThenPath(drive, "Feed Depot Long", false),
+                    // This path will be selected when the robot is on the far side of the
+                    // neutral
+                    // zone.
+                    AutoDriveCommands.driveToPoseThenPath(drive, "Feed Depot Mid", false),
+                    () ->
+                        FieldConstants.allianceFlip(FieldConstants.kOpposingAllianceZone)
+                                .contains(drive.getPose().getTranslation())
+                            || FieldConstants.allianceFlip(FieldConstants.kOpposingTrenchBumpZone)
+                                .contains(drive.getPose().getTranslation())),
+                () ->
+                    FieldConstants.allianceFlip(FieldConstants.kAllianceHalf)
+                        .contains(drive.getPose().getTranslation())));
 
     // Sweeping behind the hub
     switchBoard
@@ -364,39 +360,36 @@ public class RobotContainer {
         .get(1, 4)
         .whileTrue(
             Commands.either(
-                    Commands.either( // Alliance Side
-                        // This path will be selected when the robot is in our alliance zone or our
-                        // bump/trench
-                        AutoDriveCommands.driveToPoseThenPath(
-                            drive, "Feed Outpost Extra Short", false),
-                        // This path will be selected when the robot is on the close side of the
-                        // neutral
-                        // zone.
-                        AutoDriveCommands.driveToPoseThenPath(drive, "Feed Outpost Short", false),
-                        () ->
-                            FieldConstants.allianceFlip(FieldConstants.kHomeAllianceZone)
-                                    .contains(drive.getPose().getTranslation())
-                                || FieldConstants.allianceFlip(
-                                        FieldConstants.kAllianceTrenchBumpZone)
-                                    .contains(drive.getPose().getTranslation())),
-                    Commands.either( // Opposing Side
-                        // This path will be selected when the robot is in the opposing alliance
-                        // zone or
-                        // the opposing alliance bump/trench
-                        AutoDriveCommands.driveToPoseThenPath(drive, "Feed Outpost Long", false),
-                        // This path will be selected when the robot is on the far side of the
-                        // neutral
-                        // zone.
-                        AutoDriveCommands.driveToPoseThenPath(drive, "Feed Outpost Mid", false),
-                        () ->
-                            FieldConstants.allianceFlip(FieldConstants.kOpposingAllianceZone)
-                                    .contains(drive.getPose().getTranslation())
-                                || FieldConstants.allianceFlip(
-                                        FieldConstants.kOpposingTrenchBumpZone)
-                                    .contains(drive.getPose().getTranslation())),
+                Commands.either( // Alliance Side
+                    // This path will be selected when the robot is in our alliance zone or our
+                    // bump/trench
+                    AutoDriveCommands.driveToPoseThenPath(drive, "Feed Outpost Extra Short", false),
+                    // This path will be selected when the robot is on the close side of the
+                    // neutral
+                    // zone.
+                    AutoDriveCommands.driveToPoseThenPath(drive, "Feed Outpost Short", false),
                     () ->
-                        FieldConstants.allianceFlip(FieldConstants.kAllianceHalf)
-                            .contains(drive.getPose().getTranslation())));
+                        FieldConstants.allianceFlip(FieldConstants.kHomeAllianceZone)
+                                .contains(drive.getPose().getTranslation())
+                            || FieldConstants.allianceFlip(FieldConstants.kAllianceTrenchBumpZone)
+                                .contains(drive.getPose().getTranslation())),
+                Commands.either( // Opposing Side
+                    // This path will be selected when the robot is in the opposing alliance
+                    // zone or
+                    // the opposing alliance bump/trench
+                    AutoDriveCommands.driveToPoseThenPath(drive, "Feed Outpost Long", false),
+                    // This path will be selected when the robot is on the far side of the
+                    // neutral
+                    // zone.
+                    AutoDriveCommands.driveToPoseThenPath(drive, "Feed Outpost Mid", false),
+                    () ->
+                        FieldConstants.allianceFlip(FieldConstants.kOpposingAllianceZone)
+                                .contains(drive.getPose().getTranslation())
+                            || FieldConstants.allianceFlip(FieldConstants.kOpposingTrenchBumpZone)
+                                .contains(drive.getPose().getTranslation())),
+                () ->
+                    FieldConstants.allianceFlip(FieldConstants.kAllianceHalf)
+                        .contains(drive.getPose().getTranslation())));
 
     // #################### ROW TWO ####################
 
