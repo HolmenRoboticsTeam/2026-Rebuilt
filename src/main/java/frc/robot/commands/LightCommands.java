@@ -60,7 +60,7 @@ public class LightCommands {
               }
 
               // Are we flashing colors and is time to flip colors
-              if (flashLastColor && index == 0 && timer.hasElapsed(0.25)) {
+              if (flashLastColor && index == 0 && timer.hasElapsed(0.15)) {
 
                 // Reset the timer
                 timer.reset();
