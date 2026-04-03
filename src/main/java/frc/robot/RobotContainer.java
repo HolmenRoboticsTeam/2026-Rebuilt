@@ -300,6 +300,7 @@ public class RobotContainer {
     controller.b().onTrue(hopper.start()).onFalse(hopper.stop());
     controller.y().onTrue(feeder.start()).onFalse(feeder.stop());
     controller.pov(0).onTrue(intake.extend());
+    controller.pov(180).onTrue(feeder.start()).onFalse(feeder.autoFeed());
 
     // ######################################## ############
     // ######################################## BUTTON BOARD
