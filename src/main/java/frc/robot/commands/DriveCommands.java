@@ -27,6 +27,7 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
@@ -69,7 +70,8 @@ public class DriveCommands {
       DoubleSupplier xSupplier,
       DoubleSupplier ySupplier,
       DoubleSupplier xAngleSupplier,
-      DoubleSupplier yAngleSupplier) {
+      DoubleSupplier yAngleSupplier,
+      BooleanSupplier invertControls) {
 
     // Create PID controller
     ProfiledPIDController angleController =
@@ -125,12 +127,16 @@ public class DriveCommands {
                           * (throttleSupplier.getAsDouble() * (1.0 / 3.0) + 1.0),
                       omega);
               boolean isFlipped = !Constants.isBlueAlliance.get();
+                    if(invertControls.getAsBoolean()) {
+                      isFlipped = !isFlipped;
+                    }
+
               drive.runVelocity(
                   ChassisSpeeds.fromFieldRelativeSpeeds(
                       speeds,
                       isFlipped
-                          ? drive.getRotation()
-                          : drive.getRotation().plus(new Rotation2d(Math.PI))));
+                          ? drive.getRotation().plus(new Rotation2d(Math.PI))
+                          : drive.getRotation()));
             },
             drive)
 
@@ -157,7 +163,7 @@ public class DriveCommands {
     DoubleSupplier yAngleSupplier = () -> drive.getPose().getY() - transform.get().getY();
 
     return DriveCommands.joystickDriveAtAngle(
-            drive, () -> 1.0, xSupplier, ySupplier, xAngleSupplier, yAngleSupplier)
+            drive, () -> 1.0, xSupplier, ySupplier, xAngleSupplier, yAngleSupplier, () -> false)
         .withName("Drive_driveTowardsTransform");
   }
 
