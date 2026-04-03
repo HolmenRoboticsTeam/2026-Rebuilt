@@ -50,7 +50,7 @@ public class IntakeConstants {
           .positionConversionFactor(pivotGearRatio)
           .velocityConversionFactor(pivotGearRatio / 60.0);
 
-      pivotConfig.closedLoop.pid(1.0, 0.0, 0.0).allowedClosedLoopError(0.9, ClosedLoopSlot.kSlot0);
+      pivotConfig.closedLoop.pid(1.0, 0.0, 0.0).allowedClosedLoopError(0.5, ClosedLoopSlot.kSlot0);
 
       pivotConfig
           .softLimit

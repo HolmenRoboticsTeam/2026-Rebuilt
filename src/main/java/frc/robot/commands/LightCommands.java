@@ -60,7 +60,7 @@ public class LightCommands {
               }
 
               // Are we flashing colors and is time to flip colors
-              if (flashLastColor && index == 0 && timer.hasElapsed(0.5)) {
+              if (flashLastColor && index == 0 && timer.hasElapsed(0.25)) {
 
                 // Reset the timer
                 timer.reset();
@@ -99,7 +99,7 @@ public class LightCommands {
                 Color.kPaleVioletRed,
                 Color.kBlack,
                 Color.kBlack,
-                Color.kBlack),
+                Color.kBlack).until(() -> HubShiftUtil.getOfficialShiftInfo().remainingTime() < 0.1),
 
             // Is inactive shift, about to be active
             LightCommands.controlLights(
@@ -111,8 +111,8 @@ public class LightCommands {
                 Color.kPaleGreen,
                 Color.kBlack,
                 Color.kBlack,
-                Color.kBlack),
-            () -> HubShiftUtil.getOfficialShiftInfo().active())
+                Color.kBlack).until(() -> HubShiftUtil.getOfficialShiftInfo().remainingTime() < 0.1),
+            () -> HubShiftUtil.getOfficialShiftInfo().active()).repeatedly()
         .withName("Lights_Controller");
   }
 }
