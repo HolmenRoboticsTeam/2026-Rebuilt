@@ -9,9 +9,6 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.turret.TurretDistanceCalc.TargetType;
 import frc.robot.util.HubShiftUtil;
-import frc.robot.util.FuelSim.Hub;
-
-import java.lang.annotation.Target;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 
@@ -44,7 +41,12 @@ public class Feeder extends SubsystemBase {
   public Command autoFeed() {
     return Commands.repeatingSequence(
             stop(),
-            Commands.waitUntil(() -> (turretIsReady.get() || !hasExitFuel()) && (targetType.get().equals(TargetType.HUB) ? HubShiftUtil.getOfficialShiftInfo().active() : true)),
+            Commands.waitUntil(
+                () ->
+                    (turretIsReady.get()
+                        && (targetType.get().equals(TargetType.HUB)
+                            ? HubShiftUtil.getOfficialShiftInfo().active()
+                            : true)) || !hasExitFuel()),
             start(),
             Commands.waitUntil(() -> !turretIsReady.get() && hasExitFuel()))
         .finallyDo(() -> io.setVolts(0.0))

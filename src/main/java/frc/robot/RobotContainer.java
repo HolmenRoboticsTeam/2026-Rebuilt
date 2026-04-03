@@ -110,7 +110,9 @@ public class RobotContainer {
                 new VisionIOLimelight("limelight-right", () -> drive.getRotation()));
         intake = new Intake(new IntakeIOReal());
         hopper = new Hopper(new HopperIOReal());
-        feeder = new Feeder(new FeederIOReal(), () -> turret.isReadyForFuel(), () -> turret.getTargetType());
+        feeder =
+            new Feeder(
+                new FeederIOReal(), () -> turret.isReadyForFuel(), () -> turret.getTargetType());
         turret =
             new Turret(
                 new TurretIOReal(),
@@ -142,7 +144,9 @@ public class RobotContainer {
                 new VisionIO() {});
         intake = new Intake(new IntakeIOSim());
         hopper = new Hopper(new HopperIOSim());
-        feeder = new Feeder(new FeederIOSim(), () -> turret.isReadyForFuel(), () -> turret.getTargetType());
+        feeder =
+            new Feeder(
+                new FeederIOSim(), () -> turret.isReadyForFuel(), () -> turret.getTargetType());
         turret =
             new Turret(
                 new TurretIOSim(),
@@ -191,7 +195,9 @@ public class RobotContainer {
                 new VisionIO() {});
         intake = new Intake(new IntakeIO() {});
         hopper = new Hopper(new HopperIO() {});
-        feeder = new Feeder(new FeederIO() {}, () -> turret.isReadyForFuel(), () -> turret.getTargetType());
+        feeder =
+            new Feeder(
+                new FeederIO() {}, () -> turret.isReadyForFuel(), () -> turret.getTargetType());
         turret =
             new Turret(
                 new TurretIO() {},
