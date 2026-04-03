@@ -77,4 +77,8 @@ public class Hopper extends SubsystemBase {
   public double getPosition() {
     return inputs.positionRotation;
   }
+
+  public boolean hasFuel() {
+    return inputs.hasFuel;
+  }
 }

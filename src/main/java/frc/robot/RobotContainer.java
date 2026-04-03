@@ -17,7 +17,6 @@ import com.pathplanner.lib.commands.PathfindingCommand;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Pair;
 import edu.wpi.first.units.measure.Distance;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
@@ -247,7 +246,10 @@ public class RobotContainer {
     SmartDashboard.putData("AutoField", autoField);
     CommandScheduler.getInstance()
         .schedule(
-            AutoCommands.displayAutoField(autoField, () -> getAutoName(), () -> drive.getPose()));
+            AutoCommands.displayAutoField(
+                autoField,
+                () -> autoSelectorType.get() ? getAutoName() : hardAutoChooser.get().getName(),
+                () -> drive.getPose()));
 
     // Configure the button bindings
     configureButtonBindings();
@@ -259,15 +261,35 @@ public class RobotContainer {
             StateLoggingCommands.logMechanisms(intake, hopper, feeder, turret),
             StateLoggingCommands.updateDashboard(),
             // StateLoggingCommands.rumbleOnShiftChange(controller),
-            LightCommands.controlLights(
-                () ->
-                    MathUtil.clamp(HubShiftUtil.getShiftedShiftInfo().remainingTime(), 0.0, 25.0)
-                        / 25.0,
-                Color.kRed,
-                Color.kYellow,
-                Color.kBlack,
-                Color.kBlack,
-                Color.kBlack),
+            Commands.either(
+
+                    // Is active shift, about to be inactive
+                    LightCommands.controlLights(
+                        () ->
+                            MathUtil.clamp(
+                                    HubShiftUtil.getOfficialShiftInfo().remainingTime(), 0.0, 25.0)
+                                / 25.0,
+                        true,
+                        Color.kRed,
+                        Color.kPaleVioletRed,
+                        Color.kBlack,
+                        Color.kBlack,
+                        Color.kBlack),
+
+                    // Is inactive shift, about to be active
+                    LightCommands.controlLights(
+                        () ->
+                            MathUtil.clamp(
+                                    HubShiftUtil.getOfficialShiftInfo().remainingTime(), 0.0, 25.0)
+                                / 25.0,
+                        true,
+                        Color.kGreen,
+                        Color.kPaleGreen,
+                        Color.kBlack,
+                        Color.kBlack,
+                        Color.kBlack),
+                    () -> HubShiftUtil.getOfficialShiftInfo().active())
+                .withName("Lights_Controller"),
             // Call these here, so that the controls is ready
             intake.start().beforeStarting(Commands.waitSeconds(5.0)),
             hopper.start().beforeStarting(Commands.waitSeconds(5.0)),
@@ -388,30 +410,24 @@ public class RobotContainer {
                         .contains(drive.getPose().getTranslation())));
 
     // #################### ROW TWO ####################
+
+    switchBoard.get(2, 2).onTrue(intake.extend());
+
     switchBoard
-        .get(2, 2)
+        .get(2, 3)
         .whileTrue(hopper.reverse())
         .onFalse(
             Commands.either(
                 hopper.start(), hopper.stop(), () -> switchBoard.get(3, 2).getAsBoolean()));
 
-    switchBoard.get(2, 3).onTrue(intake.extend());
-
     // #################### ROW THREE ####################
     switchBoard.get(3, 1).onTrue(turret.maxFlyWheel());
 
-    switchBoard.get(3, 2).onTrue(hopper.start()).onFalse(hopper.stop());
+    switchBoard.get(3, 2).onTrue(intake.start()).onFalse(intake.reverse());
 
-    switchBoard.get(3, 3).onTrue(intake.start()).onFalse(intake.reverse());
+    switchBoard.get(3, 3).onTrue(hopper.start()).onFalse(hopper.stop());
 
-    switchBoard
-        .get(3, 4)
-        .whileTrue(
-            Commands.either(
-                turret.lockRotationToZero(),
-                turret.calibrate(),
-                () -> DriverStation.isFMSAttached()))
-        .whileFalse(turret.fullFieldAim());
+    switchBoard.get(3, 4).onTrue(feeder.start()).onFalse(feeder.autoFeed());
 
     // Shift Overriding
 

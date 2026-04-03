@@ -10,12 +10,15 @@ import com.revrobotics.ResetMode;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
+import edu.wpi.first.wpilibj.DigitalInput;
 
 /** The real implementation of the hopper. */
 public class HopperIOReal implements HopperIO {
 
   private SparkMax hopperMotor;
   private RelativeEncoder encoder;
+
+  private DigitalInput linebreak;
 
   /** Creates a new real hopper. */
   public HopperIOReal() {
@@ -27,6 +30,8 @@ public class HopperIOReal implements HopperIO {
         HopperConstants.Real.motorConfig,
         ResetMode.kResetSafeParameters,
         PersistMode.kPersistParameters);
+
+    linebreak = new DigitalInput(HopperConstants.Real.lineBreakID);
   }
 
   public void updateInputs(HopperIOInputs inputs) {
@@ -35,6 +40,7 @@ public class HopperIOReal implements HopperIO {
     inputs.velocityRPM = encoder.getVelocity();
     inputs.appliedVolts = hopperMotor.getBusVoltage() * hopperMotor.getAppliedOutput();
     inputs.currentAmps = hopperMotor.getOutputCurrent();
+    inputs.hasFuel = !linebreak.get();
   }
 
   @Override

@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.LEDPattern;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -17,8 +18,10 @@ import java.util.function.Supplier;
 /** Add your docs here. */
 public class LightCommands {
 
+  private static final int ledLength = 18;
   private static AddressableLED led = new AddressableLED(0);
-  private static AddressableLEDBuffer ledBuffer = new AddressableLEDBuffer(18);
+  private static AddressableLEDBuffer ledBuffer = new AddressableLEDBuffer(ledLength);
+  private static Timer timer = new Timer();
 
   static {
     led.setLength(ledBuffer.getLength());
@@ -33,7 +36,8 @@ public class LightCommands {
    * @param colors the given colors
    * @return A command with the given logic
    */
-  public static Command controlLights(Supplier<Double> percentage, Color... colors) {
+  public static Command controlLights(
+      Supplier<Double> percentage, boolean flashLastColor, Color... colors) {
 
     LEDPattern[] patterns = new LEDPattern[colors.length];
     for (int i = 0; i < colors.length; i++) {
@@ -51,6 +55,21 @@ public class LightCommands {
                 return;
               }
 
+              // Are we flashing colors and is time to flip colors
+              if (flashLastColor && index == 0 && timer.hasElapsed(0.5)) {
+
+                // Reset the timer
+                timer.reset();
+
+                // Color is not black, so set black and return
+                if (!ledBuffer.getLED(0).equals(Color.kBlack)) {
+                  LEDPattern.solid(Color.kBlack).applyTo(ledBuffer);
+                  led.setData(ledBuffer);
+                  return;
+                }
+              }
+
+              // Apply index color
               patterns[index].applyTo(ledBuffer);
               led.setData(ledBuffer);
             })

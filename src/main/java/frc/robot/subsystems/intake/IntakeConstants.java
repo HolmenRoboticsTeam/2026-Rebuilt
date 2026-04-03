@@ -39,7 +39,7 @@ public class IntakeConstants {
           .positionConversionFactor(rollerGearRatio)
           .velocityConversionFactor(rollerGearRatio);
 
-      rollerConfig.closedLoop.pid(2.0, 0.0, 0.0);
+      rollerConfig.closedLoop.pid(1.0, 0.0, 0.0);
 
       pivotConfig = new SparkMaxConfig();
 
@@ -50,7 +50,7 @@ public class IntakeConstants {
           .positionConversionFactor(pivotGearRatio)
           .velocityConversionFactor(pivotGearRatio / 60.0);
 
-      pivotConfig.closedLoop.pid(1.0, 0.0, 0.0).allowedClosedLoopError(1.0, ClosedLoopSlot.kSlot0);
+      pivotConfig.closedLoop.pid(1.0, 0.0, 0.0).allowedClosedLoopError(0.9, ClosedLoopSlot.kSlot0);
 
       pivotConfig
           .softLimit

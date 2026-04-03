@@ -11,8 +11,6 @@ import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.Meters;
 
 import edu.wpi.first.math.Pair;
-import edu.wpi.first.math.filter.Debouncer;
-import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rectangle2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -218,8 +216,6 @@ public final class Constants {
     }
   }
 
-  private static Debouncer hasFuelDebouncer = new Debouncer(2.0, DebounceType.kFalling);
-
   public static List<Pair<String, Command>> getNamedCommand(
       Drive drive, Vision vision, Intake intake, Hopper hopper, Feeder feeder, Turret turret) {
     return new ArrayList<Pair<String, Command>>(
@@ -233,8 +229,7 @@ public final class Constants {
             // Indexer Commands
             new Pair<String, Command>("Indexer Auto", hopper.autoHop()),
             new Pair<String, Command>(
-                "Indexer Wait Until Out Of Fuel",
-                Commands.waitUntil(() -> !hasFuelDebouncer.calculate(feeder.hasEnterFuel()))),
+                "Indexer Wait Until Out Of Fuel", Commands.waitUntil(() -> !hopper.hasFuel())),
 
             // Feeder Commands
             new Pair<String, Command>("Feeder Auto", feeder.autoFeed()),
