@@ -7,8 +7,10 @@
 
 package frc.robot.subsystems.vision;
 
+import static edu.wpi.first.units.Units.Degrees;
 import static frc.robot.subsystems.vision.VisionConstants.*;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -24,6 +26,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.vision.VisionIO.PoseObservationType;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 
 public class Vision extends SubsystemBase {
@@ -34,6 +37,7 @@ public class Vision extends SubsystemBase {
 
   private boolean ignoreVision;
   private VisionRotationConsumer rotationConsumer;
+  private Supplier<Rotation2d> robotRot;
 
   // Initialize logging values
   List<Pose3d> allTagPoses = new LinkedList<>();
@@ -47,11 +51,12 @@ public class Vision extends SubsystemBase {
   List<Pose3d> robotPosesAccepted = new LinkedList<>();
   List<Pose3d> robotPosesRejected = new LinkedList<>();
 
-  public Vision(VisionPoseConsumer poseConsumer, VisionIO... io) {
+  public Vision(VisionPoseConsumer poseConsumer, Supplier<Rotation2d> robotRot, VisionIO... io) {
     this.poseConsumer = poseConsumer;
     this.io = io;
     this.ignoreVision = false;
     this.rotationConsumer = (r) -> {};
+    this.robotRot = robotRot;
 
     // Initialize inputs
     this.inputs = new VisionIOInputsAutoLogged[io.length];
@@ -119,7 +124,13 @@ public class Vision extends SubsystemBase {
                 || poseObservation.pose().getX() < 0.0
                 || poseObservation.pose().getX() > aprilTagLayout.getFieldLength()
                 || poseObservation.pose().getY() < 0.0
-                || poseObservation.pose().getY() > aprilTagLayout.getFieldWidth();
+                || poseObservation.pose().getY() > aprilTagLayout.getFieldWidth()
+                || (!MathUtil.isNear(
+                    robotRot.get().getDegrees(),
+                    poseObservation.pose().getRotation().getMeasureZ().in(Degrees),
+                    5.0,
+                    0.0,
+                    360.0));
 
         // Add pose to log
         robotPoses.add(poseObservation.pose());

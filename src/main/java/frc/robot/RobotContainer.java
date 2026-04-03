@@ -104,6 +104,7 @@ public class RobotContainer {
         vision =
             new Vision(
                 (p, t, sd) -> drive.addVisionPoseMeasurement(p, t, sd),
+                () -> drive.getRotation(),
                 new VisionIOLimelight("limelight-left", () -> drive.getRotation()),
                 new VisionIOLimelight("limelight-right", () -> drive.getRotation()));
         intake = new Intake(new IntakeIOReal());
@@ -132,6 +133,7 @@ public class RobotContainer {
         vision =
             new Vision(
                 (p, t, sd) -> drive.addVisionPoseMeasurement(p, t, sd),
+                () -> drive.getRotation(),
                 // new VisionIOPhotonVisionSim(
                 //     "Camera0",
                 //     VisionConstants.robotToCamera0,
@@ -189,6 +191,7 @@ public class RobotContainer {
         vision =
             new Vision(
                 (p, t, sd) -> drive.addVisionPoseMeasurement(p, t, sd),
+                () -> drive.getRotation(),
                 new VisionIO() {},
                 new VisionIO() {});
         intake = new Intake(new IntakeIO() {});

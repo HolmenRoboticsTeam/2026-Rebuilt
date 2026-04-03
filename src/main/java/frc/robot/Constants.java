@@ -38,7 +38,7 @@ import java.util.function.Supplier;
  * (log replay from a file).
  */
 public final class Constants {
-  public static final Mode simMode = Mode.SIM;
+  public static final Mode simMode = Mode.REPLAY;
   public static final Mode currentMode = RobotBase.isReal() ? Mode.REAL : simMode;
   public static final Supplier<Boolean> isBlueAlliance =
       () -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Blue;
