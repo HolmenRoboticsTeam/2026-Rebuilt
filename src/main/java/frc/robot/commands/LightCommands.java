@@ -14,7 +14,6 @@ import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.util.HubShiftUtil;
-
 import java.util.function.Supplier;
 
 /** Add your docs here. */
@@ -82,32 +81,30 @@ public class LightCommands {
   public static Command standard() {
     return Commands.either(
 
-                    // Is active shift, about to be inactive
-                    LightCommands.controlLights(
-                        () ->
-                            MathUtil.clamp(
-                                    HubShiftUtil.getOfficialShiftInfo().remainingTime(), 0.0, 25.0)
-                                / 25.0,
-                        true,
-                        Color.kRed,
-                        Color.kPaleVioletRed,
-                        Color.kBlack,
-                        Color.kBlack,
-                        Color.kBlack),
+            // Is active shift, about to be inactive
+            LightCommands.controlLights(
+                () ->
+                    MathUtil.clamp(HubShiftUtil.getOfficialShiftInfo().remainingTime(), 0.0, 25.0)
+                        / 25.0,
+                true,
+                Color.kRed,
+                Color.kPaleVioletRed,
+                Color.kBlack,
+                Color.kBlack,
+                Color.kBlack),
 
-                    // Is inactive shift, about to be active
-                    LightCommands.controlLights(
-                        () ->
-                            MathUtil.clamp(
-                                    HubShiftUtil.getOfficialShiftInfo().remainingTime(), 0.0, 25.0)
-                                / 25.0,
-                        true,
-                        Color.kGreen,
-                        Color.kPaleGreen,
-                        Color.kBlack,
-                        Color.kBlack,
-                        Color.kBlack),
-                    () -> HubShiftUtil.getOfficialShiftInfo().active())
-                .withName("Lights_Controller");
+            // Is inactive shift, about to be active
+            LightCommands.controlLights(
+                () ->
+                    MathUtil.clamp(HubShiftUtil.getOfficialShiftInfo().remainingTime(), 0.0, 25.0)
+                        / 25.0,
+                true,
+                Color.kGreen,
+                Color.kPaleGreen,
+                Color.kBlack,
+                Color.kBlack,
+                Color.kBlack),
+            () -> HubShiftUtil.getOfficialShiftInfo().active())
+        .withName("Lights_Controller");
   }
 }
