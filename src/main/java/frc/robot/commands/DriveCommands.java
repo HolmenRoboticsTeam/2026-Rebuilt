@@ -34,7 +34,7 @@ public class DriveCommands {
   private static final double TRANSLATION_DEADBAND = 0.1;
   private static final double ANGLE_DEADBAND = 0.25;
   private static final double ANGLE_KP = 6.0;
-  private static final double ANGLE_KD = 1.0;
+  private static final double ANGLE_KD = 0.5;
   private static final double ANGLE_MAX_VELOCITY = 25.0;
   private static final double ANGLE_MAX_ACCELERATION = 9.0;
   private static final double FF_START_DELAY = 1.0; // Secs
