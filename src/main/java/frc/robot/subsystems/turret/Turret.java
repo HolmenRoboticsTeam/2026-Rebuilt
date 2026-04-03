@@ -346,7 +346,7 @@ public class Turret extends SubsystemBase {
    *
    * @return The type of the target.
    */
-  private TargetType getTargetType() {
+  public TargetType getTargetType() {
 
     ChassisSpeeds speeds = robotVelocity.get();
     Translation2d turretTrans = turretPose.get().getTranslation();
