@@ -117,20 +117,20 @@ public class DriveCommands {
                   new ChassisSpeeds(
                       linearVelocity.getX()
                           * drive.getMaxLinearSpeedMetersPerSec()
-                          * 0.5
-                          * (throttleSupplier.getAsDouble() * 1.0 + 1.0),
+                          * 0.75
+                          * (throttleSupplier.getAsDouble() * (1.0/3.0) + 1.0),
                       linearVelocity.getY()
                           * drive.getMaxLinearSpeedMetersPerSec()
-                          * 0.5
-                          * (throttleSupplier.getAsDouble() * 1.0 + 1.0),
+                          * 0.75
+                          * (throttleSupplier.getAsDouble() * (1.0/3.0) + 1.0),
                       omega);
               boolean isFlipped = !Constants.isBlueAlliance.get();
               drive.runVelocity(
                   ChassisSpeeds.fromFieldRelativeSpeeds(
                       speeds,
                       isFlipped
-                          ? drive.getRotation().plus(new Rotation2d(Math.PI))
-                          : drive.getRotation()));
+                          ? drive.getRotation()
+                          : drive.getRotation().plus(new Rotation2d(Math.PI))));
             },
             drive)
 
