@@ -49,10 +49,13 @@ public class Feeder extends SubsystemBase {
                                 : true))
                         || !hasExitFuel()),
             start(),
-            Commands.waitUntil(() -> !(turretIsReady.get()
+            Commands.waitUntil(
+                () ->
+                    !(turretIsReady.get()
                             && (targetType.get().equals(TargetType.HUB)
                                 ? HubShiftUtil.getShiftedShiftInfo().active()
-                                : true)) && hasExitFuel()))
+                                : true))
+                        && hasExitFuel()))
         .finallyDo(() -> io.setVolts(0.0))
         .withName("Feeder_Auto");
   }
