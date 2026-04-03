@@ -266,7 +266,6 @@ public class RobotContainer {
             StateLoggingCommands.logMechanisms(intake, hopper, feeder, turret),
             StateLoggingCommands.updateDashboard(),
             // StateLoggingCommands.rumbleOnShiftChange(controller),
-            LightCommands.standard(),
             // Call these here, so that the controls is ready
             intake.start().beforeStarting(Commands.waitSeconds(5.0)),
             hopper.start().beforeStarting(Commands.waitSeconds(5.0)),
