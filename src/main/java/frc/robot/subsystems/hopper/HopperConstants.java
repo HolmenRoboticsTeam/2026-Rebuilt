@@ -24,7 +24,7 @@ public class HopperConstants {
     static {
       motorConfig = new SparkMaxConfig();
 
-      motorConfig.smartCurrentLimit(20).idleMode(IdleMode.kCoast).inverted(true);
+      motorConfig.smartCurrentLimit(40).idleMode(IdleMode.kCoast).inverted(true);
 
       motorConfig
           .encoder
