@@ -114,12 +114,10 @@ public class DriveCommands {
 
               if (!goalTranslation.equals(Translation2d.kZero)) {
                 double goalAngle = goalTranslation.getAngle().getRadians();
-                if(flipToggle) {
+                if (flipToggle) {
                   goalAngle += Math.toRadians(180.0);
                 }
-                omega =
-                    angleController.calculate(
-                        drive.getRotation().getRadians(), goalAngle);
+                omega = angleController.calculate(drive.getRotation().getRadians(), goalAngle);
               }
 
               if (goalTranslation.getNorm() < ANGLE_DEADBAND) {
