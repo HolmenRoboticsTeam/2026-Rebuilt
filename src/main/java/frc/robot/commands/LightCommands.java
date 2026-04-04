@@ -97,7 +97,7 @@ public class LightCommands {
                             / 25.0,
                     true,
                     Color.kRed,
-                    Color.kPaleVioletRed,
+                    Color.kOrange,
                     Color.kBlack,
                     Color.kBlack,
                     Color.kBlack)
