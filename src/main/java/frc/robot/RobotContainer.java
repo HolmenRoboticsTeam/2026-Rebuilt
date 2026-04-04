@@ -407,7 +407,7 @@ public class RobotContainer {
                 hopper.start(), hopper.stop(), () -> switchBoard.get(3, 2).getAsBoolean()));
 
     // #################### ROW THREE ####################
-    switchBoard.get(3, 1).onTrue(turret.maxFlyWheel());
+    switchBoard.get(3, 1).whileTrue(turret.lockRotationToZero());
 
     switchBoard.get(3, 2).onTrue(intake.start()).onFalse(intake.reverse());
 

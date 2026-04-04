@@ -128,7 +128,7 @@ public class Vision extends SubsystemBase {
                 || (!MathUtil.isNear(
                     robotRot.get().getDegrees(),
                     poseObservation.pose().getRotation().getMeasureZ().in(Degrees),
-                    5.0,
+                    15.0,
                     0.0,
                     360.0));
 
