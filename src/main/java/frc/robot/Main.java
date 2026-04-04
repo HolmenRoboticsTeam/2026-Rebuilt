@@ -5,6 +5,9 @@
 // license that can be found in the LICENSE file
 // at the root directory of this project.
 
+// The pieces of this codebase were rebuilt time and time again. The process of constant
+// iteration on every design is the foundation of this years success.  -Warrick, R
+
 package frc.robot;
 
 import edu.wpi.first.wpilibj.RobotBase;
