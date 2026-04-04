@@ -15,6 +15,8 @@ import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.commands.PathfindingCommand;
 import edu.wpi.first.math.Pair;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -296,7 +298,7 @@ public class RobotContainer {
     controller
         .start()
         .onTrue(
-            Commands.runOnce(() -> drive.resetGyro()).ignoringDisable(true).withName("Zero Gyro"));
+            Commands.runOnce(() -> drive.setPose(new Pose2d(Meters.of(3.5), Meters.of(4.0), Constants.isBlueAlliance.get() ? Rotation2d.k180deg : Rotation2d.kZero))).ignoringDisable(true).withName("Zero Pose"));
 
     // Testing controls
     controller.a().onTrue(intake.start()).onFalse(intake.stop());
