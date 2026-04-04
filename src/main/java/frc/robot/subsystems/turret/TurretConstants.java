@@ -105,7 +105,12 @@ public class TurretConstants {
           .outputRange(-0.25, 0.25)
           .feedForward
           .kS(0.25);
-      angleMotorConfig.softLimit.forwardSoftLimit(0.0).reverseSoftLimit(0.45).forwardSoftLimitEnabled(true).reverseSoftLimitEnabled(true);
+      angleMotorConfig
+          .softLimit
+          .forwardSoftLimit(0.0)
+          .reverseSoftLimit(0.45)
+          .forwardSoftLimitEnabled(true)
+          .reverseSoftLimitEnabled(true);
 
       // Left FlyWheel Motor Config
 

@@ -17,7 +17,7 @@ public class IntakeConstants {
   public static final Rotation2d extendedAngle = Rotation2d.fromDegrees(120.0);
   public static final Rotation2d retractedAngle = Rotation2d.fromDegrees(0.0);
 
-  public static final double rollerGearRatio = (1.0 / 5.0);
+  public static final double rollerGearRatio = (1.0 / 3.0) * (1.0 / 3.0) * (15.0 / 24.0);
   public static final double pivotGearRatio = (2.0 * Math.PI) * (1.0 / 3.37) * (1.0 / 5.0);
 
   /** The constants only for the real version of the intake. */
