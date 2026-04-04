@@ -245,7 +245,7 @@ public class RobotContainer {
             () -> -controller.getLeftX(),
             () -> -controller.getRightY(),
             () -> -controller.getRightX(),
-        () -> controller.leftBumper().getAsBoolean()));
+            () -> controller.leftBumper().getAsBoolean()));
 
     // feeder.setDefaultCommand(feeder.autoFeed());
     turret.setDefaultCommand(turret.fullFieldAim());

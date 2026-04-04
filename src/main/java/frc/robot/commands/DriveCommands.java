@@ -43,6 +43,9 @@ public class DriveCommands {
   private static final double WHEEL_RADIUS_MAX_VELOCITY = 0.25; // Rad/Sec
   private static final double WHEEL_RADIUS_RAMP_RATE = 0.05; // Rad/Sec^2
 
+  private static boolean lastFlipValue = false;
+  private static boolean flipToggle = false;
+
   private DriveCommands() {}
 
   private static Translation2d getLinearVelocityFromJoysticks(double x, double y) {
@@ -104,10 +107,19 @@ public class DriveCommands {
               // Calculate angular speed
               Translation2d goalTranslation = new Translation2d(xAngle, yAngle);
               double omega = 0.0;
+              if (invertControls.getAsBoolean() != lastFlipValue && invertControls.getAsBoolean()) {
+                flipToggle = !flipToggle;
+              }
+              lastFlipValue = invertControls.getAsBoolean();
+
               if (!goalTranslation.equals(Translation2d.kZero)) {
+                double goalAngle = goalTranslation.getAngle().getRadians();
+                if(flipToggle) {
+                  goalAngle += Math.toRadians(180.0);
+                }
                 omega =
                     angleController.calculate(
-                        drive.getRotation().getRadians(), goalTranslation.getAngle().getRadians());
+                        drive.getRotation().getRadians(), goalAngle);
               }
 
               if (goalTranslation.getNorm() < ANGLE_DEADBAND) {
@@ -127,10 +139,6 @@ public class DriveCommands {
                           * (throttleSupplier.getAsDouble() * (1.0 / 3.0) + 1.0),
                       omega);
               boolean isFlipped = !Constants.isBlueAlliance.get();
-                    if(invertControls.getAsBoolean()) {
-                      isFlipped = !isFlipped;
-                    }
-
               drive.runVelocity(
                   ChassisSpeeds.fromFieldRelativeSpeeds(
                       speeds,

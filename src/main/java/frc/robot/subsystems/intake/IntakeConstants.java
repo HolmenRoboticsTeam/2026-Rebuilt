@@ -13,7 +13,7 @@ import edu.wpi.first.math.system.plant.DCMotor;
 /** Constants for the intake subsystem. */
 public class IntakeConstants {
 
-  public static final double rollerMaxVolts = 8.0;
+  public static final double rollerMaxVolts = 10.0;
   public static final Rotation2d extendedAngle = Rotation2d.fromDegrees(120.0);
   public static final Rotation2d retractedAngle = Rotation2d.fromDegrees(0.0);
 

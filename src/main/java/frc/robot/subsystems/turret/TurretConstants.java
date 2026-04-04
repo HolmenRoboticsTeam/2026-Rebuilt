@@ -51,7 +51,7 @@ public class TurretConstants {
     public static final SparkMaxConfig leftFlyWheelMotorConfig;
     public static final SparkMaxConfig rightFlyWheelMotorConfig;
 
-    public static final double latencyCompensation = 0.02;
+    public static final double latencyCompensation = 0.01;
 
     static {
 
