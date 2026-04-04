@@ -298,7 +298,19 @@ public class RobotContainer {
     controller
         .start()
         .onTrue(
-            Commands.runOnce(() -> drive.setPose(new Pose2d(Meters.of(3.5), Meters.of(4.0), Constants.isBlueAlliance.get() ? Rotation2d.k180deg : Rotation2d.kZero))).ignoringDisable(true).withName("Zero Pose"));
+            Commands.runOnce(
+                    () ->
+                        drive.setPose(
+                            new Pose2d(
+                                Meters.of(3.5),
+                                Constants.isBlueAlliance.get()
+                                    ? Meters.of(4.0)
+                                    : Meters.of(13.0),
+                                Constants.isBlueAlliance.get()
+                                    ? Rotation2d.k180deg
+                                    : Rotation2d.kZero)))
+                .ignoringDisable(true)
+                .withName("Zero Pose"));
 
     // Testing controls
     controller.a().onTrue(intake.start()).onFalse(intake.stop());
