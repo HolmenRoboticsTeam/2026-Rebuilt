@@ -44,7 +44,7 @@ public class DriveCommands {
   private static final double WHEEL_RADIUS_RAMP_RATE = 0.05; // Rad/Sec^2
 
   private static boolean lastFlipValue = false;
-  private static boolean flipToggle = false;
+  private static boolean flipToggle = true;
 
   private DriveCommands() {}
 
