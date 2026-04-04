@@ -19,12 +19,14 @@ public class HopperConstants {
   public static class Real {
 
     public static final int motorID = 41;
+    public static final int lineBreakID = 2;
     public static final SparkMaxConfig motorConfig;
+    public static final double debounceTime = 1.0;
 
     static {
       motorConfig = new SparkMaxConfig();
 
-      motorConfig.smartCurrentLimit(20).idleMode(IdleMode.kCoast).inverted(true);
+      motorConfig.smartCurrentLimit(40).idleMode(IdleMode.kCoast).inverted(true);
 
       motorConfig
           .encoder

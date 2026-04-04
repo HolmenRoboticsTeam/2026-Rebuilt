@@ -17,31 +17,34 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.Constants;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.DriveConstants;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
 public class DriveCommands {
   private static final double TRANSLATION_DEADBAND = 0.1;
   private static final double ANGLE_DEADBAND = 0.25;
-  private static final double ANGLE_KP = 2.0;
-  private static final double ANGLE_KD = 0.6;
+  private static final double ANGLE_KP = 6.0;
+  private static final double ANGLE_KD = 0.5;
   private static final double ANGLE_MAX_VELOCITY = 25.0;
   private static final double ANGLE_MAX_ACCELERATION = 9.0;
-  private static final double FF_START_DELAY = 2.0; // Secs
-  private static final double FF_RAMP_RATE = 0.1; // Volts/Sec
+  private static final double FF_START_DELAY = 1.0; // Secs
+  private static final double FF_RAMP_RATE = 0.01; // Volts/Sec
   private static final double WHEEL_RADIUS_MAX_VELOCITY = 0.25; // Rad/Sec
   private static final double WHEEL_RADIUS_RAMP_RATE = 0.05; // Rad/Sec^2
+
+  private static boolean lastFlipValue = false;
+  private static boolean flipToggle = true;
 
   private DriveCommands() {}
 
@@ -70,7 +73,8 @@ public class DriveCommands {
       DoubleSupplier xSupplier,
       DoubleSupplier ySupplier,
       DoubleSupplier xAngleSupplier,
-      DoubleSupplier yAngleSupplier) {
+      DoubleSupplier yAngleSupplier,
+      BooleanSupplier invertControls) {
 
     // Create PID controller
     ProfiledPIDController angleController =
@@ -93,8 +97,8 @@ public class DriveCommands {
               double xAngle = xAngleSupplier.getAsDouble();
               double yAngle = yAngleSupplier.getAsDouble();
 
-              // if (MathUtil.isNear(0.0, xAngle, DEADBAND) // Stick is a neural, so snake drive (No
-              // snake drive :( )
+              // if (MathUtil.isNear(0.0, xAngle, DEADBAND) // Stick is a neural, so snake drive. No
+              // snake drive :(
               //     && MathUtil.isNear(0.0, yAngle, DEADBAND)) {
               //   xAngle = ySupplier.getAsDouble();
               //   yAngle = xSupplier.getAsDouble();
@@ -103,10 +107,17 @@ public class DriveCommands {
               // Calculate angular speed
               Translation2d goalTranslation = new Translation2d(xAngle, yAngle);
               double omega = 0.0;
+              if (invertControls.getAsBoolean() != lastFlipValue && invertControls.getAsBoolean()) {
+                flipToggle = !flipToggle;
+              }
+              lastFlipValue = invertControls.getAsBoolean();
+
               if (!goalTranslation.equals(Translation2d.kZero)) {
-                omega =
-                    angleController.calculate(
-                        drive.getRotation().getRadians(), goalTranslation.getAngle().getRadians());
+                double goalAngle = goalTranslation.getAngle().getRadians();
+                if (flipToggle) {
+                  goalAngle += Math.toRadians(180.0);
+                }
+                omega = angleController.calculate(drive.getRotation().getRadians(), goalAngle);
               }
 
               if (goalTranslation.getNorm() < ANGLE_DEADBAND) {
@@ -118,16 +129,14 @@ public class DriveCommands {
                   new ChassisSpeeds(
                       linearVelocity.getX()
                           * drive.getMaxLinearSpeedMetersPerSec()
-                          * 0.5
-                          * (throttleSupplier.getAsDouble() * 3.0 + 1.0),
+                          * 0.75
+                          * (throttleSupplier.getAsDouble() * (1.0 / 3.0) + 1.0),
                       linearVelocity.getY()
                           * drive.getMaxLinearSpeedMetersPerSec()
-                          * 0.5
-                          * (throttleSupplier.getAsDouble() * 3.0 + 1.0),
+                          * 0.75
+                          * (throttleSupplier.getAsDouble() * (1.0 / 3.0) + 1.0),
                       omega);
-              boolean isFlipped =
-                  DriverStation.getAlliance().isPresent()
-                      && DriverStation.getAlliance().get() == Alliance.Red;
+              boolean isFlipped = !Constants.isBlueAlliance.get();
               drive.runVelocity(
                   ChassisSpeeds.fromFieldRelativeSpeeds(
                       speeds,
@@ -160,7 +169,7 @@ public class DriveCommands {
     DoubleSupplier yAngleSupplier = () -> drive.getPose().getY() - transform.get().getY();
 
     return DriveCommands.joystickDriveAtAngle(
-            drive, () -> 1.0, xSupplier, ySupplier, xAngleSupplier, yAngleSupplier)
+            drive, () -> 1.0, xSupplier, ySupplier, xAngleSupplier, yAngleSupplier, () -> false)
         .withName("Drive_driveTowardsTransform");
   }
 

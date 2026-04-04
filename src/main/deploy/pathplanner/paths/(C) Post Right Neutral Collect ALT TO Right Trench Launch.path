@@ -8,24 +8,24 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.962456067781684,
-        "y": 1.2052065474338574
+        "x": 7.203159345857924,
+        "y": 0.8113308785446229
       },
       "isLocked": false,
       "linkedName": "Post Right Neutral Collect ALT"
     },
     {
       "anchor": {
-        "x": 5.5,
+        "x": 6.0,
         "y": 0.5999999999999996
       },
       "prevControl": {
-        "x": 6.0922649104136735,
-        "y": 0.7351195238651047
+        "x": 6.617600069866936,
+        "y": 0.7719797878185948
       },
       "nextControl": {
-        "x": 5.089569774796493,
-        "y": 0.506364304833438
+        "x": 5.630225059831243,
+        "y": 0.49703075039392686
       },
       "isLocked": false,
       "linkedName": null
@@ -36,12 +36,12 @@
         "y": 0.6
       },
       "prevControl": {
-        "x": 4.4092613704446055,
-        "y": 0.6498990232368115
+        "x": 4.445557261466988,
+        "y": 0.48046931304371937
       },
       "nextControl": {
-        "x": 3.5875465314125354,
-        "y": 0.5497117815180286
+        "x": 3.0420706909124804,
+        "y": 0.8569859326134455
       },
       "isLocked": false,
       "linkedName": null
@@ -52,8 +52,8 @@
         "y": 1.1
       },
       "prevControl": {
-        "x": 3.195751666953691,
-        "y": 0.7816426456223172
+        "x": 3.8322081712592024,
+        "y": 0.7358960419519265
       },
       "nextControl": null,
       "isLocked": false,
@@ -88,7 +88,7 @@
   "reversed": false,
   "folder": "(Auto Assembled) C 4 post-collects -TO- 2 launchs (No Branches)",
   "idealStartingState": {
-    "velocity": 4.0,
+    "velocity": 3.0,
     "rotation": -90.0
   },
   "useDefaultConstraints": true

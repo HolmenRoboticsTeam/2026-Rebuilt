@@ -7,6 +7,8 @@ package frc.robot.subsystems.feeder;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.turret.TurretDistanceCalc.TargetType;
+import frc.robot.util.HubShiftUtil;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 
@@ -17,15 +19,17 @@ public class Feeder extends SubsystemBase {
   private FeederIOInputsAutoLogged inputs = new FeederIOInputsAutoLogged();
 
   private Supplier<Boolean> turretIsReady;
+  private Supplier<TargetType> targetType;
 
   /**
    * Creates a new feeder.
    *
    * @param io the implementation of the feeder.
    */
-  public Feeder(FeederIO io, Supplier<Boolean> turretIsReady) {
+  public Feeder(FeederIO io, Supplier<Boolean> turretIsReady, Supplier<TargetType> targetType) {
     this.io = io;
     this.turretIsReady = turretIsReady;
+    this.targetType = targetType;
   }
 
   @Override
@@ -37,9 +41,21 @@ public class Feeder extends SubsystemBase {
   public Command autoFeed() {
     return Commands.repeatingSequence(
             stop(),
-            Commands.waitUntil(() -> turretIsReady.get() || !hasExitFuel()),
+            Commands.waitUntil(
+                () ->
+                    (turretIsReady.get()
+                            && (targetType.get().equals(TargetType.HUB)
+                                ? HubShiftUtil.getShiftedShiftInfo().active()
+                                : true))
+                        || !hasExitFuel()),
             start(),
-            Commands.waitUntil(() -> !turretIsReady.get() && hasExitFuel()))
+            Commands.waitUntil(
+                () ->
+                    !(turretIsReady.get()
+                            && (targetType.get().equals(TargetType.HUB)
+                                ? HubShiftUtil.getShiftedShiftInfo().active()
+                                : true))
+                        && hasExitFuel()))
         .finallyDo(() -> io.setVolts(0.0))
         .withName("Feeder_Auto");
   }

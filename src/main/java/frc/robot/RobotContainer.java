@@ -14,16 +14,15 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.commands.PathfindingCommand;
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Pair;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.measure.Distance;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -107,11 +106,14 @@ public class RobotContainer {
         vision =
             new Vision(
                 (p, t, sd) -> drive.addVisionPoseMeasurement(p, t, sd),
+                () -> drive.getRotation(),
                 new VisionIOLimelight("limelight-left", () -> drive.getRotation()),
                 new VisionIOLimelight("limelight-right", () -> drive.getRotation()));
         intake = new Intake(new IntakeIOReal());
         hopper = new Hopper(new HopperIOReal());
-        feeder = new Feeder(new FeederIOReal(), () -> turret.isReadyForFuel());
+        feeder =
+            new Feeder(
+                new FeederIOReal(), () -> turret.isReadyForFuel(), () -> turret.getTargetType());
         turret =
             new Turret(
                 new TurretIOReal(),
@@ -133,6 +135,7 @@ public class RobotContainer {
         vision =
             new Vision(
                 (p, t, sd) -> drive.addVisionPoseMeasurement(p, t, sd),
+                () -> drive.getRotation(),
                 // new VisionIOPhotonVisionSim(
                 //     "Camera0",
                 //     VisionConstants.robotToCamera0,
@@ -143,7 +146,9 @@ public class RobotContainer {
                 new VisionIO() {});
         intake = new Intake(new IntakeIOSim());
         hopper = new Hopper(new HopperIOSim());
-        feeder = new Feeder(new FeederIOSim(), () -> turret.isReadyForFuel());
+        feeder =
+            new Feeder(
+                new FeederIOSim(), () -> turret.isReadyForFuel(), () -> turret.getTargetType());
         turret =
             new Turret(
                 new TurretIOSim(),
@@ -188,11 +193,14 @@ public class RobotContainer {
         vision =
             new Vision(
                 (p, t, sd) -> drive.addVisionPoseMeasurement(p, t, sd),
+                () -> drive.getRotation(),
                 new VisionIO() {},
                 new VisionIO() {});
         intake = new Intake(new IntakeIO() {});
         hopper = new Hopper(new HopperIO() {});
-        feeder = new Feeder(new FeederIO() {}, () -> turret.isReadyForFuel());
+        feeder =
+            new Feeder(
+                new FeederIO() {}, () -> turret.isReadyForFuel(), () -> turret.getTargetType());
         turret =
             new Turret(
                 new TurretIO() {},
@@ -238,16 +246,20 @@ public class RobotContainer {
             () -> -controller.getLeftY(),
             () -> -controller.getLeftX(),
             () -> -controller.getRightY(),
-            () -> -controller.getRightX()));
+            () -> -controller.getRightX(),
+            () -> controller.leftBumper().getAsBoolean()));
 
-    feeder.setDefaultCommand(feeder.autoFeed());
+    // feeder.setDefaultCommand(feeder.autoFeed());
     turret.setDefaultCommand(turret.fullFieldAim());
 
     // Auto Field
     SmartDashboard.putData("AutoField", autoField);
     CommandScheduler.getInstance()
         .schedule(
-            AutoCommands.displayAutoField(autoField, () -> getAutoName(), () -> drive.getPose()));
+            AutoCommands.displayAutoField(
+                autoField,
+                () -> autoSelectorType.get() ? getAutoName() : hardAutoChooser.get().getName(),
+                () -> drive.getPose()));
 
     // Configure the button bindings
     configureButtonBindings();
@@ -258,19 +270,12 @@ public class RobotContainer {
             PathfindingCommand.warmupCommand().withName("Pathplanner_Warmup"),
             StateLoggingCommands.logMechanisms(intake, hopper, feeder, turret),
             StateLoggingCommands.updateDashboard(),
-            StateLoggingCommands.rumbleOnShiftChange(controller),
-            LightCommands.controlLights(
-                () ->
-                    MathUtil.clamp(HubShiftUtil.getShiftedShiftInfo().remainingTime(), 0.0, 25.0)
-                        / 25.0,
-                Color.kRed,
-                Color.kYellow,
-                Color.kBlack,
-                Color.kBlack,
-                Color.kBlack),
+            // StateLoggingCommands.rumbleOnShiftChange(controller),
+            LightCommands.standard(),
             // Call these here, so that the controls is ready
             intake.start().beforeStarting(Commands.waitSeconds(5.0)),
             hopper.start().beforeStarting(Commands.waitSeconds(5.0)),
+            feeder.autoFeed().beforeStarting(Commands.waitSeconds(5.0)),
             turret.zeroRotationOffEncoder().beforeStarting(Commands.waitSeconds(5.0)));
   }
 
@@ -293,12 +298,24 @@ public class RobotContainer {
     controller
         .start()
         .onTrue(
-            Commands.runOnce(() -> drive.resetGyro()).ignoringDisable(true).withName("Zero Gyro"));
+            Commands.runOnce(
+                    () ->
+                        drive.setPose(
+                            new Pose2d(
+                                Constants.isBlueAlliance.get() ? Meters.of(3.5) : Meters.of(13.0),
+                                Meters.of(4.0),
+                                Constants.isBlueAlliance.get()
+                                    ? Rotation2d.k180deg
+                                    : Rotation2d.kZero)))
+                .ignoringDisable(true)
+                .withName("Zero Pose"));
 
     // Testing controls
     controller.a().onTrue(intake.start()).onFalse(intake.stop());
     controller.b().onTrue(hopper.start()).onFalse(hopper.stop());
-    controller.y().onTrue(feeder.start()).onFalse(feeder.stop());
+    controller.y().onTrue(feeder.start()).onFalse(feeder.autoFeed());
+    controller.pov(0).onTrue(intake.extend());
+    controller.pov(180).onTrue(feeder.start()).onFalse(feeder.autoFeed());
 
     // ######################################## ############
     // ######################################## BUTTON BOARD
@@ -315,7 +332,8 @@ public class RobotContainer {
                     // This path will be selected when the robot is in our alliance zone or our
                     // bump/trench
                     AutoDriveCommands.driveToPoseThenPath(drive, "Feed Depot Extra Short", false),
-                    // This path will be selected when the robot is on the close side of the neutral
+                    // This path will be selected when the robot is on the close side of the
+                    // neutral
                     // zone.
                     AutoDriveCommands.driveToPoseThenPath(drive, "Feed Depot Short", false),
                     () ->
@@ -324,10 +342,12 @@ public class RobotContainer {
                             || FieldConstants.allianceFlip(FieldConstants.kAllianceTrenchBumpZone)
                                 .contains(drive.getPose().getTranslation())),
                 Commands.either( // Opposing Side
-                    // This path will be selected when the robot is in the opposing alliance zone or
+                    // This path will be selected when the robot is in the opposing alliance
+                    // zone or
                     // the opposing alliance bump/trench
                     AutoDriveCommands.driveToPoseThenPath(drive, "Feed Depot Long", false),
-                    // This path will be selected when the robot is on the far side of the neutral
+                    // This path will be selected when the robot is on the far side of the
+                    // neutral
                     // zone.
                     AutoDriveCommands.driveToPoseThenPath(drive, "Feed Depot Mid", false),
                     () ->
@@ -360,7 +380,8 @@ public class RobotContainer {
                     // This path will be selected when the robot is in our alliance zone or our
                     // bump/trench
                     AutoDriveCommands.driveToPoseThenPath(drive, "Feed Outpost Extra Short", false),
-                    // This path will be selected when the robot is on the close side of the neutral
+                    // This path will be selected when the robot is on the close side of the
+                    // neutral
                     // zone.
                     AutoDriveCommands.driveToPoseThenPath(drive, "Feed Outpost Short", false),
                     () ->
@@ -369,10 +390,12 @@ public class RobotContainer {
                             || FieldConstants.allianceFlip(FieldConstants.kAllianceTrenchBumpZone)
                                 .contains(drive.getPose().getTranslation())),
                 Commands.either( // Opposing Side
-                    // This path will be selected when the robot is in the opposing alliance zone or
+                    // This path will be selected when the robot is in the opposing alliance
+                    // zone or
                     // the opposing alliance bump/trench
                     AutoDriveCommands.driveToPoseThenPath(drive, "Feed Outpost Long", false),
-                    // This path will be selected when the robot is on the far side of the neutral
+                    // This path will be selected when the robot is on the far side of the
+                    // neutral
                     // zone.
                     AutoDriveCommands.driveToPoseThenPath(drive, "Feed Outpost Mid", false),
                     () ->
@@ -385,30 +408,24 @@ public class RobotContainer {
                         .contains(drive.getPose().getTranslation())));
 
     // #################### ROW TWO ####################
+
+    switchBoard.get(2, 2).onTrue(intake.extend());
+
     switchBoard
-        .get(2, 2)
+        .get(2, 3)
         .whileTrue(hopper.reverse())
         .onFalse(
             Commands.either(
                 hopper.start(), hopper.stop(), () -> switchBoard.get(3, 2).getAsBoolean()));
 
-    switchBoard.get(2, 3).onTrue(intake.extend());
-
     // #################### ROW THREE ####################
-    switchBoard.get(3, 1).onTrue(turret.maxFlyWheel());
+    switchBoard.get(3, 1).whileTrue(turret.lockRotationToZero());
 
-    switchBoard.get(3, 2).onTrue(hopper.start()).onFalse(hopper.stop());
+    switchBoard.get(3, 2).onTrue(intake.start()).onFalse(intake.reverse());
 
-    switchBoard.get(3, 3).onTrue(intake.start()).onFalse(intake.reverse());
+    switchBoard.get(3, 3).onTrue(hopper.start()).onFalse(hopper.stop());
 
-    switchBoard
-        .get(3, 4)
-        .whileTrue(
-            Commands.either(
-                turret.lockRotationToZero(),
-                turret.calibrate(),
-                () -> DriverStation.isFMSAttached()))
-        .whileFalse(turret.fullFieldAim());
+    switchBoard.get(3, 4).onTrue(feeder.start()).onFalse(feeder.autoFeed());
 
     // Shift Overriding
 

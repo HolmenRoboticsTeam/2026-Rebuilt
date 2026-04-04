@@ -51,7 +51,7 @@ public class TurretConstants {
     public static final SparkMaxConfig leftFlyWheelMotorConfig;
     public static final SparkMaxConfig rightFlyWheelMotorConfig;
 
-    public static final double latencyCompensation = 0.02;
+    public static final double latencyCompensation = 0.01;
 
     static {
 
@@ -77,7 +77,7 @@ public class TurretConstants {
       rotationMotorConfig
           .absoluteEncoder
           .zeroCentered(true)
-          .zeroOffset(0.8536492)
+          .zeroOffset(0.29944763)
           .positionConversionFactor(rotationGearing * 3.0);
 
       rotationMotorConfig
@@ -102,9 +102,15 @@ public class TurretConstants {
           .closedLoop
           .pid(0.6, 0.0, 0.0)
           .allowedClosedLoopError(0.01, ClosedLoopSlot.kSlot0)
+          .outputRange(-0.25, 0.25)
           .feedForward
           .kS(0.25);
-      angleMotorConfig.softLimit.forwardSoftLimit(0.0).reverseSoftLimit(0.45);
+      angleMotorConfig
+          .softLimit
+          .forwardSoftLimit(0.0)
+          .reverseSoftLimit(0.45)
+          .forwardSoftLimitEnabled(true)
+          .reverseSoftLimitEnabled(true);
 
       // Left FlyWheel Motor Config
 

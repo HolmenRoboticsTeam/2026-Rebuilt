@@ -13,11 +13,11 @@ import edu.wpi.first.math.system.plant.DCMotor;
 /** Constants for the intake subsystem. */
 public class IntakeConstants {
 
-  public static final double rollerMaxVolts = 8.0;
+  public static final double rollerMaxVolts = 12.0;
   public static final Rotation2d extendedAngle = Rotation2d.fromDegrees(120.0);
   public static final Rotation2d retractedAngle = Rotation2d.fromDegrees(0.0);
 
-  public static final double rollerGearRatio = (1.0 / 5.0);
+  public static final double rollerGearRatio = (1.0 / 3.0) * (1.0 / 3.0) * (15.0 / 24.0);
   public static final double pivotGearRatio = (2.0 * Math.PI) * (1.0 / 3.37) * (1.0 / 5.0);
 
   /** The constants only for the real version of the intake. */
@@ -32,7 +32,7 @@ public class IntakeConstants {
     static {
       rollerConfig = new SparkMaxConfig();
 
-      rollerConfig.smartCurrentLimit(40).idleMode(IdleMode.kCoast).inverted(false);
+      rollerConfig.smartCurrentLimit(40).idleMode(IdleMode.kCoast).inverted(true);
 
       rollerConfig
           .encoder
@@ -50,7 +50,7 @@ public class IntakeConstants {
           .positionConversionFactor(pivotGearRatio)
           .velocityConversionFactor(pivotGearRatio / 60.0);
 
-      pivotConfig.closedLoop.pid(1.0, 0.0, 0.0).allowedClosedLoopError(1.05, ClosedLoopSlot.kSlot0);
+      pivotConfig.closedLoop.pid(1.0, 0.0, 0.0).allowedClosedLoopError(0.5, ClosedLoopSlot.kSlot0);
 
       pivotConfig
           .softLimit

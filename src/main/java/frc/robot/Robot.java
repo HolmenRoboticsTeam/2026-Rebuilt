@@ -101,9 +101,14 @@ public class Robot extends LoggedRobot {
     // timing (see the template project documentation for details)
     // Threads.setCurrentThreadPriority(true, 99);
 
-    Logger.recordOutput(
-        "Command Stats/Active Commands",
-        runningCommands.stream().map((c) -> c.getName()).toList().toArray(new String[0]));
+    String[] commandNames = {""};
+    runningCommands.stream()
+        .forEach(
+            (c) -> {
+              commandNames[0] += c.getName() + ", ";
+            });
+    commandNames[0] = commandNames[0].substring(0, commandNames[0].length() - 1);
+    Logger.recordOutput("Command Stats/Active Commands", commandNames);
 
     // Runs the Scheduler. This is responsible for polling buttons, adding
     // newly-scheduled commands, running already-scheduled commands, removing
