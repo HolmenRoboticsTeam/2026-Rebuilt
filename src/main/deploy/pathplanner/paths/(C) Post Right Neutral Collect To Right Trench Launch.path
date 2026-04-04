@@ -25,7 +25,7 @@
       },
       "nextControl": {
         "x": 5.659005261207075,
-        "y": 0.4161970447783066
+        "y": 0.41619704477830666
       },
       "isLocked": false,
       "linkedName": null
@@ -88,7 +88,7 @@
   "reversed": false,
   "folder": "(Auto Assembled) C 4 post-collects -TO- 2 launchs (No Branches)",
   "idealStartingState": {
-    "velocity": 3.0,
+    "velocity": 1.0,
     "rotation": -90.0
   },
   "useDefaultConstraints": true
