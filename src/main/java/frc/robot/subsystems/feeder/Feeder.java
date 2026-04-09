@@ -38,6 +38,15 @@ public class Feeder extends SubsystemBase {
     Logger.processInputs("Feeder", inputs);
   }
 
+  /**
+   * Creates and returns a command that controls the feeder automatically base on the position on
+   * the field, the active shift, and whether the turret is ready. If target is hub and inactive
+   * shift do not feed, overwise feed. As well only shoot when the turret is ready.
+   *
+   * <p>TODO: This command always acted funny, more testing is needed.
+   *
+   * @return A command with the given logic
+   */
   public Command autoFeed() {
     return Commands.repeatingSequence(
             stop(),
@@ -74,14 +83,6 @@ public class Feeder extends SubsystemBase {
         .withName("Feeder_Start");
   }
 
-  public Command reverse() {
-    return Commands.runOnce(
-            () -> {
-              io.setVolts(-FeederConstants.maxVolts);
-            })
-        .withName("Feeder_Reverse");
-  }
-
   /**
    * Creates and returns a command that stops the feeder.
    *
@@ -94,6 +95,19 @@ public class Feeder extends SubsystemBase {
             },
             this)
         .withName("Feeder_Stop");
+  }
+
+  /**
+   * Creates and returns a command that reverse the feeder.
+   *
+   * @return A command with the given logic.
+   */
+  public Command reverse() {
+    return Commands.runOnce(
+            () -> {
+              io.setVolts(-FeederConstants.maxVolts);
+            })
+        .withName("Feeder_Reverse");
   }
 
   /**

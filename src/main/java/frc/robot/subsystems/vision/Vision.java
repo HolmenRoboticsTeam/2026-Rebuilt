@@ -125,6 +125,11 @@ public class Vision extends SubsystemBase {
                 || poseObservation.pose().getX() > aprilTagLayout.getFieldLength()
                 || poseObservation.pose().getY() < 0.0
                 || poseObservation.pose().getY() > aprilTagLayout.getFieldWidth()
+
+                // Fix for MegaTag2's issue where it will return a different angle than the one
+                // given.
+                // TODO: Consider using MegaTag1, if no pose update has been given after a long
+                // time.
                 || (!MathUtil.isNear(
                     robotRot.get().getDegrees(),
                     poseObservation.pose().getRotation().getMeasureZ().in(Degrees),
@@ -199,6 +204,13 @@ public class Vision extends SubsystemBase {
         "Vision/Summary/RobotPosesRejected", allRobotPosesRejected.toArray(new Pose3d[0]));
   }
 
+  /**
+   * Creates and returns a command that sets a whitelist for the cameras, where they will only see
+   * those tags
+   *
+   * @param ids the tags to whitelist
+   * @return A command with the given logic
+   */
   public Command setWhiteList(int[] ids) {
     return Commands.runOnce(
             () -> {
@@ -210,6 +222,12 @@ public class Vision extends SubsystemBase {
         .withName("Vision_SetWhiteList");
   }
 
+  /**
+   * Creates and returns a command that resets the whitelist for the cameras, where they can see all
+   * tags
+   *
+   * @return A command with the given logic
+   */
   public Command clearWhiteList() {
     return Commands.runOnce(
             () -> {
@@ -221,6 +239,12 @@ public class Vision extends SubsystemBase {
         .withName("Vision_ClearWhiteList");
   }
 
+  /**
+   * Creates and returns a command that sets the IUM mode on the limelights
+   *
+   * @param mode the target mode
+   * @return A command with the given logic
+   */
   public Command setIMUMode(int mode) {
     return Commands.runOnce(
             () -> {
@@ -233,6 +257,12 @@ public class Vision extends SubsystemBase {
         .withName("Vision_SetIMUMode");
   }
 
+  /**
+   * Creates and returns a command that will send or never send updates to the drive odometry.
+   *
+   * @param ignoreVision whether to ignore vision or not.
+   * @return A command with the given logic
+   */
   public Command ignoreVision(boolean ignoreVision) {
     return Commands.runOnce(
             () -> {
@@ -242,6 +272,13 @@ public class Vision extends SubsystemBase {
         .withName("Vision_ignoreVision");
   }
 
+  /**
+   * Creates and returns a command that will have the limelights record the last amount of seconds
+   * given.
+   *
+   * @param seconds the number of past seconds to record.
+   * @return A command with the given logic.
+   */
   public Command recordLastSecond(double seconds) {
     return Commands.runOnce(
             () -> {
@@ -253,6 +290,11 @@ public class Vision extends SubsystemBase {
         .withName("Vision_Record");
   }
 
+  /**
+   * Sets what the rotation estimations should do
+   *
+   * @param consumer the consumer for the rotation estimations
+   */
   public void setRotationConsumer(VisionRotationConsumer consumer) {
     this.rotationConsumer = consumer;
   }

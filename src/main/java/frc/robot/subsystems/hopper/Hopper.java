@@ -26,6 +26,12 @@ public class Hopper extends SubsystemBase {
     Logger.processInputs("Hopper", inputs);
   }
 
+  /**
+   * Creates and returns a command to automatically run the hopper's rollers. Reversing for one
+   * second, to remove jams, and then running forward for 3 seconds.
+   *
+   * @return A command with the given logic
+   */
   public Command autoHop() {
     return Commands.repeatingSequence(
             reverse(), Commands.waitSeconds(1.0), start(), Commands.waitSeconds(3.0))
@@ -60,6 +66,11 @@ public class Hopper extends SubsystemBase {
         .withName("Hopper_Stop");
   }
 
+  /**
+   * Creates and returns a command that reverse the hopper.
+   *
+   * @return A command with the given logic.
+   */
   public Command reverse() {
     return Commands.runOnce(
             () -> {

@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-/** Add your docs here. */
+/** A class for storing and getting turret shot data through interpolation. */
 public class TurretDistanceCalc {
 
   private static InverseInterpolator<Distance> inverseInterpolator =
@@ -127,6 +127,7 @@ public class TurretDistanceCalc {
     return minHubTimeOfFlight;
   }
 
+  /** A record of the shot distance, RPM, hood angle, and time-of-flight */
   public record TurretShotData(
       Distance distance, double RPM, double angleRad, double timeOfFlightSec) {}
 
@@ -161,12 +162,14 @@ public class TurretDistanceCalc {
                 new TurretShotData(Meters.of(4.36), 2100.0, 0.0, 1.196),
                 new TurretShotData(Meters.of(4.46), 2150.0, 0.0, 1.210)));
 
+    // Load the hub points in the map
     for (TurretShotData dataPoint : hubDataPoints) {
       hubMap.put(dataPoint.distance, dataPoint);
       velocityToEffectiveDistanceHubMap.put(
           dataPoint.distance.div(dataPoint.timeOfFlightSec).in(Meters),
           dataPoint.distance.in(Meters));
 
+      // Get max and min ToF
       if (dataPoint.timeOfFlightSec < minHubTimeOfFlight)
         minHubTimeOfFlight = dataPoint.timeOfFlightSec;
       if (dataPoint.timeOfFlightSec > maxHubTimeOfFlight)
@@ -183,6 +186,7 @@ public class TurretDistanceCalc {
                 new TurretShotData(Meters.of(9.0), 2500.0, 0.4, 1.0),
                 new TurretShotData(Meters.of(10.0), 3000.0, 0.4, 1.0)));
 
+    // Load the ground points in the map
     for (TurretShotData dataPoint : groundDataPoints) {
       groundMap.put(dataPoint.distance, dataPoint);
       velocityToEffectiveDistanceGroundMap.put(
@@ -200,12 +204,14 @@ public class TurretDistanceCalc {
                 new TurretShotData(Meters.of(5.08), 3100.0, 0.698, 0.0),
                 new TurretShotData(Meters.of(5.17), 4100.0, 0.785, 0.0)));
 
+    // Load the hub points in the map
     for (TurretShotData dataPoint : hubDataPoints) {
       hubMap.put(dataPoint.distance, dataPoint);
       velocityToEffectiveDistanceHubMap.put(
           dataPoint.distance.div(dataPoint.timeOfFlightSec).in(Meters),
           dataPoint.distance.in(Meters));
 
+      // Get max and min ToF
       if (dataPoint.timeOfFlightSec < minHubTimeOfFlight)
         minHubTimeOfFlight = dataPoint.timeOfFlightSec;
       if (dataPoint.timeOfFlightSec > maxHubTimeOfFlight)
@@ -215,6 +221,7 @@ public class TurretDistanceCalc {
     groundDataPoints =
         new ArrayList<>(Arrays.asList(new TurretShotData(Meters.of(0.0), 4000.0, 0.5, 0.0)));
 
+    // Load the ground points in the map
     for (TurretShotData dataPoint : groundDataPoints) {
       groundMap.put(dataPoint.distance, dataPoint);
       velocityToEffectiveDistanceGroundMap.put(

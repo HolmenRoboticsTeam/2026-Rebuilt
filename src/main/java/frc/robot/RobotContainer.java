@@ -87,7 +87,7 @@ public class RobotContainer {
   private final LoggedDashboardChooser<Command> hardAutoChooser;
   private final Field2d autoField = new Field2d();
 
-  // Controller
+  // Controllers
   private final CommandXboxController controller = new CommandXboxController(0);
   private final SwitchBoard switchBoard = new SwitchBoard(1, 2);
 
@@ -258,8 +258,7 @@ public class RobotContainer {
         .schedule(
             AutoCommands.displayAutoField(
                 autoField,
-                () -> autoSelectorType.get() ? getAutoName() : hardAutoChooser.get().getName(),
-                () -> drive.getPose()));
+                () -> autoSelectorType.get() ? getAutoName() : hardAutoChooser.get().getName()));
 
     // Configure the button bindings
     configureButtonBindings();
@@ -294,7 +293,7 @@ public class RobotContainer {
     // Switch to X pattern when X button is pressed
     controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
 
-    // Reset gyro to ZERO when Start button is pressed
+    // Reset rose to in front of the pose facing the driver's stations.
     controller
         .start()
         .onTrue(
@@ -315,7 +314,6 @@ public class RobotContainer {
     controller.b().onTrue(hopper.start()).onFalse(hopper.stop());
     controller.y().onTrue(feeder.start()).onFalse(feeder.autoFeed());
     controller.pov(0).onTrue(intake.extend());
-    controller.pov(180).onTrue(feeder.start()).onFalse(feeder.autoFeed());
 
     // ######################################## ############
     // ######################################## BUTTON BOARD
@@ -381,8 +379,7 @@ public class RobotContainer {
                     // bump/trench
                     AutoDriveCommands.driveToPoseThenPath(drive, "Feed Outpost Extra Short", false),
                     // This path will be selected when the robot is on the close side of the
-                    // neutral
-                    // zone.
+                    // neutral zone.
                     AutoDriveCommands.driveToPoseThenPath(drive, "Feed Outpost Short", false),
                     () ->
                         FieldConstants.allianceFlip(FieldConstants.kHomeAllianceZone)
@@ -391,12 +388,10 @@ public class RobotContainer {
                                 .contains(drive.getPose().getTranslation())),
                 Commands.either( // Opposing Side
                     // This path will be selected when the robot is in the opposing alliance
-                    // zone or
-                    // the opposing alliance bump/trench
+                    // zone or the opposing alliance bump/trench
                     AutoDriveCommands.driveToPoseThenPath(drive, "Feed Outpost Long", false),
                     // This path will be selected when the robot is on the far side of the
-                    // neutral
-                    // zone.
+                    // neutral zone.
                     AutoDriveCommands.driveToPoseThenPath(drive, "Feed Outpost Mid", false),
                     () ->
                         FieldConstants.allianceFlip(FieldConstants.kOpposingAllianceZone)
@@ -463,6 +458,11 @@ public class RobotContainer {
     }
   }
 
+  /**
+   * Polls the switchboard's axises to get the selected auto name.
+   *
+   * @return Get selected auto name.
+   */
   private String getAutoName() {
     String[] autonomousData =
         new String[] {
@@ -480,18 +480,22 @@ public class RobotContainer {
     return autonomousData[0] + "-" + autonomousData[1] + "-" + autonomousData[2];
   }
 
+  /** Runs once on enable start */
   public void enabledInit() {
     CommandScheduler.getInstance().schedule(vision.setIMUMode(4));
   }
 
+  /** Runs once on disable start */
   public void disabledInit() {
     CommandScheduler.getInstance().schedule(vision.setIMUMode(1));
   }
 
+  /** Runs once at the end of auto */
   public void endAuto() {
     vision.recordLastSecond(30.0);
   }
 
+  /** Runs once at the end of the match */
   public void endMatch() {
     vision.recordLastSecond(145.0);
   }

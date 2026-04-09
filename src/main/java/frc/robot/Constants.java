@@ -54,6 +54,10 @@ public final class Constants {
     REPLAY
   }
 
+  /**
+   * WARNING: All the these Rectangle, Poses, Translations, and every thing else are for THE BLUE
+   * ALLIANCE. Call the allianceFlip method anytime you use the constants to get your alliance side.
+   */
   public static class FieldConstants {
 
     public static final Distance fieldLength = Inches.of(650.12);
@@ -216,6 +220,7 @@ public final class Constants {
     }
   }
 
+  /** This list on contains the pathplanner named command */
   public static List<Pair<String, Command>> getNamedCommand(
       Drive drive, Vision vision, Intake intake, Hopper hopper, Feeder feeder, Turret turret) {
     return new ArrayList<Pair<String, Command>>(
@@ -226,10 +231,10 @@ public final class Constants {
             new Pair<String, Command>("Intake Extend", intake.extend()),
             new Pair<String, Command>("Intake Retract", intake.retract()),
 
-            // Indexer Commands
-            new Pair<String, Command>("Indexer Auto", hopper.autoHop()),
+            // Hopper Commands
+            new Pair<String, Command>("Hopper Auto", hopper.autoHop()),
             new Pair<String, Command>(
-                "Indexer Wait Until Out Of Fuel", Commands.waitUntil(() -> !hopper.hasFuel())),
+                "Hopper Wait Until Out Of Fuel", Commands.waitUntil(() -> !hopper.hasFuel())),
 
             // Feeder Commands
             new Pair<String, Command>("Feeder Auto", feeder.autoFeed()),

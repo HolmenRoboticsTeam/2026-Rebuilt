@@ -82,11 +82,13 @@ public class Robot extends LoggedRobot {
     // Start AdvantageKit logger
     Logger.start();
 
+    // Used for logging what commands are running
     runningCommands = new LinkedHashSet<>();
     CommandScheduler.getInstance().onCommandInitialize((c) -> runningCommands.add(c));
     CommandScheduler.getInstance().onCommandFinish((c) -> runningCommands.remove(c));
     CommandScheduler.getInstance().onCommandInterrupt((c) -> runningCommands.remove(c));
 
+    // Sets the pathfinder for pathplanner
     Pathfinding.setPathfinder(new LocalADStarAK());
 
     // Instantiate our RobotContainer. This will perform all our button bindings,
@@ -101,6 +103,7 @@ public class Robot extends LoggedRobot {
     // timing (see the template project documentation for details)
     // Threads.setCurrentThreadPriority(true, 99);
 
+    // Converts the currently running command into strings for easing display in the console view.
     String[] commandNames = {""};
     runningCommands.stream()
         .forEach(
@@ -108,7 +111,7 @@ public class Robot extends LoggedRobot {
               commandNames[0] += c.getName() + ", ";
             });
     commandNames[0] = commandNames[0].substring(0, commandNames[0].length() - 1);
-    Logger.recordOutput("Command Stats/Active Commands", commandNames);
+    Logger.recordOutput("Command Stats/Active Commands", commandNames[0]);
 
     // Runs the Scheduler. This is responsible for polling buttons, adding
     // newly-scheduled commands, running already-scheduled commands, removing

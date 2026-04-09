@@ -22,11 +22,18 @@ import java.util.Set;
 import java.util.function.Supplier;
 import org.json.simple.parser.ParseException;
 
-/** Add your docs here. */
+/** A class for commands that display the currently selected auto. */
 public class AutoCommands {
 
-  public static Command displayAutoField(
-      Field2d field, Supplier<String> autoName, Supplier<Pose2d> robotPose) {
+  /**
+   * Creates and returns a command that displays the selected autos's the trajectories and moves a
+   * robot along the path of said auto
+   *
+   * @param field The 2d field object to display on
+   * @param autoName A supplier to the name of the selected auto
+   * @return A command with the given logic
+   */
+  public static Command displayAutoField(Field2d field, Supplier<String> autoName) {
     double[] robotIndex = new double[] {0};
     return Commands.run(
             () -> {
@@ -37,12 +44,14 @@ public class AutoCommands {
               // Save trajectories.
               field.getObject("traj").setPoses(autoPoses);
 
+              // Move the robot forward on the trajectory
               robotIndex[0] += 1.0 / 3.0;
               if (robotIndex[0] > autoPoses.size() - 2) {
                 robotIndex[0] = 0.0;
               }
               int index = (int) Math.floor(robotIndex[0]);
 
+              // Set the robot pose based on the target index
               field.setRobotPose(autoPoses.get(index));
             })
         .until(() -> DriverStation.isEnabled())
@@ -53,8 +62,15 @@ public class AutoCommands {
   private static List<Pose2d> lastPoses;
   private static String lastAutoName;
 
+  /**
+   * Gets all the poses of an auto based on it's name
+   *
+   * @param autoName A supplier to the name of the selected auto
+   * @return The poses of the selected auto.
+   */
   private static List<Pose2d> getAutoPoses(Supplier<String> autoName) {
 
+    // If the name is the same as last time, no need to recalculate everything
     if (autoName.get().equals(lastAutoName)) return lastPoses;
 
     // Initialize a list of poses
@@ -104,6 +120,7 @@ public class AutoCommands {
       autoPoses.set(index, new Pose2d(autoPoses.get(index).getTranslation(), rot));
     }
 
+    // Update last poses
     lastPoses = autoPoses;
 
     return autoPoses;

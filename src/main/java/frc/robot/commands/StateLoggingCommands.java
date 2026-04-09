@@ -21,7 +21,10 @@ import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.mechanism.LoggedMechanism2d;
 import org.littletonrobotics.junction.mechanism.LoggedMechanismLigament2d;
 
-/** Add your docs here. */
+/**
+ * This class logs the positions of the different subsystems in Mechanism2d for easy viewing in the
+ * advantage scope.
+ */
 public class StateLoggingCommands {
 
   private static double canvasWidth = 1.0;
@@ -50,6 +53,7 @@ public class StateLoggingCommands {
       new LoggedMechanismLigament2d("flyWheel", 0.05, 0.0);
 
   static {
+    // Bind the ligaments to the mechanism
     intakeMechanism.getRoot("root", 1.0, 0.2).append(intakeLigament);
     intakeLigament.setColor(new Color8Bit(0, 0, 255));
     intakeLigament.setLineWeight(1.0);
@@ -72,6 +76,7 @@ public class StateLoggingCommands {
   public static Command logMechanisms(Intake intake, Hopper hopper, Feeder feeder, Turret turret) {
     return Commands.run(
             () -> {
+              // Set the angles of the ligaments
               intakeLigament.setAngle(Rotation2d.fromRotations(intake.getPivotPosition()));
               hopperLigament.setAngle(Rotation2d.fromRotations(hopper.getPosition()));
               feederLigament.setAngle(Rotation2d.fromRotations(feeder.getPosition()));
@@ -79,6 +84,7 @@ public class StateLoggingCommands {
               angleLigament.setAngle(Rotation2d.fromRadians(turret.getAngle()));
               flyWheelLigament.setAngle(Rotation2d.fromRotations(turret.getFlyWheelPosition()));
 
+              // log the positions
               Logger.recordOutput("Mechanism/Intake", intakeMechanism);
               Logger.recordOutput("Mechanism/Hopper", hopperMechanism);
               Logger.recordOutput("Mechanism/Feeder", feederMechanism);
@@ -89,6 +95,11 @@ public class StateLoggingCommands {
         .withName("logMechanisms");
   }
 
+  /**
+   * Creates and returns a command that updates the shift info on the dashboard
+   *
+   * @return A command with the given logic
+   */
   public static Command updateDashboard() {
     return Commands.run(
             () -> {
@@ -107,6 +118,13 @@ public class StateLoggingCommands {
         .withName("updateDashboard");
   }
 
+  /**
+   * Creates and returns a command that rumbles the driver controller when the shifts are about the
+   * change.
+   *
+   * @param controller the controller to rumble
+   * @return A command with the given logic
+   */
   public static Command rumbleOnShiftChange(CommandXboxController controller) {
     return Commands.repeatingSequence(
             Commands.run(() -> controller.setRumble(RumbleType.kBothRumble, 0.0))

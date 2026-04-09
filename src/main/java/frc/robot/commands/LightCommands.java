@@ -17,9 +17,10 @@ import frc.robot.util.HubShiftUtil;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 
-/** Add your docs here. */
+/** A class for controlling LED lights */
 public class LightCommands {
 
+  // setup fields
   private static final int ledLength = 18;
   private static AddressableLED led = new AddressableLED(0);
   private static AddressableLEDBuffer ledBuffer = new AddressableLEDBuffer(ledLength);
@@ -86,6 +87,11 @@ public class LightCommands {
         .withName("LightControlCommand");
   }
 
+  /**
+   * This year's standard light control based on shift activity.
+   *
+   * @return A command to control the lights
+   */
   public static Command standard() {
     return Commands.either(
 

@@ -22,9 +22,11 @@ import frc.robot.subsystems.drive.Drive;
 import java.io.IOException;
 import java.util.function.BooleanSupplier;
 import org.json.simple.parser.ParseException;
-import org.littletonrobotics.junction.Logger;
 
-/** Add your docs here. */
+/**
+ * A class for commands that control the robot's drive base through pathplanner's pathfinding,
+ * follow paths, and a new precise move system.
+ */
 public class AutoDriveCommands {
 
   private static final PathConstraints constraints = PathConstraints.unlimitedConstraints(12.0);
@@ -64,7 +66,7 @@ public class AutoDriveCommands {
    */
   public static Command driveToPoseThenPath(Drive drive, String pathName, boolean withPreciseMove) {
 
-    PathPlannerPath path = getPath(drive, pathName);
+    PathPlannerPath path = getPath(pathName);
 
     if (withPreciseMove) {
       return Commands.sequence(
@@ -109,6 +111,7 @@ public class AutoDriveCommands {
    */
   private static Command preciseMove(Drive drive, Pose2d pose) {
 
+    // A supplier for if the robot is in position
     BooleanSupplier inPosition =
         () ->
             drive.getPose().getTranslation().getDistance(pose.getTranslation()) < 0.05 // Meters
@@ -126,11 +129,16 @@ public class AutoDriveCommands {
         .until(() -> preciseMoveDebouncer.calculate(inPosition.getAsBoolean()));
   }
 
-  private static PathPlannerPath getPath(Drive drive, String pathName) {
+  /**
+   * Builds and returns a pathplanner path given its name. Null if any IO exception is encountered.
+   *
+   * @param pathName the path name
+   * @return the Pathplanner path
+   */
+  private static PathPlannerPath getPath(String pathName) {
     try {
       return PathPlannerPath.fromPathFile(pathName);
     } catch (FileVersionException | IOException | ParseException e) {
-      Logger.recordOutput("PathPlannerIOException", true);
       System.out.println(
           "PathPlannerIOException was caught in AutoDriveCommands. Name: " + pathName);
       return null;

@@ -37,7 +37,7 @@
                           {
                             "type": "named",
                             "data": {
-                              "name": "Indexer Wait Until Out Of Fuel"
+                              "name": "Hopper Wait Until Out Of Fuel"
                             }
                           },
                           {
@@ -55,7 +55,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Indexer Auto"
+                  "name": "Hopper Auto"
                 }
               },
               {

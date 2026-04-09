@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import java.util.HashMap;
 import java.util.Map;
 
-/** Add your docs here. */
+/** A class for the switch board */
 public class SwitchBoard {
 
   private CommandGenericHID leftControls;
@@ -18,6 +18,12 @@ public class SwitchBoard {
 
   private Map<Pair<Integer, Integer>, Trigger> buttonMap = new HashMap<>();
 
+  /**
+   * Creates a new switch board
+   *
+   * @param leftPort the port of the left side
+   * @param rightPort the port of the right side
+   */
   public SwitchBoard(int leftPort, int rightPort) {
     leftControls = new CommandGenericHID(leftPort);
     rightControls = new CommandGenericHID(rightPort);
@@ -25,10 +31,25 @@ public class SwitchBoard {
     linkButtons();
   }
 
+  /**
+   * Returns a Trigger of the selected switch
+   *
+   * @param row the row (Starting with 1 on the bottom)
+   * @param col the col (Starting with 1 on the left)
+   * @return The Trigger of the corresponding switch
+   */
   public Trigger get(int row, int col) {
     return buttonMap.get(new Pair<Integer, Integer>(row, col));
   }
 
+  /**
+   * Returns a trigger for the switch's board axises. The switch board has four axises, two on the
+   * left and two on the right
+   *
+   * @param axis The target axis
+   * @param threshold the minimum value before the trigger returns true
+   * @return The Trigger of the axis
+   */
   public Trigger axisGreaterThan(int axis, double threshold) {
     if (axis < 2) {
       return leftControls.axisGreaterThan(axis, threshold);
@@ -37,6 +58,14 @@ public class SwitchBoard {
     }
   }
 
+  /**
+   * Returns a trigger for the switch's board axises. The switch board has four axises, two on the
+   * left and two on the right
+   *
+   * @param axis The target axis
+   * @param threshold the maximum value before the trigger returns true
+   * @return The Trigger of the axis
+   */
   public Trigger axisLessThan(int axis, double threshold) {
     if (axis < 2) {
       return leftControls.axisLessThan(axis, threshold);
@@ -45,6 +74,13 @@ public class SwitchBoard {
     }
   }
 
+  /**
+   * Returns the raw value for the switch's board axises [-1.0,1.0]. The switch board has four
+   * axises, two on the left and two on the right
+   *
+   * @param axis The target axis
+   * @return The Trigger of the axis
+   */
   public double getRawAxis(int axis) {
     if (axis < 2) {
       return leftControls.getRawAxis(axis);

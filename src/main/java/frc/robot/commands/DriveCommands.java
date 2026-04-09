@@ -29,7 +29,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
-import java.util.function.Supplier;
 
 public class DriveCommands {
   private static final double TRANSLATION_DEADBAND = 0.1;
@@ -65,7 +64,7 @@ public class DriveCommands {
   /**
    * Field relative drive command using joystick for linear control and PID for angular control.
    * Possible use cases include snapping to an angle, aiming at a vision target, or controlling
-   * absolute rotation with a joystick.
+   * absolute rotation with a joystick. Also a boolean for whether to invert the controls.
    */
   public static Command joystickDriveAtAngle(
       Drive drive,
@@ -107,19 +106,25 @@ public class DriveCommands {
               // Calculate angular speed
               Translation2d goalTranslation = new Translation2d(xAngle, yAngle);
               double omega = 0.0;
+
+              // If the invert controls value changed then flip the toggle.
               if (invertControls.getAsBoolean() != lastFlipValue && invertControls.getAsBoolean()) {
                 flipToggle = !flipToggle;
               }
               lastFlipValue = invertControls.getAsBoolean();
 
+              // If the goal angle is real
               if (!goalTranslation.equals(Translation2d.kZero)) {
                 double goalAngle = goalTranslation.getAngle().getRadians();
+
+                // Flip as needed
                 if (flipToggle) {
                   goalAngle += Math.toRadians(180.0);
                 }
                 omega = angleController.calculate(drive.getRotation().getRadians(), goalAngle);
               }
 
+              // Zero the omega if the magnitude is small
               if (goalTranslation.getNorm() < ANGLE_DEADBAND) {
                 omega = 0.0;
               }
@@ -149,28 +154,6 @@ public class DriveCommands {
         // Reset PID controller when command starts
         .beforeStarting(() -> angleController.reset(drive.getRotation().getRadians()))
         .withName("Drive_joystickDriveAtAngle");
-  }
-
-  /**
-   * Creates and returns a command that point the drive towards and move at the given transform.
-   *
-   * @param drive the drive subsystem
-   * @param transform the target pose
-   * @return A command with the given logic
-   */
-  public static Command driveTowardsTransform(Drive drive, Supplier<Transform2d> transform) {
-
-    // Move towards pose
-    DoubleSupplier xSupplier = () -> drive.getPose().getX() - transform.get().getX();
-    DoubleSupplier ySupplier = () -> drive.getPose().getY() - transform.get().getY();
-
-    // Look at pose
-    DoubleSupplier xAngleSupplier = () -> drive.getPose().getX() - transform.get().getX();
-    DoubleSupplier yAngleSupplier = () -> drive.getPose().getY() - transform.get().getY();
-
-    return DriveCommands.joystickDriveAtAngle(
-            drive, () -> 1.0, xSupplier, ySupplier, xAngleSupplier, yAngleSupplier, () -> false)
-        .withName("Drive_driveTowardsTransform");
   }
 
   /**

@@ -122,6 +122,16 @@ public class Turret extends SubsystemBase {
               // Get target translation and type based on turret position
               Translation2d targetTranslation = getTargetTranslation();
 
+              /**
+               * This whole segment of code is based on the following two blogs:
+               *
+               * <p>https://blog.eeshwark.com/blog/shooting-on-the-fly
+               * https://blog.eeshwark.com/robotblog/shooting-on-the-fly-pt2
+               *
+               * <p>Honestly the impletion sucks, rewriting this with a simple velocity vector times
+               * TOF offset then tweaking the latency would be better.
+               */
+
               // Get future translation
               Translation2d futureTranslation =
                   turretPose
@@ -164,6 +174,7 @@ public class Turret extends SubsystemBase {
                       .plus(Rotation2d.k180deg)
                       .minus(robotPose.get().getRotation());
 
+              // Disabled because it do not work
               // double requiredVelocity = shotVelocity.getNorm();
               //
               // Loop up RPM from required velocity
@@ -191,6 +202,12 @@ public class Turret extends SubsystemBase {
         .withName("Turret_FullFieldAim");
   }
 
+  /**
+   * Creates and returns a command to lock the turret to zero rotation when active, then unlock when
+   * the command ends.
+   *
+   * @return A command with the given logic
+   */
   public Command lockRotationToZero() {
     return Commands.startEnd(
         () -> {
@@ -247,10 +264,18 @@ public class Turret extends SubsystemBase {
         .withName("Turret_Calibrate");
   }
 
+  /**
+   * Creates and returns a command to max the flywheel speed to unjam.
+   *
+   * @return A command with the given logic
+   */
   public Command maxFlyWheel() {
-    return Commands.run(
+    return Commands.startEnd(
         () -> {
           io.setFlyWheelRPM(4000.0);
+        },
+        () -> {
+          io.setFlyWheelRPM(0.0);
         },
         this);
   }
@@ -271,6 +296,11 @@ public class Turret extends SubsystemBase {
         .withName("Turret_Stop");
   }
 
+  /**
+   * Creates and returns a command to zero the rotation motor based on the absolute encoder
+   *
+   * @return A command with the given logic
+   */
   public Command zeroRotationOffEncoder() {
     return Commands.runOnce(
         () -> {
@@ -279,14 +309,29 @@ public class Turret extends SubsystemBase {
         this);
   }
 
+  /**
+   * Gets the rotation of the turret.
+   *
+   * @return rotation in radians
+   */
   public double getRotation() {
     return inputs.rotationPositionRad;
   }
 
+  /**
+   * Gets the angle of the turret's hood.
+   *
+   * @return angle in radians
+   */
   public double getAngle() {
     return inputs.anglePositionRad;
   }
 
+  /**
+   * Gets the position of the flywheel.
+   *
+   * @return position in rotations
+   */
   public double getFlyWheelPosition() {
     return inputs.flyWheelPositionRotations;
   }

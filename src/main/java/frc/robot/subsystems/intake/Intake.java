@@ -80,6 +80,11 @@ public class Intake extends SubsystemBase {
         .withName("Intake_Stop");
   }
 
+  /**
+   * Creates and returns a command that reverses the intake.
+   *
+   * @return A command with the given logic.
+   */
   public Command reverse() {
     return Commands.runOnce(
         () -> {
