@@ -94,12 +94,21 @@ public class Intake extends SubsystemBase {
   }
 
   /**
-   * Get the current position of the intake
+   * Get the current position of the intake's pivot
    *
    * @return the position in radians
    */
   public double getPivotPosition() {
     return inputs.pivotPositionRad;
+  }
+
+  /**
+   * Get the current position of the intake's rollers
+   *
+   * @return the position in rotations
+   */
+  public double getRollerPosition() {
+    return inputs.rollerPositionRotations;
   }
 
   /**

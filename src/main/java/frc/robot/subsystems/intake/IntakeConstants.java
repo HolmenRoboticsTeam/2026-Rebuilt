@@ -64,7 +64,14 @@ public class IntakeConstants {
   /** The constants only for the sim version of the intake. */
   public static class Sim {
 
-    public static final DCMotor motorGearBox = DCMotor.getNEO(1);
-    public static final double JKgMetersSquared = 0.004;
+    public static final DCMotor rollerMotorGearBox = DCMotor.getNEO(1);
+    public static final double rollerJKgMetersSquared = 0.004;
+
+    public static final DCMotor pivotMotorGearBox = DCMotor.getNEO(1);
+    public static final double pivotJKgMetersSquared = 0.004;
+
+    public static final double simPivotP = 1.0;
+    public static final double simPivotI = 0.0;
+    public static final double simPivotD = 0.0;
   }
 }

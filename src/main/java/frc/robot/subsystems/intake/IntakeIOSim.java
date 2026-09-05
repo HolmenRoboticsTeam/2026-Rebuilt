@@ -4,44 +4,77 @@
 
 package frc.robot.subsystems.intake;
 
+import static edu.wpi.first.units.Units.Radians;
+
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 
 /** The sim implementation of the intake */
 public class IntakeIOSim implements IntakeIO {
 
-  private DCMotorSim intakeMotor;
+  private DCMotorSim rollerMotor;
+  private double rollerAppliedVolts;
 
-  private double appliedVolts;
+  private DCMotorSim pivotMotor;
+  private PIDController pivotPidController;
+  private Rotation2d pivotTargetPosition;
 
   /** Creates a new sim intake. */
   public IntakeIOSim() {
 
-    intakeMotor =
+    rollerMotor =
         new DCMotorSim(
             LinearSystemId.createDCMotorSystem(
-                IntakeConstants.Sim.motorGearBox,
-                IntakeConstants.Sim.JKgMetersSquared,
+                IntakeConstants.Sim.rollerMotorGearBox,
+                IntakeConstants.Sim.rollerJKgMetersSquared,
                 IntakeConstants.rollerGearRatio),
-            IntakeConstants.Sim.motorGearBox);
+            IntakeConstants.Sim.rollerMotorGearBox);
 
-    appliedVolts = 0.0;
+    rollerAppliedVolts = 0.0;
+
+    pivotMotor =
+        new DCMotorSim(
+            LinearSystemId.createDCMotorSystem(
+                IntakeConstants.Sim.pivotMotorGearBox,
+                IntakeConstants.Sim.pivotJKgMetersSquared,
+                IntakeConstants.pivotGearRatio),
+            IntakeConstants.Sim.pivotMotorGearBox);
+    pivotPidController =
+        new PIDController(
+            IntakeConstants.Sim.simPivotP,
+            IntakeConstants.Sim.simPivotI,
+            IntakeConstants.Sim.simPivotD);
+
+    pivotTargetPosition = Rotation2d.kZero;
   }
 
   public void updateInputs(IntakeIOInputs inputs) {
-    intakeMotor.setInputVoltage(appliedVolts);
-    intakeMotor.update(0.02);
+    rollerMotor.setInputVoltage(rollerAppliedVolts);
+    rollerMotor.update(0.02);
 
-    // inputs.positionRotations = intakeMotor.getAngularPositionRotations();
-    // inputs.velocityRadPerSec = intakeMotor.getAngularVelocityRPM();
-    // inputs.appliedVolts = appliedVolts;
-    // inputs.currentAmps = intakeMotor.getCurrentDrawAmps();
+    pivotMotor.setInputVoltage(
+        pivotPidController.calculate(
+            pivotMotor.getAngularPosition().in(Radians), pivotTargetPosition.getRadians()));
+    pivotMotor.update(0.02);
 
-    // inputs.isRunning = appliedVolts != 0.0;
+    inputs.rollerAppliedVolts = rollerMotor.getInputVoltage();
+    inputs.rollerCurrentAmps = rollerMotor.getCurrentDrawAmps();
+    inputs.rollerPositionRotations = rollerMotor.getAngularPositionRotations();
+    inputs.rollerVelocityRPM = rollerMotor.getAngularVelocityRPM();
+
+    inputs.pivotAppliedVolts = pivotMotor.getInputVoltage();
+    inputs.pivotCurrentAmps = pivotMotor.getCurrentDrawAmps();
+    inputs.pivotPositionRad = pivotMotor.getAngularPositionRad();
+    inputs.pivotVelocityRadPerSec = pivotMotor.getAngularVelocityRadPerSec();
   }
 
   @Override
+  public void setPivotPosition(Rotation2d rot) {}
+
+  @Override
   public void setRollerVolts(double volts) {
-    appliedVolts = volts;
+    rollerAppliedVolts = volts;
   }
 }

@@ -32,8 +32,10 @@ public class StateLoggingCommands {
 
   private static LoggedMechanism2d intakeMechanism =
       new LoggedMechanism2d(canvasWidth, canvasHeight);
-  private static LoggedMechanismLigament2d intakeLigament =
-      new LoggedMechanismLigament2d("Intake", 0.1, 0.0);
+  private static LoggedMechanismLigament2d intakePivotLigament =
+      new LoggedMechanismLigament2d("IntakePivot", 0.2, 0.0);
+  private static LoggedMechanismLigament2d intakeRollerLigament =
+      new LoggedMechanismLigament2d("IntakeRoller", 0.1, 0.0);
 
   private static LoggedMechanism2d hopperMechanism =
       new LoggedMechanism2d(canvasWidth, canvasHeight);
@@ -54,9 +56,14 @@ public class StateLoggingCommands {
 
   static {
     // Bind the ligaments to the mechanism
-    intakeMechanism.getRoot("root", 1.0, 0.2).append(intakeLigament);
-    intakeLigament.setColor(new Color8Bit(0, 0, 255));
-    intakeLigament.setLineWeight(1.0);
+    intakeMechanism
+        .getRoot("root", 0.7, 0.2)
+        .append(intakePivotLigament)
+        .append(intakeRollerLigament);
+    intakePivotLigament.setColor(new Color8Bit(0, 0, 255));
+    intakeRollerLigament.setColor(new Color8Bit(255, 255, 0));
+    intakePivotLigament.setLineWeight(1.0);
+    intakeRollerLigament.setLineWeight(1.0);
 
     hopperMechanism.getRoot("root", 0.4, 0.4).append(hopperLigament);
     hopperLigament.setColor(new Color8Bit(255, 0, 0));
@@ -77,7 +84,9 @@ public class StateLoggingCommands {
     return Commands.run(
             () -> {
               // Set the angles of the ligaments
-              intakeLigament.setAngle(Rotation2d.fromRotations(intake.getPivotPosition()));
+              intakePivotLigament.setAngle(Rotation2d.fromRadians(intake.getPivotPosition()));
+              intakeRollerLigament.setAngle(Rotation2d.fromRotations(intake.getRollerPosition()));
+
               hopperLigament.setAngle(Rotation2d.fromRotations(hopper.getPosition()));
               feederLigament.setAngle(Rotation2d.fromRotations(feeder.getPosition()));
 
@@ -88,7 +97,6 @@ public class StateLoggingCommands {
               Logger.recordOutput("Mechanism/Intake", intakeMechanism);
               Logger.recordOutput("Mechanism/Hopper", hopperMechanism);
               Logger.recordOutput("Mechanism/Feeder", feederMechanism);
-
               Logger.recordOutput("Mechanism/Turret", turretMechanism);
             })
         .ignoringDisable(true)
