@@ -130,6 +130,25 @@ public class Turret extends SubsystemBase {
                *
                * <p>Honestly the impletion sucks, rewriting this with a simple velocity vector times
                * TOF offset then tweaking the latency would be better.
+               *
+               * <p>TODO: Better impletion:
+               *
+               * <p>1. Offset the target translation by the robot's velocity times the time of
+               * flight.
+               *
+               * <p>2. Calculate the new distance (now that the target has been moved), but this
+               * changes the time of flight
+               *
+               * <p>3. Calculate the new time of flight
+               *
+               * <p>4. Go back to step one and use the new time of flight, repeat this 3 or 4 times
+               * for a good estimate
+               *
+               * <p>5. Lastly, take the latest target translation and multiply it by a constant
+               * latency compensation 6. The latency compensation should start as 1.0, but be
+               * changed depending on whether the shots are ahead or behind the target.
+               *
+               * <p>Also consider locking the robot speed to a constant while shooting on the move.
                */
 
               // Get future translation

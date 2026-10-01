@@ -16,6 +16,8 @@ import edu.wpi.first.units.measure.Distance;
 /** Constants for the turret subsystem. */
 public class TurretConstants {
 
+  // These offsets are field relative assuming the robot is facing the red alliance driver stations
+  // (X+ being forward and Y+ be left, according the the robot's view).
   public static final Distance turretXOffset = Inches.of(-6.0);
   public static final Distance turretYOffset = Inches.of(0.0);
 
