@@ -15,10 +15,16 @@ public class HopperConstants {
 
   public static final double gearRatio = 1.0;
 
+  public static final double maxAcrossVolts = 4.0;
+
+  public static final double maxTowardsVolts = 6.0;
+
   /** The constants only for the real version of the indexer. */
   public static class Real {
 
-    public static final int motorID = 41;
+    public static final int acrossMotorID = 41;
+    public static final int towardsMotorID = 50;
+
     public static final int lineBreakID = 2;
     public static final SparkMaxConfig motorConfig;
     public static final double debounceTime = 1.0;
@@ -26,7 +32,7 @@ public class HopperConstants {
     static {
       motorConfig = new SparkMaxConfig();
 
-      motorConfig.smartCurrentLimit(40).idleMode(IdleMode.kCoast).inverted(true);
+      motorConfig.smartCurrentLimit(40).idleMode(IdleMode.kCoast).inverted(false);
 
       motorConfig
           .encoder

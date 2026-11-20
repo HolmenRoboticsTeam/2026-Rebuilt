@@ -31,5 +31,5 @@ public interface HopperIO {
    *
    * @param volts The target voltage.
    */
-  public default void setVolts(double volts) {}
+  public default void setVolts(double acrossVolts, double towardsVolts) {}
 }

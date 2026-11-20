@@ -234,7 +234,9 @@ public final class Constants {
             // Hopper Commands
             new Pair<String, Command>("Hopper Auto", hopper.autoHop()),
             new Pair<String, Command>(
-                "Hopper Wait Until Out Of Fuel", Commands.waitUntil(() -> !hopper.hasFuel())),
+                "Hopper Wait Until Out Of Fuel",
+                /** Commands.waitUntil(() -> !hopper.hasFuel()) */
+                Commands.waitSeconds(8.0)),
 
             // Feeder Commands
             new Pair<String, Command>("Feeder Auto", feeder.autoFeed()),

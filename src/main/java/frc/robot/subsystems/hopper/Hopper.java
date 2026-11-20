@@ -46,7 +46,7 @@ public class Hopper extends SubsystemBase {
   public Command start() {
     return Commands.runOnce(
             () -> {
-              io.setVolts(HopperConstants.maxVolts);
+              io.setVolts(HopperConstants.maxAcrossVolts, HopperConstants.maxTowardsVolts);
             },
             this)
         .withName("Hopper_Start");
@@ -60,7 +60,7 @@ public class Hopper extends SubsystemBase {
   public Command stop() {
     return Commands.runOnce(
             () -> {
-              io.setVolts(0.0);
+              io.setVolts(0.0, 0.0);
             },
             this)
         .withName("Hopper_Stop");
@@ -74,7 +74,7 @@ public class Hopper extends SubsystemBase {
   public Command reverse() {
     return Commands.runOnce(
             () -> {
-              io.setVolts(-HopperConstants.maxVolts);
+              io.setVolts(-HopperConstants.maxAcrossVolts, -HopperConstants.maxTowardsVolts);
             },
             this)
         .withName("Hopper_Reverse");

@@ -20,6 +20,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -260,6 +261,8 @@ public class RobotContainer {
                 autoField,
                 () -> autoSelectorType.get() ? getAutoName() : hardAutoChooser.get().getName()));
 
+    RobotController.setBrownoutVoltage(6.0);
+
     // Configure the button bindings
     configureButtonBindings();
 
@@ -308,6 +311,9 @@ public class RobotContainer {
                                     : Rotation2d.kZero)))
                 .ignoringDisable(true)
                 .withName("Zero Pose"));
+
+    controller.rightTrigger(0.5).onTrue(intake.start()).onFalse(intake.stop());
+    controller.rightBumper().onTrue(feeder.start()).onFalse(feeder.stop());
 
     // Testing controls
     controller.a().onTrue(intake.start()).onFalse(intake.stop());

@@ -15,7 +15,8 @@ import edu.wpi.first.wpilibj.DigitalInput;
 /** The real implementation of the hopper. */
 public class HopperIOReal implements HopperIO {
 
-  private SparkMax hopperMotor;
+  private SparkMax hopperAcrossMotor;
+  private SparkMax hopperTowardsMotor;
   private RelativeEncoder encoder;
 
   private DigitalInput linebreak;
@@ -23,28 +24,35 @@ public class HopperIOReal implements HopperIO {
   /** Creates a new real hopper. */
   public HopperIOReal() {
 
-    hopperMotor = new SparkMax(HopperConstants.Real.motorID, MotorType.kBrushless);
-    encoder = hopperMotor.getEncoder();
+    hopperAcrossMotor = new SparkMax(HopperConstants.Real.acrossMotorID, MotorType.kBrushless);
+    hopperTowardsMotor = new SparkMax(HopperConstants.Real.towardsMotorID, MotorType.kBrushless);
 
-    hopperMotor.configure(
+    encoder = hopperAcrossMotor.getEncoder();
+
+    hopperAcrossMotor.configure(
         HopperConstants.Real.motorConfig,
         ResetMode.kResetSafeParameters,
         PersistMode.kPersistParameters);
 
     linebreak = new DigitalInput(HopperConstants.Real.lineBreakID);
+    hopperTowardsMotor.configure(
+        HopperConstants.Real.motorConfig,
+        ResetMode.kResetSafeParameters,
+        PersistMode.kPersistParameters);
   }
 
   public void updateInputs(HopperIOInputs inputs) {
 
     inputs.positionRotation = encoder.getPosition();
     inputs.velocityRPM = encoder.getVelocity();
-    inputs.appliedVolts = hopperMotor.getBusVoltage() * hopperMotor.getAppliedOutput();
-    inputs.currentAmps = hopperMotor.getOutputCurrent();
+    inputs.appliedVolts = hopperAcrossMotor.getBusVoltage() * hopperAcrossMotor.getAppliedOutput();
+    inputs.currentAmps = hopperAcrossMotor.getOutputCurrent();
     inputs.hasFuel = !linebreak.get();
   }
 
   @Override
-  public void setVolts(double volts) {
-    hopperMotor.getClosedLoopController().setSetpoint(volts, ControlType.kVoltage);
+  public void setVolts(double acrossVolts, double towardsVolts) {
+    hopperAcrossMotor.getClosedLoopController().setSetpoint(acrossVolts, ControlType.kVoltage);
+    hopperTowardsMotor.getClosedLoopController().setSetpoint(towardsVolts, ControlType.kVoltage);
   }
 }

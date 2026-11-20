@@ -40,7 +40,7 @@ public class HopperIOSim implements HopperIO {
   }
 
   @Override
-  public void setVolts(double volts) {
-    appliedVolts = volts;
+  public void setVolts(double acrossVolts, double towardsVolts) {
+    appliedVolts = acrossVolts;
   }
 }
