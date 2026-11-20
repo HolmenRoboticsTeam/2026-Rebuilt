@@ -31,9 +31,9 @@ public class FeederIOReal implements FeederIO {
     feederMotor = new SparkMax(FeederConstants.Real.motorID, MotorType.kBrushless);
     encoder = feederMotor.getEncoder();
     enterLineBreak = new DigitalInput(FeederConstants.Real.enterLineBreakID);
-    enterDebouncer = new Debouncer(FeederConstants.Real.debounceTime, DebounceType.kFalling);
+    enterDebouncer = new Debouncer(FeederConstants.Real.enterDebounceTime, DebounceType.kFalling);
     exitLineBreak = new DigitalInput(FeederConstants.Real.exitLineBreakID);
-    exitDebouncer = new Debouncer(FeederConstants.Real.debounceTime, DebounceType.kFalling);
+    exitDebouncer = new Debouncer(FeederConstants.Real.exitDebounceTime, DebounceType.kFalling);
 
     feederMotor.configure(
         FeederConstants.Real.motorConfig,
